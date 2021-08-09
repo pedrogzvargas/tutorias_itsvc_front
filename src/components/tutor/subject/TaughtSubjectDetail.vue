@@ -1,0 +1,275 @@
+<template>
+  <div>
+    <v-breadcrumbs :items="items">
+      <template v-slot:divider>
+        <v-icon>mdi-forward</v-icon>
+      </template>
+    </v-breadcrumbs>
+    <material-card
+      class="mb-10"
+      color="primary"
+      icon="mdi-human-male"
+    >
+      <template #title>
+        Docente
+      </template>
+      <v-container>
+        <v-row>
+          <v-col
+            cols="12"
+            sm="3"
+          >
+            <v-text-field
+              label="Nombre"
+              :value="taughtSubject.tutor.first_name"
+              outlined
+              readonly
+              disabled
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="3"
+          >
+            <v-text-field
+              label="Segundo nombre"
+              :value="taughtSubject.tutor.second_name"
+              outlined
+              readonly
+              disabled
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="3"
+          >
+            <v-text-field
+              label="Apellido paterno"
+              :value="taughtSubject.tutor.last_name"
+              outlined
+              readonly
+              disabled
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="3"
+          >
+            <v-text-field
+              label="Apellido materno"
+              :value="taughtSubject.tutor.second_last_name"
+              outlined
+              readonly
+              disabled
+            ></v-text-field>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col
+            cols="12"
+            sm="3"
+          >
+            <v-text-field
+              label="Nombre de usuario"
+              :value="taughtSubject.tutor.username"
+              outlined
+              readonly
+              disabled
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="3"
+          >
+            <v-switch
+              class="px-10"
+              v-model="taughtSubject.tutor.is_active"
+              inset
+              :label="taughtSubject.tutor.is_active ? 'Activo': 'Inactivo'"
+              disabled
+            ></v-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </material-card>
+
+    <material-card
+      class="mb-10"
+      color="primary"
+      icon="mdi-book"
+    >
+      <template #title>
+        Materia
+      </template>
+      <v-container>
+        <v-row>
+          <v-col
+            cols="12"
+            sm="8"
+          >
+            <v-text-field
+              label="Nombre"
+              :value="taughtSubject.subject.name"
+              outlined
+              readonly
+              disabled
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="4"
+          >
+            <v-text-field
+              label="Código"
+              :value="taughtSubject.subject.code"
+              outlined
+              readonly
+              disabled
+            ></v-text-field>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col
+            cols="12"
+            sm="3"
+          >
+            <v-text-field
+              label="Valor 1"
+              :value="taughtSubject.subject.first_value"
+              outlined
+              readonly
+              disabled
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="3"
+          >
+            <v-text-field
+              label="Valor 2"
+              :value="taughtSubject.subject.second_value"
+              outlined
+              readonly
+              disabled
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="3"
+          >
+            <v-text-field
+              label="Valor total"
+              :value="taughtSubject.subject.total_value"
+              outlined
+              readonly
+              disabled
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="3"
+          >
+            <v-switch
+              v-model="taughtSubject.subject.is_active"
+              class="px-10"
+              inset
+              :label="taughtSubject.subject.is_active ? 'Activo': 'Inactivo'"
+              disabled
+            ></v-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </material-card>
+
+    <material-card
+      class="mb-10"
+      color="primary"
+      icon="mdi-school"
+    >
+      <template #title>
+        Ciclo escolar
+      </template>
+      <v-container>
+        <v-row>
+          <v-col
+            cols="12"
+            sm="8"
+          >
+            <v-text-field
+              label="Nombre"
+              :value="taughtSubject.school_cycle.name"
+              outlined
+              readonly
+              disabled
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="4"
+          >
+            <v-switch
+              v-model="taughtSubject.school_cycle.is_active"
+              class="px-10"
+              inset
+              :label="taughtSubject.school_cycle.is_active ? 'Activo': 'Inactivo'"
+              disabled
+            ></v-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </material-card>
+  </div>
+</template>
+
+<script>
+  import TaughtSubjectService from '../../../services/tutor/subject/TaughtSubjectService'
+
+  export default {
+    name: 'TaughtSubjectDetail',
+    data: () => ({
+      taughtSubject: null,
+      taughtSubjectId: null,
+      items: [
+        {
+          text: 'Materias impartidas',
+          disabled: false,
+          href: '/tutor/subjects/',
+        },
+        {
+          text: 'Detalle',
+          disabled: true,
+        },
+      ],
+    }),
+    watch: {
+      '$route.params.id': function (id) {
+        this.fillTaughtSubject(id)
+      },
+    },
+    created () {
+      this.taughtSubjectId = this.$route.params.id
+      this.fillTaughtSubject()
+    },
+    methods: {
+      async fillTaughtSubject () {
+        await TaughtSubjectService.get(this.taughtSubjectId).then(
+          (response) => {
+            this.taughtSubject = response.data.data
+          },
+        ).catch(
+          (response) => {
+            this.notify('No se encontraron tutores', 'warning')
+            return Promise.reject(response)
+          },
+        )
+        this.isLoading = false
+      },
+    },
+  }
+</script>
+
+<style scoped>
+
+</style>
