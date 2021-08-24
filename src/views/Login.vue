@@ -86,6 +86,7 @@
             this.data.token = response.data.data.token
             this.data.roles = response.data.data.roles
             this.$router.push('/student/profile/')
+            this.$cookies.set('token', response.data.data.token)
           },
         )
       },

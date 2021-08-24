@@ -153,6 +153,7 @@
         ).catch(
           (response) => {
             this.notify('No se encontraron tutores', 'warning')
+            this.isLoading = false
             return Promise.reject(response)
           },
         )
