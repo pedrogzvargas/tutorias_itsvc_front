@@ -257,11 +257,11 @@
       ],
     }),
     computed: {
-      currentStudentId () {
-        return this.studentId ? this.studentId : this.userType.id
+      currentUser () {
+        return this.studentId ? this.studentId : this.data.roles[0]
       },
       ...get('user', [
-        'userType',
+        'data',
       ]),
       numberOfChildrenRules () {
         const rules = [v => !!v || 'Número de hijos es requerido']
@@ -294,7 +294,7 @@
         this.$refs.menu.save(date)
       },
       callMainService () {
-        PersonalInformationService.get(this.currentStudentId).then(
+        PersonalInformationService.get(this.currentUser.id).then(
           (response) => {
             this.form.place_birth = response.data.data.place_birth
             this.form.birth_date = response.data.data.birth_date
@@ -340,7 +340,7 @@
       updatePersonalInformation () {
         if (this.$refs.form.validate()) {
           this.form.number_of_children = this.form.number_of_children ? this.form.number_of_children : null
-          PersonalInformationService.put(this.currentStudentId, this.form).then((response) => {
+          PersonalInformationService.put(this.currentUser.id, this.form).then((response) => {
             this.notify('Guardado correctamente', 'success')
             this.isEditing = false
           }).catch(

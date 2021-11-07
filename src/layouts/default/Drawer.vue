@@ -1,5 +1,6 @@
 <template>
   <v-navigation-drawer
+    v-if="drawerSide"
     id="default-drawer"
     v-model="drawer"
     :dark="dark"
@@ -26,7 +27,7 @@
 
       <v-divider class="mx-3 mb-2" />
 
-      <default-list :items="items" />
+      <default-list :items="sideMenuItems(userType.name)" />
     </div>
 
     <div class="pt-12" />
@@ -56,14 +57,17 @@
         'dark',
         'gradient',
         'image',
+        'userType',
       ]),
       ...get('app', [
         'items',
         'version',
+        'sideMenuItems',
       ]),
       ...sync('app', [
         'drawer',
         'drawerImage',
+        'drawerSide',
         'mini',
       ]),
     },

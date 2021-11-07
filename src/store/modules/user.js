@@ -7,11 +7,11 @@ import { IN_BROWSER } from '@/util/globals'
 const state = {
   dark: false,
   data: {
-    user_id: null,
+    userId: null,
     fullName: '',
     profileImage: '',
-    token: null,
     roles: [],
+    groups: [],
   },
   drawer: {
     image: 0,
@@ -72,7 +72,13 @@ const getters = {
     return state.data
   },
   userType: state => {
-    return state.data.roles[0]
+    return state.data.groups[0]
+  },
+  hasMoreThanOneRole: state => {
+    return state.data.groups[0]
+  },
+  currentUser () {
+    const currentUser = localStorage.getItem('vuetify@user') || '{}'
   },
 }
 

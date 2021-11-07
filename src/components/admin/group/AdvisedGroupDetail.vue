@@ -209,22 +209,66 @@
         </v-row>
       </v-container>
     </material-card>
+
+    <material-card
+      color="primary"
+      full-header
+    >
+      <template #heading>
+        <div class="pa-3 white--text">
+          <div class="text-h4 font-weight-light">
+            Alumnos inscritos
+          </div>
+
+          <div>
+            <v-row>
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <div class="d-flex justify-start">
+                  <v-text-field
+                    label="Buscar"
+                    clearable
+                  ></v-text-field>
+                  <v-btn
+                    class="ma-3"
+                    depressed
+                    color="secondary"
+                  >
+                    Buscar
+                  </v-btn>
+                </div>
+              </v-col>
+            </v-row>
+          </div>
+        </div>
+      </template>
+      <v-card-text v-if="academicInformationId">
+        <advised-group-students-list :academic-information-id="academicInformationId" />
+      </v-card-text>
+    </material-card>
   </div>
 </template>
 
 <script>
   import AdvisedGroupService from '../../../services/tutor/group/AdvisedGroupService'
+  import AdvisedGroupStudentsList from '../../tutor/group/AdvisedGroupStudentsList'
 
   export default {
     name: 'AdvisedGroupDetail',
+    components: {
+      AdvisedGroupStudentsList,
+    },
     data: () => ({
       advisedGroup: null,
       advisedGroupId: null,
+      academicInformationId: null,
       items: [
         {
           text: 'Grupos asesorados',
           disabled: false,
-          href: '/tutor/groups/',
+          href: '/groups/',
         },
         {
           text: 'Detalle',
@@ -246,6 +290,7 @@
         await AdvisedGroupService.get(this.advisedGroupId).then(
           (response) => {
             this.advisedGroup = response.data.data
+            this.academicInformationId = response.data.data.group.id
           },
         ).catch(
           (response) => {

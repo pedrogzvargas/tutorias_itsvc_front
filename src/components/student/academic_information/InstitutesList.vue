@@ -3,7 +3,6 @@
     <progress-bar v-if="isLoading" />
     <institute-modal-form
       ref="instituteModalForm"
-      :student-id="currentStudentId"
       :mode="instituteModelMode"
       :current-record="selectedInstitute"
       @listUpdated="fillInstitutes"
@@ -103,11 +102,11 @@
       actionMessageColor: null,
     }),
     computed: {
-      currentStudentId () {
-        return this.studentId ? this.studentId : this.userType.id
+      currentUser () {
+        return this.studentId ? this.studentId : this.data.roles[0]
       },
       ...get('user', [
-        'userType',
+        'data',
       ]),
     },
     created () {
@@ -115,7 +114,7 @@
     },
     methods: {
       fillInstitutes () {
-        InstitutesService.get(this.currentStudentId).then(
+        InstitutesService.get(this.currentUser.id).then(
           (response) => {
             this.institutes = response.data.data
             this.isLoading = false
@@ -143,7 +142,7 @@
         this.$refs.confirmationModal.dialog = true
       },
       deleteInstitute () {
-        InstitutesService.delete(this.currentStudentId, this.selectedInstitute.id).then(
+        InstitutesService.delete(this.currentUser.id, this.selectedInstitute.id).then(
           (response) => {
             this.fillInstitutes()
             this.notify('Eliminado correctamente', 'success')

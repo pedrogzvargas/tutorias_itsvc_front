@@ -89,11 +89,11 @@
       }
     },
     computed: {
-      currentStudentId () {
-        return this.studentId ? this.studentId : this.userType.id
+      currentUser () {
+        return this.studentId ? this.studentId : this.data.roles[0]
       },
       ...get('user', [
-        'userType',
+        'data',
       ]),
     },
     created () {
@@ -101,7 +101,7 @@
     },
     methods: {
       callMainService () {
-        IncomeService.get(this.currentStudentId).then(
+        IncomeService.get(this.currentUser.id).then(
           (response) => {
             this.form.income = response.data.data.income
             this.form.family_income = response.data.data.family_income
@@ -115,7 +115,7 @@
         )
       },
       createIncome () {
-        IncomeService.post(this.currentStudentId, this.form).then(
+        IncomeService.post(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Guardado correctamente', 'success')
           },
@@ -128,7 +128,7 @@
         )
       },
       updateIncome () {
-        IncomeService.put(this.currentStudentId, this.form).then(
+        IncomeService.put(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Actualizado correctamente', 'success')
             this.isEditing = false

@@ -71,7 +71,7 @@
 </template>
 
 <script>
-  import TutorsList from '../components/tutor/tutor/TutorsList'
+  import TutorsList from '../components/admin/tutor/TutorsList'
   export default {
     name: 'Tutors',
     components: {

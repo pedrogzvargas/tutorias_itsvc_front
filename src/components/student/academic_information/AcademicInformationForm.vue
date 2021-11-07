@@ -141,7 +141,7 @@
       majors: [],
       periods: [],
       period_numbers: [],
-      groups: [],
+      academicGroups: [],
       academicInformationId: null,
       actionMessage: null,
       actionMessageColor: null,
@@ -155,11 +155,11 @@
       },
     }),
     computed: {
-      currentUserId () {
-        return this.studentId ? this.studentId : this.userType.id
+      currentUser () {
+        return this.studentId ? this.studentId : this.data.roles[0]
       },
       ...get('user', [
-        'userType',
+        'data',
       ]),
     },
     created () {
@@ -175,7 +175,7 @@
         }
       },
       fillForm () {
-        AcademicInformationService.get(this.currentUserId).then(
+        AcademicInformationService.get(this.currentUser.id).then(
           (response) => {
             this.academicInformationId = response.data.data.id
             this.form.university_id = response.data.data.university_id
@@ -187,7 +187,7 @@
             this.majors.push({ id: response.data.data.major_id, name: response.data.data.major })
             this.periods.push({ id: response.data.data.period_id, name: response.data.data.period })
             this.period_numbers.push({ id: response.data.data.period_number_id, name: response.data.data.period_number })
-            this.groups.push({ id: response.data.data.group_id, name: response.data.data.group })
+            this.academicGroups.push({ id: response.data.data.group_id, name: response.data.data.group })
             this.isLoading = false
             this.hasRecord = true
           },
@@ -200,7 +200,7 @@
         )
       },
       createAcademicInformation () {
-        AcademicInformationService.post(this.currentUserId, this.academicInformationId, this.form).then(
+        AcademicInformationService.post(this.currentUser.id, this.academicInformationId, this.form).then(
           (response) => {
             this.isLoading = false
             this.isEditing = false
@@ -215,7 +215,7 @@
         )
       },
       updateAcademicInformation () {
-        AcademicInformationService.put(this.currentUserId, this.academicInformationId, this.form).then(
+        AcademicInformationService.put(this.currentUser.id, this.academicInformationId, this.form).then(
           (response) => {
             this.isLoading = false
             this.isEditing = false

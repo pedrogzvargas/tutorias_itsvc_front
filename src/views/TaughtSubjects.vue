@@ -1,6 +1,6 @@
 <template>
   <v-container
-    id="tutor-subjecs-view"
+    id="ubjecs-view"
     fluid
     tag="section"
   >
@@ -59,7 +59,7 @@
           </template>
           <v-card-text>
             <subjects-list
-              ref="TutorSubjectsList"
+              ref="SubjectsList"
               :search="searchValue"
             />
           </v-card-text>
@@ -70,9 +70,9 @@
 </template>
 
 <script>
-  import SubjectsList from '../components/tutor/subject/SubjectsList'
+  import SubjectsList from '../components/admin/subject/SubjectsList'
   export default {
-    name: 'TutorSubjects',
+    name: 'TaughtSubjects',
     components: {
       SubjectsList,
     },
@@ -81,10 +81,10 @@
     }),
     methods: {
       showModalASCreate () {
-        this.$refs.TutorSubjectsList.showSubjectFormAsCreation()
+        this.$refs.SubjectsList.showSubjectFormAsCreation()
       },
       filterList () {
-        this.$refs.TutorSubjectsList.fillSubjects()
+        this.$refs.SubjectsList.fillSubjects()
       },
     },
   }

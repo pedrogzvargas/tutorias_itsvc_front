@@ -1,18 +1,16 @@
 <template>
   <div>
     <progress-bar v-if="isLoading" />
-    <group-modal-form
-      :key="groupModelKey"
-      ref="groupModalForm"
-      :mode="groupModelMode"
-      :current-record="selectedGroup"
-      @listUpdated="reloadGroupList"
-      @hiddenModal="hideModal"
+    <tutor-modal-form
+      ref="tutorModalForm"
+      :mode="tutorModelMode"
+      :current-record="selectedTutor"
+      @listUpdated="fillTutors"
     />
     <confirmation-modal
       ref="confirmationModal"
       :message="confirmationModalMessage"
-      @agree="deleteGroup"
+      @agree="deleteSibling"
     />
     <action-notifier
       ref="ActionNotifier"
@@ -26,19 +24,13 @@
             #
           </th>
           <th class="primary--text">
-            Docente
+            Nombre
           </th>
           <th class="primary--text">
-            Carrera
+            Usuario
           </th>
           <th class="primary--text">
-            Periodo
-          </th>
-          <th class="primary--text">
-            Periodo academico
-          </th>
-          <th class="primary--text">
-            Periodo activo
+            Activo
           </th>
           <th class="primary--text">
             Acciones
@@ -47,17 +39,15 @@
       </thead>
       <tbody>
         <tr
-          v-for="(group, index) in groups"
-          :key="group.id"
+          v-for="(tutor, index) in tutors"
+          :key="tutor.id"
         >
           <td>{{ index +1 }}</td>
-          <td>{{ `${group.first_name} ${group.second_name || ''} ${group.last_name} ${group.second_last_name || ''}` }}</td>
-          <td>{{ group.major }}</td>
-          <td>{{ group.period_number }}</td>
-          <td>{{ group.school_cycle_name }}</td>
+          <td>{{ `${tutor.first_name} ${tutor.second_name || ''} ${tutor.last_name} ${tutor.second_last_name || ''}` }}</td>
+          <td>{{ tutor.username }}</td>
           <td>
             <v-icon
-              v-if="group.school_cycle_active"
+              v-if="tutor.is_active"
               class="mx-1"
               color="success"
             >
@@ -78,13 +68,7 @@
               >
                 <v-icon
                   class="mx-1"
-                  @click="$router.push({name: 'AdvisedGroup', params: { id: group.id }})"
-                >
-                  mdi-arrow-right-thick
-                </v-icon>
-                <v-icon
-                  class="mx-1"
-                  @click="showGroupFormAsEdition(group)"
+                  @click="showTutorFormAsEdition(tutor)"
                 >
                   mdi-pencil
                 </v-icon>
@@ -92,7 +76,7 @@
                 <v-icon
                   class="mx-1"
                   color="error"
-                  @click="showConfirmationModal(group)"
+                  @click="showConfirmationModal(tutor)"
                 >
                   mdi-close
                 </v-icon>
@@ -118,16 +102,16 @@
   import ActionNotifier from '../../common/general/ActionNotifier'
   import ConfirmationModal from '../../common/utils/ConfirmationModal'
   import ProgressBar from '../../app/ProgressBar'
-  import GroupService from '../../../services/tutor/group/GroupService'
-  import GroupsService from '../../../services/tutor/group/GroupsService'
-  import GroupModalForm from './GroupModalForm'
+  import TutorModalForm from './TutorModalForm'
+  import TutorsService from '../../../services/admin/tutor/TutorsService'
+  import TutorService from '../../../services/admin/tutor/TutorService'
   export default {
-    name: 'GroupsList',
+    name: 'TutorsList',
     components: {
       ActionNotifier,
       ConfirmationModal,
       ProgressBar,
-      GroupModalForm,
+      TutorModalForm,
     },
     props: {
       search: String,
@@ -137,10 +121,9 @@
       totalItems: 0,
       dialog: false,
       isLoading: true,
-      groups: [],
-      groupModelMode: null,
-      groupModelKey: 0,
-      selectedGroup: null,
+      tutors: [],
+      tutorModelMode: null,
+      selectedTutor: null,
       confirmationModalMessage: '¿Estas seguro que deseas eliminar este tutor?',
       actionMessage: null,
       actionMessageColor: null,
@@ -154,17 +137,17 @@
     watch: {
       page (value) {
         // console.log(value)
-        this.fillGroups()
+        this.fillTutors()
       },
     },
     created () {
-      this.fillGroups()
+      this.fillTutors()
     },
     methods: {
-      async fillGroups () {
-        await GroupsService.get(this.search, this.page).then(
+      async fillTutors () {
+        await TutorsService.get(this.search, this.page).then(
           (response) => {
-            this.groups = response.data.results
+            this.tutors = response.data.results
             this.totalItems = response.data.count
           },
         ).catch(
@@ -176,35 +159,24 @@
         )
         this.isLoading = false
       },
-      reloadGroupList () {
-        this.fillGroups()
-        this.notify('Actualizado correctamente', 'success')
-        this.groupModelKey += 1
-        this.groupModelMode = null
+      showTutorFormAsEdition (value) {
+        this.tutorModelMode = 'edit'
+        this.selectedTutor = value
+        this.$refs.tutorModalForm.show = true
       },
-      hideModal () {
-        this.groupModelKey += 1
-        this.selectedGroup = null
-        this.groupModelMode = null
+      showTutorFormAsCreation (value) {
+        this.selectedTutor = null
+        this.tutorModelMode = 'create'
+        this.$refs.tutorModalForm.show = true
       },
-      showGroupFormAsEdition (value) {
-        this.groupModelMode = 'edit'
-        this.selectedGroup = value
-        this.$refs.groupModalForm.show = true
-      },
-      showGroupFormAsCreation () {
-        this.selectedGroup = null
-        this.groupModelMode = 'create'
-        this.$refs.groupModalForm.show = true
-      },
-      showConfirmationModal (group) {
-        this.selectedGroup = group
+      showConfirmationModal (sibling) {
+        this.selectedTutor = sibling
         this.$refs.confirmationModal.dialog = true
       },
-      deleteGroup () {
-        GroupService.delete(this.selectedGroup.id).then(
+      deleteSibling () {
+        TutorService.delete(this.selectedTutor.id).then(
           (response) => {
-            this.fillGroups()
+            this.fillTutors()
             this.notify('Eliminado correctamente', 'success')
           },
         ).catch(

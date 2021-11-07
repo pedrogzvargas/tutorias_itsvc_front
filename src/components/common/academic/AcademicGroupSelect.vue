@@ -7,6 +7,7 @@
       :items="academicGroups"
       label="Grupo"
       :readonly="readonly"
+      :rules="rules"
       outlined
       @change="emitSelected"
     ></v-select>
@@ -24,6 +25,7 @@
       academicPeriodNumberId: Number,
       readonly: Boolean,
       defaultSelected: Number,
+      rules: Array,
     },
     data () {
       return {

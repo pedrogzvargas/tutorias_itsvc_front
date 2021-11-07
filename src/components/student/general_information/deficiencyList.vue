@@ -98,11 +98,11 @@
       actionMessageColor: null,
     }),
     computed: {
-      currentStudentId () {
-        return this.studentId ? this.studentId : this.userType.id
+      currentUser () {
+        return this.studentId ? this.studentId : this.data.roles[0]
       },
       ...get('user', [
-        'userType',
+        'data',
       ]),
     },
     created () {
@@ -110,7 +110,7 @@
     },
     methods: {
       fillDeficiencies () {
-        MedicalInformationService.get(this.currentStudentId).then(
+        MedicalInformationService.get(this.currentUser.id).then(
           (response) => {
             this.deficiencies = response.data.data
           },
@@ -137,10 +137,15 @@
         this.$refs.confirmationModal.dialog = true
       },
       deleteDeficiency () {
-        MedicalInformationService.delete(this.currentStudentId, this.selectedDeficiency.id).then(
+        MedicalInformationService.delete(this.currentUser.id, this.selectedDeficiency.id).then(
           (response) => {
             this.fillDeficiencies()
             this.notify('Eliminado correctamente', 'success')
+          },
+        ).catch(
+          (response) => {
+            this.notify('No se pudo eliminar el registro', 'warning')
+            return Promise.reject(response)
           },
         )
       },

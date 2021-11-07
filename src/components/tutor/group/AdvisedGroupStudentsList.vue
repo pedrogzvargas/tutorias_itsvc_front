@@ -1,16 +1,16 @@
 <template>
   <div>
     <progress-bar v-if="isLoading" />
-    <tutor-modal-form
-      ref="tutorModalForm"
-      :mode="tutorModelMode"
-      :current-record="selectedTutor"
-      @listUpdated="fillTutors"
-    />
+<!--    <tutor-modal-form-->
+<!--      ref="tutorModalForm"-->
+<!--      :mode="tutorModelMode"-->
+<!--      :current-record="selectedTutor"-->
+<!--      @listUpdated="fillTutors"-->
+<!--    />-->
     <confirmation-modal
       ref="confirmationModal"
       :message="confirmationModalMessage"
-      @agree="deleteSibling"
+      @agree="deleteStudent"
     />
     <action-notifier
       ref="ActionNotifier"
@@ -30,7 +30,7 @@
             Usuario
           </th>
           <th class="primary--text">
-            Activo
+            Email
           </th>
           <th class="primary--text">
             Acciones
@@ -39,28 +39,13 @@
       </thead>
       <tbody>
         <tr
-          v-for="(tutor, index) in tutors"
-          :key="tutor.id"
+          v-for="(student, index) in students"
+          :key="student.id"
         >
           <td>{{ index +1 }}</td>
-          <td>{{ `${tutor.first_name} ${tutor.second_name || ''} ${tutor.last_name} ${tutor.second_last_name || ''}` }}</td>
-          <td>{{ tutor.username }}</td>
-          <td>
-            <v-icon
-              v-if="tutor.is_active"
-              class="mx-1"
-              color="success"
-            >
-              mdi-check-circle-outline
-            </v-icon>
-            <v-icon
-              v-else
-              class="mx-1"
-              color="error"
-            >
-              mdi-close-circle-outline
-            </v-icon>
-          </td>
+          <td>{{ `${student.first_name} ${student.second_name || ''} ${student.last_name} ${student.second_last_name || ''}` }}</td>
+          <td>{{ student.username }}</td>
+          <td>{{ student.email }}</td>
           <td class="text-right">
             <v-row>
               <v-col
@@ -68,18 +53,24 @@
               >
                 <v-icon
                   class="mx-1"
-                  @click="showTutorFormAsEdition(tutor)"
+                  @click="$router.push({name: 'StudentSubjectsDetail', params: { id: student.id }})"
                 >
-                  mdi-pencil
+                  mdi-arrow-right-thick
                 </v-icon>
+<!--                <v-icon-->
+<!--                  class="mx-1"-->
+<!--                  @click="showStudentFormAsEdition(tutor)"-->
+<!--                >-->
+<!--                  mdi-pencil-->
+<!--                </v-icon>-->
 
-                <v-icon
-                  class="mx-1"
-                  color="error"
-                  @click="showConfirmationModal(tutor)"
-                >
-                  mdi-close
-                </v-icon>
+<!--                <v-icon-->
+<!--                  class="mx-1"-->
+<!--                  color="error"-->
+<!--                  @click="showConfirmationModal(tutor)"-->
+<!--                >-->
+<!--                  mdi-close-->
+<!--                </v-icon>-->
               </v-col>
             </v-row>
           </td>
@@ -102,18 +93,17 @@
   import ActionNotifier from '../../common/general/ActionNotifier'
   import ConfirmationModal from '../../common/utils/ConfirmationModal'
   import ProgressBar from '../../app/ProgressBar'
-  import TutorModalForm from './TutorModalForm'
-  import TutorsService from '../../../services/tutor/tutor/TutorsService'
-  import TutorService from '../../../services/tutor/tutor/TutorService'
+  import TutorService from '../../../services/admin/tutor/TutorService'
+  import AdvisedGroupStudentsService from '../../../services/tutor/group/AdvisedGroupStudentsService'
   export default {
-    name: 'TutorsList',
+    name: 'AdvisedGroupStudentsList',
     components: {
       ActionNotifier,
       ConfirmationModal,
       ProgressBar,
-      TutorModalForm,
     },
     props: {
+      academicInformationId: Number,
       search: String,
     },
     data: () => ({
@@ -121,10 +111,10 @@
       totalItems: 0,
       dialog: false,
       isLoading: true,
-      tutors: [],
+      students: [],
       tutorModelMode: null,
       selectedTutor: null,
-      confirmationModalMessage: '¿Estas seguro que deseas eliminar este tutor?',
+      confirmationModalMessage: '¿Estas seguro que deseas eliminar este alumno?',
       actionMessage: null,
       actionMessageColor: null,
     }),
@@ -136,35 +126,39 @@
     },
     watch: {
       page (value) {
-        // console.log(value)
-        this.fillTutors()
+        this.fillStudents()
       },
+      // academicInformationId (value) {
+      //   this.fillStudents()
+      // },
     },
     created () {
-      this.fillTutors()
+      if (this.academicInformationId) {
+        this.fillStudents()
+      }
     },
     methods: {
-      async fillTutors () {
-        await TutorsService.get(this.search, this.page).then(
+      async fillStudents () {
+        await AdvisedGroupStudentsService.get(this.academicInformationId, this.search, this.page).then(
           (response) => {
-            this.tutors = response.data.results
+            this.students = response.data.results
             this.totalItems = response.data.count
           },
         ).catch(
           (response) => {
-            this.notify('No se encontraron tutores', 'warning')
+            this.notify('No se encontraron estudiantes', 'warning')
             this.isLoading = false
             return Promise.reject(response)
           },
         )
         this.isLoading = false
       },
-      showTutorFormAsEdition (value) {
+      showStudentFormAsEdition (value) {
         this.tutorModelMode = 'edit'
         this.selectedTutor = value
         this.$refs.tutorModalForm.show = true
       },
-      showTutorFormAsCreation (value) {
+      showStudentFormAsCreation (value) {
         this.selectedTutor = null
         this.tutorModelMode = 'create'
         this.$refs.tutorModalForm.show = true
@@ -173,7 +167,7 @@
         this.selectedTutor = sibling
         this.$refs.confirmationModal.dialog = true
       },
-      deleteSibling () {
+      deleteStudent () {
         TutorService.delete(this.selectedTutor.id).then(
           (response) => {
             this.fillTutors()
@@ -194,7 +188,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

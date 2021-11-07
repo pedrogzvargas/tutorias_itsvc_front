@@ -7,6 +7,7 @@
       :items="majors"
       label="Carrera"
       :readonly="readonly"
+      :rules="rules"
       outlined
       @change="emitSelected"
     ></v-select>
@@ -22,12 +23,13 @@
       universityId: Number,
       defaultSelected: Number,
       readonly: Boolean,
+      rules: Array,
     },
     data () {
       return {
         selected: this.defaultSelected,
         majors: [
-          { id: 0, name: 'Seleccione' },
+          { id: null, name: 'Seleccione' },
         ],
       }
     },

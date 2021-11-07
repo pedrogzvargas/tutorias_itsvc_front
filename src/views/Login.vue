@@ -10,7 +10,7 @@
         <v-col
           cols="12"
           sm="8"
-          md="6"
+          md="4"
         >
           <v-card class="elevation-10">
             <div
@@ -60,7 +60,7 @@
 <script>
   import LoginService from '../services/user/LoginService'
   // Utilities
-  import { sync } from 'vuex-pathify'
+  import { sync, call } from 'vuex-pathify'
   export default {
     name: 'LoginView',
     data () {
@@ -76,15 +76,22 @@
       ...sync('user', [
         'data',
       ]),
+      ...sync('app', [
+        'drawerSide',
+      ]),
     },
     methods: {
+      ...call('user/*'),
       auth () {
         LoginService.create(this.form).then(
           (response) => {
             this.data.fullName = response.data.data.fullname
             this.data.profileImage = response.data.data.profile_image
-            this.data.token = response.data.data.token
+            this.data.userId = response.data.data.user_id
             this.data.roles = response.data.data.roles
+            this.data.groups = response.data.data.groups
+            this.drawerSide = true
+            this.update()
             this.$router.push('/student/profile/')
             this.$cookies.set('token', response.data.data.token)
           },

@@ -165,11 +165,11 @@
       }
     },
     computed: {
-      currentStudentId () {
-        return this.studentId ? this.studentId : this.userType.id
+      currentUser () {
+        return this.studentId ? this.studentId : this.data.roles[0]
       },
       ...get('user', [
-        'userType',
+        'data',
       ]),
     },
     watch: {
@@ -196,7 +196,7 @@
         this.$refs.form.resetValidation()
       },
       createInstitute () {
-        InstitutesService.post(this.currentStudentId, this.form).then(
+        InstitutesService.post(this.currentUser.id, this.form).then(
           (response) => {
             this.$emit('listUpdated')
             this.notify('Agregado correctamente', 'success')
@@ -209,7 +209,7 @@
         )
       },
       updateInstitute () {
-        InstitutesService.put(this.currentStudentId, this.currentRecord.id, this.form).then(
+        InstitutesService.put(this.currentUser.id, this.currentRecord.id, this.form).then(
           (response) => {
             this.$emit('listUpdated')
             this.notify('Actualizado correctamente', 'success')

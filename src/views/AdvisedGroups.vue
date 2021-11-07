@@ -70,9 +70,9 @@
 </template>
 
 <script>
-  import GroupsList from '../components/tutor/group/GroupsList'
+  import GroupsList from '../components/admin/group/GroupsList'
   export default {
-    name: 'TutorGroups',
+    name: 'AdvisedGroups',
     components: {
       GroupsList,
     },

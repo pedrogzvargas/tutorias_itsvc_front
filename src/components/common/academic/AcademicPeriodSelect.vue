@@ -7,6 +7,7 @@
       :items="academicPeriods"
       label="Periodo"
       :readonly="readonly"
+      :rules="rules"
       outlined
       @change="emitSelected"
     />
@@ -22,6 +23,7 @@
       majorId: Number,
       defaultSelected: Number,
       readonly: Boolean,
+      rules: Array,
     },
     data () {
       return {

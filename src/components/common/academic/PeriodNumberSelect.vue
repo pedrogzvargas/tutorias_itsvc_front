@@ -7,6 +7,7 @@
       :items="academicPeriodNumber"
       label="Número de periodo"
       :readonly="readonly"
+      :rules="rules"
       outlined
       @change="emitSelected"
     ></v-select>
@@ -23,6 +24,7 @@
       academicPeriodId: Number,
       readonly: Boolean,
       defaultSelected: Number,
+      rules: Array,
     },
     data () {
       return {

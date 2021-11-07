@@ -1,16 +1,5 @@
 <template>
   <div>
-    <!--<v-select
-      v-model="selected"
-      item-value="id"
-      item-text="name"
-      :items="subjects"
-      label="Materia"
-      :readonly="readonly"
-      :rules="rules"
-      outlined
-      @change="emitSelected"
-    ></v-select>-->
     <v-autocomplete
       v-model="selected"
       item-value="id"

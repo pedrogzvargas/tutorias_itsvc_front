@@ -76,7 +76,7 @@
             >
               <v-text-field
                 v-model="form.username"
-                :rules="secondLastNameRules"
+                :rules="userNameRules"
                 label="Usuario"
                 outlined
               />
@@ -89,9 +89,24 @@
               <v-text-field
                 v-model="form.password"
                 :rules="passwordRules"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="showPassword ? 'text' : 'password'"
                 label="Contraseña"
                 :hint="passwordHint"
                 persistent-hint
+                outlined
+                @click:append="showPassword = !showPassword"
+              />
+            </v-col>
+            <v-col
+              cols="12"
+              md="12"
+              class="pb-0"
+            >
+              <v-text-field
+                v-model="form.email"
+                :rules="emailRules"
+                label="Correo"
                 outlined
               />
             </v-col>
@@ -102,6 +117,7 @@
             >
               <university-select
                 :default-selected="form.university_id"
+                :rules="[v => !!v || 'Este campo es requerido']"
                 @SelectedItem="form.university_id = $event"
               />
             </v-col>
@@ -113,18 +129,19 @@
               <major-select
                 :university-id="form.university_id"
                 :default-selected="form.academic_id"
+                :rules="[v => !!v || 'Este campo es requerido']"
                 @SelectedItem="form.academic_id = $event"
               />
             </v-col>
             <v-col
               cols="12"
-              md="3"
+              md="6"
               class="pb-0 px-10"
             >
               <v-switch
                 v-model="form.is_active"
                 inset
-                :label="form.is_active ? 'Activo': 'Inactivo'"
+                :label="form.is_active ? 'Tutor activo': 'Tutor inactivo'"
               ></v-switch>
             </v-col>
           </v-row>
@@ -133,7 +150,7 @@
           <v-spacer />
           <v-btn
             color="secondary"
-            @click="show = false"
+            @click="resetValidation"
           >
             Cancelar
           </v-btn>
@@ -170,6 +187,7 @@
     data () {
       return {
         show: false,
+        showPassword: false,
         valid: false,
         birthDateMenu: false,
         actionMessage: null,
@@ -179,11 +197,12 @@
           second_name: null,
           last_name: null,
           second_last_name: null,
+          email: null,
           username: null,
           password: null,
           is_active: null,
-          university_id: 0,
-          academic_id: 0,
+          university_id: null,
+          academic_id: null,
         },
         firstNameRules: [
           v => !!v || 'Nombre es requerido',
@@ -193,8 +212,13 @@
           v => !!v || 'Apellido paterno es requerido',
           v => (v && v.length <= 100) || 'Apellido paterno debe ser menor de 100 caracteres',
         ],
-        birthDateRules: [
-          v => !!v || 'Fecha de nacimiento es requerido',
+        userNameRules: [
+          v => !!v || 'Nombre de usuario es requerido',
+          v => (v && v.length <= 100) || 'Nombre de usuario debe ser menor de 100 caracteres',
+        ],
+        emailRules: [
+          v => !!v || 'E-mail es requerido',
+          v => /.+@.+\..+/.test(v) || 'E-mail debe ser válido',
         ],
       }
     },
@@ -223,6 +247,7 @@
           this.form.last_name = this.currentRecord.last_name
           this.form.second_last_name = this.currentRecord.second_last_name
           this.form.username = this.currentRecord.username
+          this.form.email = this.currentRecord.email
           this.form.university_id = this.currentRecord.university_id
           this.form.academic_id = this.currentRecord.academic_id
           this.form.is_active = this.currentRecord.is_active
@@ -237,10 +262,11 @@
       },
       reset () {
         this.$refs.form.reset()
-        this.form.university_id = 0
-        this.form.academic_id = 0
+        this.form.university_id = null
+        this.form.academic_id = null
       },
       resetValidation () {
+        this.show = false
         this.$refs.form.resetValidation()
       },
       createTutor () {

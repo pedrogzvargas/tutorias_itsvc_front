@@ -297,11 +297,11 @@
         const rules = [v => (v && v.length <= 50) || 'Número interior debe menor o igual a 50 caracteres']
         return this.form.indoor_number ? rules : []
       },
-      currentStudentId () {
-        return this.studentId ? this.studentId : this.userType.id
+      currentUser () {
+        return this.studentId ? this.studentId : this.data.roles[0]
       },
       ...get('user', [
-        'userType',
+        'data',
       ]),
     },
     created () {
@@ -318,7 +318,7 @@
         this.$refs.form.resetValidation()
       },
       callMainService () {
-        AddressService.get(this.currentStudentId).then(
+        AddressService.get(this.currentUser.id).then(
           (response) => {
             this.form.street = response.data.data.street
             this.form.indoor_number = response.data.data.indoor_number
@@ -342,7 +342,7 @@
         this.isLoading = false
       },
       saveAddressInformation () {
-        AddressService.post(this.currentStudentId, this.form).then(
+        AddressService.post(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Guardado correctamente', 'success')
             this.isEditing = false
@@ -355,7 +355,7 @@
         )
       },
       updateAddressInformation () {
-        AddressService.put(this.currentStudentId, this.form).then(
+        AddressService.put(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Guardado correctamente', 'success')
             this.isEditing = false

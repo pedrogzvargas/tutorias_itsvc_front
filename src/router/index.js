@@ -22,7 +22,7 @@ const router = new Router({
   routes: [
     layout('Default', [
       route('Dashboard'),
-      route('Dash', null, 'components/dash'),
+      route('Dash', null, 'components/dash', { requiresAuth: true }),
 
       // Pages
       route('UserProfile', null, 'student/profile', { requiresAuth: true }),
@@ -32,10 +32,16 @@ const router = new Router({
       route('FamilyInformation', null, 'student/family', { requiresAuth: true }),
       route('Login', null, 'components/login'),
       route('Tutors', null, 'tutors'),
-      route('TutorGroups', null, 'tutor/groups'),
-      route('TutorSubjects', null, 'tutor/subjects'),
-      route('TaughtSubject', null, 'tutor/subject/detail/:id'),
-      route('AdvisedGroup', null, 'tutor/group/detail/:id'),
+      route('AdvisedGroups', null, 'groups'),
+      route('TaughtSubjects', null, 'subjects'),
+      route('Students', null, 'students'),
+      route('StudentSubjectsDetail', null, 'students/:id/subjects-detail/'),
+      route('StudentsSubjects', null, 'students/:id/subjects/'),
+      route('TaughtSubject', null, 'subject/detail/:id'),
+      route('AdvisedGroup', null, 'group/detail/:id'),
+      // Tutor
+      route('TutorTaughtSubjects', null, 'tutor/subjects'),
+      route('TutorAdvisedGroups', null, 'tutor/groups'),
 
       // Components
       route('Notifications', null, 'components/notifications'),
@@ -55,10 +61,10 @@ router.beforeEach(async (to, from, next) => {
   // return to.path.endsWith('/') ? next() : next(trailingSlash(to.path))
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const user = await store.getters['user/userData']
-  if (requiresAuth && !user.token) {
-    next('/')
-  } else if (to.name === 'Login' && user.token) {
-    next('/')
+  if (requiresAuth && !user.userId) {
+    next('/components/login/')
+  } else if (to.name === 'Login' && user.userId) {
+    next('/components/dash')
   } else {
     next()
   }

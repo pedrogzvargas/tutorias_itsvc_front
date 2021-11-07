@@ -95,11 +95,11 @@
         const rules = [v => !!v || 'Description es requerida']
         return this.form.disability_id === 4 ? rules : []
       },
-      currentStudentId () {
-        return this.studentId ? this.studentId : this.userType.id
+      currentUser () {
+        return this.studentId ? this.studentId : this.data.roles[0]
       },
       ...get('user', [
-        'userType',
+        'data',
       ]),
     },
     watch: {
@@ -124,7 +124,7 @@
         this.$refs.form.resetValidation()
       },
       createDeficiency () {
-        MedicalInformationService.post(this.currentStudentId, this.form).then(
+        MedicalInformationService.post(this.currentUser.id, this.form).then(
           (response) => {
             this.$emit('listUpdated')
             this.notify('Agregado correctamente', 'success')
@@ -137,7 +137,7 @@
         )
       },
       updateDeficiency () {
-        MedicalInformationService.put(this.currentStudentId, this.currentRecord.id, this.form).then(
+        MedicalInformationService.put(this.currentUser.id, this.currentRecord.id, this.form).then(
           (response) => {
             this.$emit('listUpdated')
             this.notify('Actualizado correctamente', 'success')

@@ -1,19 +1,11 @@
 <template>
   <div>
     <progress-bar v-if="isLoading" />
-    <subject-modal-form
-      :key="groupModelKey"
-      ref="subjectModalForm"
-      :mode="subjectModelMode"
-      :current-record="selectedSubject"
-      @listUpdated="reloadSubjectList"
-      @hiddenModal="hideModal"
-    />
-    <confirmation-modal
-      ref="confirmationModal"
-      :message="confirmationModalMessage"
-      @agree="deleteSubject"
-    />
+<!--    <confirmation-modal-->
+<!--      ref="confirmationModal"-->
+<!--      :message="confirmationModalMessage"-->
+<!--      @agree="deleteSubject"-->
+<!--    />-->
     <action-notifier
       ref="ActionNotifier"
       :text="actionMessage"
@@ -24,9 +16,6 @@
         <tr>
           <th class="primary--text">
             #
-          </th>
-          <th class="primary--text">
-            Docente
           </th>
           <th class="primary--text">
             Materia
@@ -51,7 +40,6 @@
           :key="subject.id"
         >
           <td>{{ index +1 }}</td>
-          <td>{{ `${subject.first_name} ${subject.second_name || ''} ${subject.last_name} ${subject.second_last_name || ''}` }}</td>
           <td>{{ subject.subject }}</td>
           <td>{{ subject.subject_code }}</td>
           <td>{{ subject.school_cycle_name }}</td>
@@ -82,20 +70,6 @@
                 >
                   mdi-arrow-right-thick
                 </v-icon>
-                <v-icon
-                  class="mx-1"
-                  @click="showSubjectFormAsEdition(subject)"
-                >
-                  mdi-pencil
-                </v-icon>
-
-                <v-icon
-                  class="mx-1"
-                  color="error"
-                  @click="showConfirmationModal(subject)"
-                >
-                  mdi-close
-                </v-icon>
               </v-col>
             </v-row>
           </td>
@@ -116,21 +90,18 @@
 
 <script>
   import ActionNotifier from '../../common/general/ActionNotifier'
-  import ConfirmationModal from '../../common/utils/ConfirmationModal'
   import ProgressBar from '../../app/ProgressBar'
-  import SubjectsService from '../../../services/tutor/subject/SubjectsService'
-  import SubjectService from '../../../services/tutor/subject/SubjectService'
-  import SubjectModalForm from './SubjectModalForm'
+  import TutorSubjectsService from '../../../services/tutor/subject/TutorSubjectsService'
+  import { get } from 'vuex-pathify'
   export default {
-    name: 'SubjectsList',
+    name: 'TutorSubjectsList',
     components: {
       ActionNotifier,
-      ConfirmationModal,
       ProgressBar,
-      SubjectModalForm,
     },
     props: {
       search: String,
+      tutorId: Number,
     },
     data: () => ({
       page: 1,
@@ -150,6 +121,12 @@
         const total = this.totalItems / 10
         return Math.ceil(total)
       },
+      currentUser () {
+        return this.tutorId ? this.tutorId : this.data.roles[0]
+      },
+      ...get('user', [
+        'data',
+      ]),
     },
     watch: {
       page (value) {
@@ -162,14 +139,14 @@
     },
     methods: {
       async fillSubjects () {
-        await SubjectsService.get(this.search, this.page).then(
+        await TutorSubjectsService.get(this.currentUser.id, this.search, this.page).then(
           (response) => {
             this.subjects = response.data.results
             this.totalItems = response.data.count
           },
         ).catch(
           (response) => {
-            this.notify('No se encontraron tutores', 'warning')
+            this.notify('No se encontraron materias', 'warning')
             this.isLoading = false
             return Promise.reject(response)
           },
@@ -182,38 +159,38 @@
         this.groupModelKey += 1
         this.subjectModelMode = null
       },
-      hideModal () {
-        this.groupModelKey += 1
-        this.selectedSubject = null
-        this.subjectModelMode = null
-      },
-      showSubjectFormAsEdition (value) {
-        this.subjectModelMode = 'edit'
-        this.selectedSubject = value
-        this.$refs.subjectModalForm.show = true
-      },
-      showSubjectFormAsCreation () {
-        this.selectedSubject = null
-        this.subjectModelMode = 'create'
-        this.$refs.subjectModalForm.show = true
-      },
-      showConfirmationModal (group) {
-        this.selectedSubject = group
-        this.$refs.confirmationModal.dialog = true
-      },
-      deleteSubject () {
-        SubjectService.delete(this.selectedSubject.id).then(
-          (response) => {
-            this.fillSubjects()
-            this.notify('Eliminado correctamente', 'success')
-          },
-        ).catch(
-          (response) => {
-            this.notify('No se pudo eliminar correctamente', 'error')
-            return Promise.reject(response)
-          },
-        )
-      },
+      // hideModal () {
+      //   this.groupModelKey += 1
+      //   this.selectedSubject = null
+      //   this.subjectModelMode = null
+      // },
+      // showSubjectFormAsEdition (value) {
+      //   this.subjectModelMode = 'edit'
+      //   this.selectedSubject = value
+      //   this.$refs.subjectModalForm.show = true
+      // },
+      // showSubjectFormAsCreation () {
+      //   this.selectedSubject = null
+      //   this.subjectModelMode = 'create'
+      //   this.$refs.subjectModalForm.show = true
+      // },
+      // showConfirmationModal (group) {
+      //   this.selectedSubject = group
+      //   this.$refs.confirmationModal.dialog = true
+      // },
+      // deleteSubject () {
+      //   SubjectService.delete(this.selectedSubject.id).then(
+      //     (response) => {
+      //       this.fillSubjects()
+      //       this.notify('Eliminado correctamente', 'success')
+      //     },
+      //   ).catch(
+      //     (response) => {
+      //       this.notify('No se pudo eliminar correctamente', 'error')
+      //       return Promise.reject(response)
+      //     },
+      //   )
+      // },
       notify (message, type) {
         this.actionMessage = message
         this.actionMessageColor = type
