@@ -45,7 +45,7 @@
           <td>{{ index +1 }}</td>
           <td>{{ `${sibling.first_name} ${sibling.second_name || ''} ${sibling.last_name} ${sibling.second_last_name || ''}` }}</td>
           <td>{{ sibling.birth_date }}</td>
-          <td>{{ sibling.gender_id }}</td>
+          <td>{{ sibling.gender }}</td>
           <td class="text-right">
             <v-row>
               <v-col

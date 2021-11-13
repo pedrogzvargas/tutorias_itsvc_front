@@ -95,6 +95,7 @@
                 :hint="passwordHint"
                 persistent-hint
                 outlined
+                autocomplete="nope"
                 @click:append="showPassword = !showPassword"
               />
             </v-col>
@@ -206,6 +207,7 @@
           this.form.last_name = this.currentRecord.last_name
           this.form.second_last_name = this.currentRecord.second_last_name
           this.form.username = this.currentRecord.username
+          this.form.password = null
           this.form.email = this.currentRecord.email
         } else {
           this.reset()
@@ -218,13 +220,11 @@
       },
       reset () {
         this.$refs.form.reset()
-        this.form.university_id = 0
-        this.form.academic_id = 0
       },
       resetValidation () {
         this.$refs.form.resetValidation()
       },
-      createTutor () {
+      createStudent () {
         StudentsService.post(this.form).then(
           (response) => {
             this.$emit('listUpdated')
@@ -237,7 +237,7 @@
           },
         )
       },
-      updateTutor () {
+      updateStudent () {
         StudentService.put(this.currentRecord.id, this.form).then(
           (response) => {
             this.$emit('listUpdated')
@@ -253,9 +253,9 @@
       persist () {
         if (this.$refs.form.validate()) {
           if (this.mode === 'create') {
-            this.createTutor()
+            this.createStudent()
           } else {
-            this.updateTutor()
+            this.updateStudent()
           }
           this.show = false
           this.reset()

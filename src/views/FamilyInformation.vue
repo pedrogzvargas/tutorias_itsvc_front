@@ -91,58 +91,7 @@
                   <template #title>
                     Contacto
                   </template>
-                  <v-form>
-                    <v-container>
-                      <v-row>
-                        <v-col
-                          cols="12"
-                          sm="4"
-                        >
-                          <v-text-field
-                            label="Teléfono celular"
-                            outlined
-                            :readonly="!isEditing"
-                          />
-                        </v-col>
-
-                        <v-col
-                          cols="12"
-                          sm="4"
-                        >
-                          <v-text-field
-                            label="Teléfono de casa"
-                            outlined
-                            :readonly="!isEditing"
-                          />
-                        </v-col>
-                      </v-row>
-
-                      <v-divider />
-                      <v-card-actions>
-                        <v-spacer />
-                        <v-btn
-                          v-if="!isEditing"
-                          color="primary"
-                          @click="isEditing = !isEditing"
-                        >
-                          Editar
-                        </v-btn>
-                        <v-btn
-                          v-if="isEditing"
-                          color="secondary"
-                          @click="isEditing = !isEditing"
-                        >
-                          Cancelar
-                        </v-btn>
-                        <v-btn
-                          :disabled="!isEditing"
-                          color="success"
-                        >
-                          Guardar
-                        </v-btn>
-                      </v-card-actions>
-                    </v-container>
-                  </v-form>
+                  <father-contact-form />
                 </material-card>
               </v-card-text>
             </v-tab-item>
@@ -179,58 +128,7 @@
                   <template #title>
                     Contacto
                   </template>
-                  <v-form>
-                    <v-container>
-                      <v-row>
-                        <v-col
-                          cols="12"
-                          sm="4"
-                        >
-                          <v-text-field
-                            label="Teléfono celular"
-                            outlined
-                            :readonly="!isEditing"
-                          />
-                        </v-col>
-
-                        <v-col
-                          cols="12"
-                          sm="4"
-                        >
-                          <v-text-field
-                            label="Teléfono de casa"
-                            outlined
-                            :readonly="!isEditing"
-                          />
-                        </v-col>
-                      </v-row>
-
-                      <v-divider />
-                      <v-card-actions>
-                        <v-spacer />
-                        <v-btn
-                          v-if="!isEditing"
-                          color="primary"
-                          @click="isEditing = !isEditing"
-                        >
-                          Editar
-                        </v-btn>
-                        <v-btn
-                          v-if="isEditing"
-                          color="secondary"
-                          @click="isEditing = !isEditing"
-                        >
-                          Cancelar
-                        </v-btn>
-                        <v-btn
-                          :disabled="!isEditing"
-                          color="success"
-                        >
-                          Guardar
-                        </v-btn>
-                      </v-card-actions>
-                    </v-container>
-                  </v-form>
+                  <mother-contact-form />
                 </material-card>
               </v-card-text>
             </v-tab-item>
@@ -269,9 +167,11 @@
   import FatherGeneralInformationForm
     from '../components/student/family_information/father/FatherGeneralInformationForm'
   import FatherAddressForm from '../components/student/family_information/father/FatherAddressForm'
+  import FatherContactForm from '../components/student/family_information/father/FatherContactForm'
   import MotherGeneralInformationForm
     from '../components/student/family_information/mother/MotherGeneralInformationForm'
   import MotherAddressForm from '../components/student/family_information/mother/MotherAddressForm'
+  import MotherContactForm from '../components/student/family_information/mother/MotherContactForm'
   import SiblingsList from '../components/student/family_information/siblings/SiblingsList'
   export default {
     name: 'FamilyInformationView',
@@ -280,12 +180,13 @@
       FatherGeneralInformationForm,
       FatherAddressForm,
       MotherAddressForm,
+      FatherContactForm,
+      MotherContactForm,
       SiblingsList,
     },
     data: () => ({
       tabs: null,
       isEditing: null,
-      items: ['Instituto Tecnológico Superior de Venustiano Carranza', 'Instituto Tecnológico Superior de Poza Rica'],
     }),
     methods: {
       showModalASCreate () {

@@ -1,9 +1,9 @@
 import Service from '../Service'
 
-const resource = 'students'
+const resource = 'users'
 
 export default {
   get (id) {
-    return Service.get(`${resource}/${id}/`)
+    return Service.get(`${resource}/${id}/profile/`)
   },
 }

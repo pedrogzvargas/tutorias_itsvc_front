@@ -51,6 +51,15 @@
                 </v-icon>
                 Económica
               </v-tab>
+              <v-tab
+                class="mr-3"
+                href="#tab-4"
+              >
+                <v-icon class="mr-2">
+                  mdi-phone
+                </v-icon>
+                Contacto
+              </v-tab>
             </v-tabs>
           </template>
           <v-tabs-items
@@ -99,6 +108,17 @@
               value="tab-3"
             >
               <v-card-text>
+                <v-card-text>
+                  <material-card
+                    color="primary"
+                    icon="mdi-briefcase"
+                  >
+                    <template #title>
+                      Información laboral
+                    </template>
+                    <job-form />
+                  </material-card>
+                </v-card-text>
                 <material-card
                   color="primary"
                   icon="mdi-currency-usd"
@@ -108,6 +128,23 @@
                   </template>
                   <income-form />
                 </material-card>
+              </v-card-text>
+            </v-tab-item>
+            <v-tab-item
+              value="tab-4"
+            >
+              <v-card-text>
+                <v-card-text>
+                  <material-card
+                    color="primary"
+                    icon="mdi-phone"
+                  >
+                    <template #title>
+                      Información de contacto
+                    </template>
+                    <student-contact-form />
+                  </material-card>
+                </v-card-text>
               </v-card-text>
             </v-tab-item>
           </v-tabs-items>
@@ -121,12 +158,16 @@
   import PersonalInformationForm from '../components/student/general_information/PersonalInformationForm'
   import DeficiencyList from '../components/student/general_information/deficiencyList'
   import IncomeForm from '../components/student/general_information/IncomeForm'
+  import JobForm from '../components/student/general_information/JobForm'
+  import StudentContactForm from '../components/student/general_information/StudentContactForm'
   export default {
     name: 'GeneralInformationView',
     components: {
       PersonalInformationForm,
       DeficiencyList,
       IncomeForm,
+      JobForm,
+      StudentContactForm,
     },
     data: () => ({
       tabs: null,

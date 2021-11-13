@@ -146,11 +146,15 @@
   import FatherAddressService from '../../../../services/student/parents/father/FatherAddressService'
   import StateSelect from '../../../common/address/StateSelect'
   import ActionNotifier from '../../../common/general/ActionNotifier'
+  import { get } from 'vuex-pathify'
   export default {
     name: 'FatherAddressForm',
     components: {
       StateSelect,
       ActionNotifier,
+    },
+    props: {
+      studentId: Number,
     },
     data () {
       return {
@@ -159,6 +163,7 @@
         actionMessage: null,
         actionMessageColor: null,
         valid: false,
+        hasRecord: null,
         form: {
           street: null,
           outdoor_number: null,
@@ -195,6 +200,12 @@
         const rules = [v => (v && v.length <= 50) || 'Número interior debe menor o igual a 50 caracteres']
         return this.form.indoor_number ? rules : []
       },
+      currentUser () {
+        return this.studentId ? this.studentId : this.data.roles[0]
+      },
+      ...get('user', [
+        'data',
+      ]),
     },
     created () {
       this.fillForm()
@@ -210,7 +221,7 @@
         this.$refs.form.resetValidation()
       },
       fillForm () {
-        FatherAddressService.get(1).then(
+        FatherAddressService.get(this.currentUser.id).then(
           (response) => {
             this.form.street = response.data.data.street
             this.form.outdoor_number = response.data.data.outdoor_number
@@ -219,16 +230,34 @@
             this.form.locality = response.data.data.locality
             this.form.state_id = response.data.data.state_id
             this.form.zip_code = response.data.data.zip_code
+            this.hasRecord = true
           },
         )
       },
       persist () {
         if (this.$refs.form.validate()) {
-          this.saveFatherAddress()
+          if (!this.hasRecord) {
+            this.createFatherAddress()
+          } else {
+            this.updateFatherAddress()
+          }
         }
       },
-      saveFatherAddress () {
-        FatherAddressService.put(1, this.form).then(
+      createFatherAddress () {
+        FatherAddressService.post(this.currentUser.id, this.form).then(
+          (response) => {
+            this.notify('Guardado correctamente', 'success')
+            this.isEditing = false
+          },
+        ).catch(
+          (response) => {
+            this.notify('No se pudo guardar correctamente', 'error')
+            return Promise.reject(response)
+          },
+        )
+      },
+      updateFatherAddress () {
+        FatherAddressService.put(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Guardado correctamente', 'success')
             this.isEditing = false
@@ -248,7 +277,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

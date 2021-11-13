@@ -1,10 +1,5 @@
 <template>
   <div>
-    <v-breadcrumbs :items="items">
-      <template v-slot:divider>
-        <v-icon>mdi-forward</v-icon>
-      </template>
-    </v-breadcrumbs>
     <progress-bar v-if="isLoading" />
     <student-subject-modal-form
       ref="studentSubjectModalForm"

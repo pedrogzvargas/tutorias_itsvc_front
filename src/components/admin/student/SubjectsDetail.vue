@@ -1,11 +1,16 @@
 <template>
   <div>
-    <v-breadcrumbs :items="items">
+    <progress-bar v-if="isLoading" />
+    <v-breadcrumbs
+      :items="items"
+      v-if="!isLoading"
+    >
       <template v-slot:divider>
         <v-icon>mdi-forward</v-icon>
       </template>
     </v-breadcrumbs>
     <material-card
+      v-if="!isLoading"
       class="mb-10"
       color="primary"
       icon="mdi-human-male"
@@ -107,6 +112,7 @@
     </material-card>
 
     <material-card
+      v-if="!isLoading"
       class="mb-10"
       color="primary"
       icon="mdi-account-multiple"
@@ -190,6 +196,7 @@
     </material-card>
 
     <material-card
+      v-if="!isLoading"
       class="mb-10"
       color="primary"
       icon="mdi-book"
@@ -311,12 +318,17 @@
 </template>
 
 <script>
+  import ProgressBar from '../../app/ProgressBar'
   import StudentSubjectsDeatailService from '../../../services/student/StudentSubjectsDeatailService'
 
   export default {
     name: 'SubjectsDetail',
+    components: {
+      ProgressBar,
+    },
     data: () => ({
       subjectDetails: null,
+      isLoading: true,
       items: [
         {
           text: 'Alumnos',

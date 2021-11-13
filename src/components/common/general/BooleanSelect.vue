@@ -20,7 +20,7 @@
   export default {
     name: 'BooleanSelect',
     props: {
-      defaultSelected: Number,
+      defaultSelected: Boolean,
       label: String,
       dense: Boolean,
       readonly: Boolean,
@@ -41,9 +41,6 @@
       defaultSelected (value) {
         this.selected = value
       },
-    },
-    created () {
-      this.fillSelect()
     },
     methods: {
       emitSelected () {

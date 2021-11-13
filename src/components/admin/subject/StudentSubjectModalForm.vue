@@ -65,7 +65,6 @@
                 :items="subjectStatusItems"
                 :label="'Estatus'"
                 outlined
-                @change="emitSelected"
               ></v-select>
             </v-col>
             <v-col

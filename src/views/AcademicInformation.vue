@@ -42,6 +42,15 @@
                 </v-icon>
                 Historial
               </v-tab>
+              <v-tab
+                class="mr-3"
+                href="#tab-3"
+              >
+                <v-icon class="mr-2">
+                  mdi-cash-multiple
+                </v-icon>
+                Beca
+              </v-tab>
             </v-tabs>
           </template>
           <v-tabs-items
@@ -98,6 +107,21 @@
                 </material-card>
               </v-card-text>
             </v-tab-item>
+            <v-tab-item
+              value="tab-3"
+            >
+              <v-card-text>
+                <material-card
+                  color="primary"
+                  icon="mdi-cash-multiple"
+                >
+                  <template #title>
+                    Información de beca
+                  </template>
+                  <scholarship-form />
+                </material-card>
+              </v-card-text>
+            </v-tab-item>
           </v-tabs-items>
         </material-card>
       </v-col>
@@ -108,9 +132,11 @@
 <script>
   import AcademicInformationForm from '../components/student/academic_information/AcademicInformationForm'
   import InstitutesList from '../components/student/academic_information/InstitutesList'
+  import ScholarshipForm from '../components/student/academic_information/ScholarshipForm'
   export default {
     name: 'AcademicInformationView',
     components: {
+      ScholarshipForm,
       AcademicInformationForm,
       InstitutesList,
     },

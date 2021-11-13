@@ -1,11 +1,16 @@
 <template>
   <div>
-    <v-breadcrumbs :items="items">
+    <progress-bar v-if="isLoading" />
+    <v-breadcrumbs
+      :items="items"
+      v-if="!isLoading"
+    >
       <template v-slot:divider>
         <v-icon>mdi-forward</v-icon>
       </template>
     </v-breadcrumbs>
     <material-card
+      v-if="!isLoading"
       class="mb-10"
       color="primary"
       icon="mdi-human-male"
@@ -95,6 +100,7 @@
     </material-card>
 
     <material-card
+      v-if="!isLoading"
       class="mb-10"
       color="primary"
       icon="mdi-account-multiple"
@@ -173,6 +179,7 @@
     </material-card>
 
     <material-card
+      v-if="!isLoading"
       class="mb-10"
       color="primary"
       icon="mdi-school"
@@ -211,6 +218,7 @@
     </material-card>
 
     <material-card
+      v-if="!isLoading"
       color="primary"
       full-header
     >
@@ -252,15 +260,18 @@
 </template>
 
 <script>
+  import ProgressBar from '../../app/ProgressBar'
   import AdvisedGroupService from '../../../services/tutor/group/AdvisedGroupService'
   import AdvisedGroupStudentsList from '../../tutor/group/AdvisedGroupStudentsList'
 
   export default {
     name: 'AdvisedGroupDetail',
     components: {
+      ProgressBar,
       AdvisedGroupStudentsList,
     },
     data: () => ({
+      isLoading: true,
       advisedGroup: null,
       advisedGroupId: null,
       academicInformationId: null,

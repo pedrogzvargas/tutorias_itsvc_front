@@ -23,7 +23,7 @@
               outlined
               :readonly="!isEditing"
               :disabled="!isEditing"
-            ></v-text-field>
+            />
           </v-col>
 
           <v-col
@@ -36,7 +36,7 @@
               outlined
               :readonly="!isEditing"
               :disabled="!isEditing"
-            ></v-text-field>
+            />
           </v-col>
 
           <v-col
@@ -50,7 +50,7 @@
               outlined
               :readonly="!isEditing"
               :disabled="!isEditing"
-            ></v-text-field>
+            />
           </v-col>
 
           <v-col
@@ -63,7 +63,7 @@
               outlined
               :readonly="!isEditing"
               :disabled="!isEditing"
-            ></v-text-field>
+            />
           </v-col>
         </v-row>
 
@@ -149,7 +149,7 @@
               outlined
               :readonly="!isEditing"
               :disabled="!isEditing"
-            ></v-text-field>
+            />
           </v-col>
 
           <v-col
@@ -181,7 +181,7 @@
               :rules="typeOfJobRules"
               :readonly="!form.has_job"
               :disabled="!form.has_job"
-            ></v-text-field>
+            />
           </v-col>
 
           <v-col
@@ -195,13 +195,13 @@
               outlined
               :readonly="!form.has_job"
               :disabled="!form.has_job"
-            ></v-text-field>
+            />
           </v-col>
         </v-row>
 
-        <v-divider></v-divider>
+        <v-divider />
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
             v-if="!isEditing"
             color="primary"
@@ -234,11 +234,15 @@
     from '../../../../services/student/parents/father/FatherGeneralInformationService'
   import AcademicDegreeSelect from '../../../common/general/AcademicDegreeSelect'
   import ActionNotifier from '../../../common/general/ActionNotifier'
+  import { get } from 'vuex-pathify'
   export default {
     name: 'FatherGeneralInformationForm',
     components: {
       AcademicDegreeSelect,
       ActionNotifier,
+    },
+    props: {
+      studentId: Number,
     },
     data () {
       return {
@@ -249,6 +253,7 @@
         valid: false,
         actionMessage: null,
         actionMessageColor: null,
+        hasRecord: null,
         form: {
           first_name: '',
           second_name: '',
@@ -296,6 +301,12 @@
       typeOfJob () {
         return this.form.has_job ? this.form.type_of_job : null
       },
+      currentUser () {
+        return this.studentId ? this.studentId : this.data.roles[0]
+      },
+      ...get('user', [
+        'data',
+      ]),
     },
     watch: {
       menu (val) {
@@ -327,11 +338,15 @@
       },
       persist () {
         if (this.$refs.form.validate()) {
-          this.updateFatherGeneralInformation()
+          if (!this.hasRecord) {
+            this.createFatherGeneralInformation()
+          } else {
+            this.updateFatherGeneralInformation()
+          }
         }
       },
       fillForm () {
-        FatherGeneralInformationService.get(1).then(
+        FatherGeneralInformationService.get(this.currentUser.id).then(
           (response) => {
             this.form.first_name = response.data.data.first_name
             this.form.second_name = response.data.data.second_name
@@ -344,13 +359,28 @@
             this.form.type_of_job = response.data.data.type_of_job
             this.form.profession_occupation = response.data.data.profession_occupation
             this.form.is_alive = response.data.data.is_alive
+            this.hasRecord = true
+          },
+        )
+      },
+      createFatherGeneralInformation () {
+        FatherGeneralInformationService.post(this.currentUser.id, this.form).then(
+          (response) => {
+            this.notify('Creado correctamente', 'success')
+            this.isEditing = false
+          },
+        ).catch(
+          (response) => {
+            this.notify('No se pudo guardar correctamente', 'error')
+            return Promise.reject(response)
           },
         )
       },
       updateFatherGeneralInformation () {
-        FatherGeneralInformationService.put(1, this.form).then(
+        FatherGeneralInformationService.put(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Actualizado correctamente', 'success')
+            this.isEditing = false
           },
         ).catch(
           (response) => {
