@@ -53,6 +53,10 @@ const router = new Router({
 
       // Maps
       route('Google Maps', null, 'maps/google'),
+      // Course
+      route('StudentCourse', null, 'student/course'),
+      route('StudentInterview', null, 'student/interview'),
+      route('StudentStudyInterview', null, 'student/study-interview'),
     ]),
   ],
 })
@@ -64,6 +68,7 @@ router.beforeEach(async (to, from, next) => {
   if (requiresAuth && !user.userId) {
     next('/components/login/')
   } else if (to.name === 'Login' && user.userId) {
+    console.info(user.userId)
     next('/components/dash')
   } else {
     next()

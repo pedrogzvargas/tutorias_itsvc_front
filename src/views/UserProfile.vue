@@ -12,7 +12,7 @@
         <app-card class="mt-4 text-center">
           <v-img
             class="rounded-circle elevation-6 mt-n12 d-inline-block"
-            :src="data.profileImage"
+            :src="data.profileImage ? data.profileImage : require('@/assets/no-image.png')"
             width="140"
             height="140"
           />

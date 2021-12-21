@@ -20,6 +20,7 @@
               v-model="form.mobile_phone"
               label="Teléfono celular"
               outlined
+              :rules="[v => !!v || 'Este campo es requerido']"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />

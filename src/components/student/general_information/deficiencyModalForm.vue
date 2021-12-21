@@ -24,6 +24,7 @@
             <v-col class="pb-0">
               <disability-select
                 :default-selected="form.disability_id"
+                :rules="[v => v!== null || 'Este campo es requerido']"
                 @SelectedItem="form.disability_id = $event"
               />
             </v-col>

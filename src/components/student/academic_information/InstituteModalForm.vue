@@ -25,6 +25,7 @@
               <academic-degree-select
                 :default-selected="form.academic_degree_id"
                 :dense="true"
+                :rules="[v => v!== null || 'Este campo es requerido']"
                 @SelectedItem="form.academic_degree_id = $event"
               />
             </v-col>

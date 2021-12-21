@@ -5,7 +5,10 @@
       :text="actionMessage"
       :color="actionMessageColor"
     />
-    <v-form>
+    <v-form
+      ref="form"
+      lazy-validation
+    >
       <v-container>
         <v-row>
           <v-col
@@ -31,6 +34,7 @@
               v-model="form.company_name"
               label="Nombre de la compañia"
               outlined
+              :rules="companyNameRules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -43,6 +47,7 @@
               v-model="form.schedule"
               label="Horario"
               outlined
+              :rules="scheduleRules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -111,6 +116,14 @@
       ...get('user', [
         'data',
       ]),
+      companyNameRules () {
+        const rules = [v => !!v || 'Nombre de la compañia es requerida']
+        return this.form.has_job ? rules : []
+      },
+      scheduleRules () {
+        const rules = [v => !!v || 'Horario es requerida']
+        return this.form.has_job ? rules : []
+      },
     },
     created () {
       this.callMainService()
@@ -158,10 +171,12 @@
         )
       },
       persist () {
-        if (!this.hasRecord) {
-          this.createJob()
-        } else {
-          this.updateJob()
+        if (this.$refs.form.validate()) {
+          if (!this.hasRecord) {
+            this.createJob()
+          } else {
+            this.updateJob()
+          }
         }
       },
       notify (message, type) {

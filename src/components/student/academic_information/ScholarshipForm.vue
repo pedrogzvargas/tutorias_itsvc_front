@@ -6,7 +6,11 @@
       :text="actionMessage"
       :color="actionMessageColor"
     />
-    <v-form v-if="!isLoading">
+    <v-form
+      v-if="!isLoading"
+      ref="form"
+      lazy-validation
+    >
       <v-container>
         <v-row>
           <v-col
@@ -32,6 +36,7 @@
               v-model="form.institute_name"
               label="Nombre de la institución"
               outlined
+              :rules="institutionRules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -44,6 +49,7 @@
               v-model="form.dependence_name"
               label="Nombre de la dependencia"
               outlined
+              :rules="dependenceRules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -115,17 +121,27 @@
       ...get('user', [
         'data',
       ]),
+      institutionRules () {
+        const rules = [v => !!v || 'Nombre de la institución es requerida']
+        return this.form.has_scholarship ? rules : []
+      },
+      dependenceRules () {
+        const rules = [v => !!v || 'Nombre de la dependencia es requerida']
+        return this.form.has_scholarship ? rules : []
+      },
     },
     created () {
       this.fillForm()
     },
     methods: {
       persist () {
-        this.isLoading = true
-        if (!this.hasRecord) {
-          this.createScholarship()
-        } else {
-          this.updateScholarship()
+        if (this.$refs.form.validate()) {
+          this.isLoading = true
+          if (!this.hasRecord) {
+            this.createScholarship()
+          } else {
+            this.updateScholarship()
+          }
         }
       },
       fillForm () {

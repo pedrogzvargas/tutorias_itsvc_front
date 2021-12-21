@@ -5,7 +5,10 @@
       :text="actionMessage"
       :color="actionMessageColor"
     />
-    <v-form>
+    <v-form
+      ref="form"
+      lazy-validation
+    >
       <v-container>
         <v-row>
           <v-col
@@ -16,6 +19,7 @@
               v-model="form.income"
               label="¿A cuánto ascienden los ingresos mensuales de tu familia?"
               outlined
+              :rules="[v => !!v || 'Este campo es requerido']"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -30,6 +34,7 @@
               v-model="form.family_income"
               label="¿En caso de ser económicamente independiente a cuánto asciende tu ingreso?"
               outlined
+              :rules="[v => !!v || 'Este campo es requerido']"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -141,10 +146,12 @@
         )
       },
       persist () {
-        if (!this.hasRecord) {
-          this.createIncome()
-        } else {
-          this.updateIncome()
+        if (this.$refs.form.validate()) {
+          if (!this.hasRecord) {
+            this.createIncome()
+          } else {
+            this.updateIncome()
+          }
         }
       },
       notify (message, type) {

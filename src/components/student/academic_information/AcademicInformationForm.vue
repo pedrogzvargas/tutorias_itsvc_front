@@ -6,7 +6,11 @@
       :text="actionMessage"
       :color="actionMessageColor"
     />
-    <v-form v-if="!isLoading">
+    <v-form
+      v-if="!isLoading"
+      ref="form"
+      lazy-validation
+    >
       <v-container>
         <v-row>
           <v-col
@@ -17,6 +21,7 @@
               ref="UniversitySelect"
               :default-selected="form.university_id"
               :readonly="!isEditing"
+              :rules="[v => v!== null || 'Este campo es requerido']"
               @SelectedItem="updateMajors"
             />
           </v-col>
@@ -31,6 +36,7 @@
               :university-id="form.university_id"
               :default-selected="form.major_id"
               :readonly="!isEditing"
+              :rules="[v => v!== null || 'Este campo es requerido']"
               @SelectedItem="updatePeriods"
             />
           </v-col>
@@ -45,6 +51,7 @@
               :university-id="form.university_id"
               :major-id="form.major_id"
               :readonly="!isEditing"
+              :rules="[v => v!== null || 'Este campo es requerido']"
               :default-selected="form.period_id"
               @SelectedItem="updatePeriodsNumber"
             />
@@ -60,6 +67,7 @@
               :academic-period-id="form.period_id"
               :default-selected="form.period_number_id"
               :readonly="!isEditing"
+              :rules="[v => v!== null || 'Este campo es requerido']"
               @SelectedItem="updateGroup"
             />
           </v-col>
@@ -75,6 +83,7 @@
               :academic-period-number-id="form.period_number_id"
               :readonly="!isEditing"
               :default-selected="form.group_id"
+              :rules="[v => v!== null || 'Este campo es requerido']"
               @SelectedItem="form.group_id = $event"
             />
           </v-col>
@@ -167,11 +176,13 @@
     },
     methods: {
       persist () {
-        this.isLoading = true
-        if (!this.hasRecord) {
-          this.createAcademicInformation()
-        } else {
-          this.updateAcademicInformation()
+        if (this.$refs.form.validate()) {
+          this.isLoading = true
+          if (!this.hasRecord) {
+            this.createAcademicInformation()
+          } else {
+            this.updateAcademicInformation()
+          }
         }
       },
       fillForm () {

@@ -17,14 +17,14 @@
 
     <default-drawer-toggle class="hidden-sm-and-down" />
 
-    <v-toolbar-title
-      class="font-weight-light text-h5"
-      v-text="name"
-    />
+<!--    <v-toolbar-title-->
+<!--      class="font-weight-light text-h5"-->
+<!--      v-text="name"-->
+<!--    />-->
 
     <v-spacer />
 
-    <default-notifications />
+<!--    <default-notifications />-->
 
     <default-account />
   </v-app-bar>
@@ -50,10 +50,10 @@
       //   /* webpackChunkName: "default-go-home" */
       //   './widgets/GoHome'
       // ),
-      DefaultNotifications: () => import(
-        /* webpackChunkName: "default-notifications" */
-        './widgets/Notifications'
-      ),
+      // DefaultNotifications: () => import(
+      //   /* webpackChunkName: "default-notifications" */
+      //   './widgets/Notifications'
+      // ),
       // DefaultSearch: () => import(
       //   /* webpackChunkName: "default-search" */
       //   './widgets/Search'

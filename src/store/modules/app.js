@@ -4,11 +4,6 @@ import { make } from 'vuex-pathify'
 const usersMenu = {
   student: [
     {
-      title: 'Dash',
-      icon: 'mdi-view-dashboard',
-      to: '/components/dash/',
-    },
-    {
       title: 'Perfil',
       icon: 'mdi-account',
       to: '/student/profile/',
@@ -32,6 +27,16 @@ const usersMenu = {
       title: 'Información familiar',
       icon: 'mdi-home-heart',
       to: '/student/family/',
+    },
+    {
+      title: 'Entrevista persona',
+      icon: 'mdi-account-question',
+      to: '/student/interview/',
+    },
+    {
+      title: 'Entrevista aprendizaje',
+      icon: 'mdi-chair-school',
+      to: '/student/study-interview/',
     },
   ],
   tutor: [
@@ -59,7 +64,7 @@ const usersMenu = {
     },
     {
       title: 'Alumnos',
-      icon: 'mdi-account',
+      icon: 'mdi-account-multiple',
       to: '/students/',
     },
     {
