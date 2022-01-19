@@ -7,6 +7,7 @@
       :items="academicPeriodNumber"
       label="Número de periodo"
       :readonly="readonly"
+      :disabled="disabled"
       :rules="rules"
       outlined
       @change="emitSelected"
@@ -23,6 +24,7 @@
       majorId: Number,
       academicPeriodId: Number,
       readonly: Boolean,
+      disabled: Boolean,
       defaultSelected: Number,
       rules: Array,
     },

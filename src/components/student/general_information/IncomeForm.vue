@@ -1,11 +1,13 @@
 <template>
   <div>
+    <progress-bar v-if="isLoading" />
     <action-notifier
       ref="ActionNotifier"
       :text="actionMessage"
       :color="actionMessageColor"
     />
     <v-form
+      v-if="!isLoading"
       ref="form"
       lazy-validation
     >
@@ -70,6 +72,7 @@
   </div>
 </template>
 <script>
+  import ProgressBar from '../../app/ProgressBar'
   import IncomeService from '../../../services/student/IncomeService'
   import ActionNotifier from '../../common/general/ActionNotifier'
   import { get } from 'vuex-pathify'
@@ -84,6 +87,7 @@
     data () {
       return {
         isEditing: false,
+        isLoading: true,
         hasRecord: null,
         actionMessage: null,
         actionMessageColor: null,
@@ -118,9 +122,10 @@
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
       },
-      createIncome () {
-        IncomeService.post(this.currentUser.id, this.form).then(
+      async createIncome () {
+        await IncomeService.post(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Guardado correctamente', 'success')
           },
@@ -131,12 +136,13 @@
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
-      updateIncome () {
-        IncomeService.put(this.currentUser.id, this.form).then(
+      async updateIncome () {
+        await IncomeService.put(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Actualizado correctamente', 'success')
-            this.isEditing = false
           },
         ).catch(
           (response) => {
@@ -144,9 +150,12 @@
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
       persist () {
         if (this.$refs.form.validate()) {
+          this.isLoading = true
           if (!this.hasRecord) {
             this.createIncome()
           } else {

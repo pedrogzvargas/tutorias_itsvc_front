@@ -50,6 +50,10 @@
             >
               <v-text-field
                 v-model="form.final_score"
+                :rules="finalScoreRules"
+                :readonly="form.approved === null"
+                :disabled="form.approved === null"
+                type="number"
                 label="Calificación"
                 outlined
               />
@@ -73,7 +77,10 @@
               class="pb-0 px-5"
             >
               <failure-metric-select
+                :readonly="form.approved || form.approved == null"
+                :disabled="form.approved || form.approved == null"
                 :default-selected="form.failure_metric_id"
+                :rules="failureMetricRules"
                 @SelectedItem="form.failure_metric_id = $event"
               />
             </v-col>
@@ -84,6 +91,8 @@
             >
               <v-textarea
                 v-model="form.comment"
+                :readonly="form.approved || form.approved == null"
+                :disabled="form.approved || form.approved == null"
                 label="Comentario"
                 outlined
               />
@@ -181,6 +190,16 @@
         ],
       }
     },
+    computed: {
+      finalScoreRules () {
+        const rules = [v => !!v || 'Este campo es requerido']
+        return this.form.approved !== null ? rules : []
+      },
+      failureMetricRules () {
+        const rules = [v => !!v || 'Este campo es requerido']
+        return this.form.approved === false ? rules : []
+      },
+    },
     watch: {
       currentRecord () {
         if (this.mode === 'edit' && this.currentRecord) {
@@ -215,7 +234,7 @@
         this.resetValidation()
         this.form.tutor_subject_id = null
         this.form.type_id = null
-        this.form.final_score = null
+        this.form.final_score = 0
         this.form.approved = null
         this.form.failure_metric_id = null
         this.form.comment = null
@@ -227,6 +246,7 @@
         this.show = false
       },
       createStudentSubject () {
+        this.form.final_score = this.form.final_score ? this.form.final_score : null
         this.emitShow = false
         StudentSubjectsService.post(this.studentId, this.form).then(
           (response) => {
@@ -241,6 +261,7 @@
         )
       },
       updateStudentSubject () {
+        this.form.final_score = this.form.final_score ? this.form.final_score : null
         this.emitShow = false
         StudentSubjectsService.put(this.currentRecord.student_id, this.currentRecord.id, this.form).then(
           (response) => {

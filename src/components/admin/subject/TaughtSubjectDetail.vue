@@ -271,6 +271,7 @@
 </template>
 
 <script>
+  import { get } from 'vuex-pathify'
   import ProgressBar from '../../app/ProgressBar'
   import TaughtSubjectService from '../../../services/tutor/subject/TaughtSubjectService'
   import TaughtSubjectStudentsList from './TaughtSubjectStudentsList'
@@ -285,18 +286,27 @@
       isLoading: true,
       taughtSubject: null,
       taughtSubjectId: null,
-      items: [
-        {
-          text: 'Materias impartidas',
-          disabled: false,
-          href: '/subjects/',
-        },
-        {
-          text: 'Detalle',
-          disabled: true,
-        },
-      ],
     }),
+    computed: {
+      items () {
+        return [
+          {
+            text: 'Materias impartidas',
+            disabled: false,
+            to: {
+              name: this.data.groups[0].name === 'tutor' ? 'TutorTaughtSubjects' : 'TaughtSubjects',
+            },
+          },
+          {
+            text: 'Detalle',
+            disabled: true,
+          },
+        ]
+      },
+      ...get('user', [
+        'data',
+      ]),
+    },
     watch: {
       '$route.params.id': function (id) {
         this.fillTaughtSubject(id)

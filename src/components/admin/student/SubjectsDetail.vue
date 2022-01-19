@@ -333,7 +333,10 @@
         {
           text: 'Alumnos',
           disabled: false,
-          href: '/students',
+          exact: true,
+          to: {
+            name: 'Students',
+          },
         },
         {
           text: 'Detalle',

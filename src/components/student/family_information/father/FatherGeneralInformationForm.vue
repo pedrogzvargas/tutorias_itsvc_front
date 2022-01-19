@@ -1,11 +1,13 @@
 <template>
   <div>
+    <progress-bar v-if="isLoading" />
     <action-notifier
       ref="ActionNotifier"
       :text="actionMessage"
       :color="actionMessageColor"
     />
     <v-form
+      v-if="!isLoading"
       ref="form"
       v-model="valid"
       lazy-validation
@@ -113,8 +115,9 @@
             <academic-degree-select
               :default-selected="form.academic_degree_id"
               :dense="false"
-              :readonly="!isEditing"
               :rules="[v => v!== null || 'Este campo es requerido']"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
               @SelectedItem="form.academic_degree_id = $event"
             />
           </v-col>
@@ -179,8 +182,8 @@
               label="Tipo de Trabajo"
               outlined
               :rules="typeOfJobRules"
-              :readonly="!form.has_job"
-              :disabled="!form.has_job"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
             />
           </v-col>
 
@@ -193,8 +196,8 @@
               label="Nombre o lugar de trabajo"
               :rules="workplaceRules"
               outlined
-              :readonly="!form.has_job"
-              :disabled="!form.has_job"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
             />
           </v-col>
         </v-row>
@@ -230,6 +233,7 @@
 </template>
 
 <script>
+  import ProgressBar from '../../../app/ProgressBar'
   import FatherGeneralInformationService
     from '../../../../services/student/parents/father/FatherGeneralInformationService'
   import AcademicDegreeSelect from '../../../common/general/AcademicDegreeSelect'
@@ -338,6 +342,7 @@
       },
       persist () {
         if (this.$refs.form.validate()) {
+          this.isLoading = true
           if (!this.hasRecord) {
             this.createFatherGeneralInformation()
           } else {
@@ -362,12 +367,13 @@
             this.hasRecord = true
           },
         )
+        this.isLoading = false
       },
-      createFatherGeneralInformation () {
-        FatherGeneralInformationService.post(this.currentUser.id, this.form).then(
+      async createFatherGeneralInformation () {
+        await FatherGeneralInformationService.post(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Creado correctamente', 'success')
-            this.isEditing = false
+            this.hasRecord = true
           },
         ).catch(
           (response) => {
@@ -375,12 +381,13 @@
             return Promise.reject(response)
           },
         )
+        this.isEditing = false
+        this.isLoading = false
       },
-      updateFatherGeneralInformation () {
-        FatherGeneralInformationService.put(this.currentUser.id, this.form).then(
+      async updateFatherGeneralInformation () {
+        await FatherGeneralInformationService.put(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Actualizado correctamente', 'success')
-            this.isEditing = false
           },
         ).catch(
           (response) => {
@@ -388,6 +395,8 @@
             return Promise.reject(response)
           },
         )
+        this.isEditing = false
+        this.isLoading = false
       },
       save (date) {
         this.$refs.menu.save(date)

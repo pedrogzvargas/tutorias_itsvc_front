@@ -1,5 +1,6 @@
 <template>
   <div>
+    <progress-bar v-if="isLoading" />
     <action-notifier
       ref="ActionNotifier"
       :text="actionMessage"
@@ -113,8 +114,9 @@
             <academic-degree-select
               :default-selected="form.academic_degree_id"
               :dense="false"
-              :readonly="!isEditing"
               :rules="[v => v!== null || 'Este campo es requerido']"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
               @SelectedItem="form.academic_degree_id = $event"
             />
           </v-col>
@@ -131,7 +133,7 @@
               :disabled="!isEditing"
               item-value="id"
               item-text="name"
-              label="Tu padre vive"
+              label="Tu madre vive"
               outlined
             />
           </v-col>
@@ -179,8 +181,8 @@
               label="Tipo de Trabajo"
               outlined
               :rules="typeOfJobRules"
-              :readonly="!form.has_job"
-              :disabled="!form.has_job"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
             ></v-text-field>
           </v-col>
 
@@ -193,8 +195,8 @@
               label="Nombre o lugar de trabajo"
               :rules="workplaceRules"
               outlined
-              :readonly="!form.has_job"
-              :disabled="!form.has_job"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -230,6 +232,7 @@
 </template>
 
 <script>
+  import ProgressBar from '../../../app/ProgressBar'
   import MotherGeneralInformationService
     from '../../../../services/student/parents/mother/MotherGeneralInformationService'
   import AcademicDegreeSelect from '../../../common/general/AcademicDegreeSelect'
@@ -338,6 +341,7 @@
       },
       persist () {
         if (this.$refs.form.validate()) {
+          this.isLoading = true
           if (!this.hasRecord) {
             this.createMotherGeneralInformation()
           } else {
@@ -362,12 +366,13 @@
             this.hasRecord = true
           },
         )
+        this.isLoading = false
       },
-      createMotherGeneralInformation () {
-        MotherGeneralInformationService.post(this.currentUser.id, this.form).then(
+      async createMotherGeneralInformation () {
+        await MotherGeneralInformationService.post(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Creado correctamente', 'success')
-            this.isEditing = false
+            this.hasRecord = true
           },
         ).catch(
           (response) => {
@@ -375,9 +380,11 @@
             return Promise.reject(response)
           },
         )
+        this.isEditing = false
+        this.isLoading = false
       },
-      updateMotherGeneralInformation () {
-        MotherGeneralInformationService.put(this.currentUser.id, this.form).then(
+      async updateMotherGeneralInformation () {
+        await MotherGeneralInformationService.put(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Actualizado correctamente', 'success')
             this.isEditing = false
@@ -388,6 +395,8 @@
             return Promise.reject(response)
           },
         )
+        this.isEditing = false
+        this.isLoading = false
       },
       save (date) {
         this.$refs.menu.save(date)

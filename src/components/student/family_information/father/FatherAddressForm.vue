@@ -1,11 +1,13 @@
 <template>
   <div>
+    <progress-bar v-if="isLoading" />
     <action-notifier
       ref="ActionNotifier"
       :text="actionMessage"
       :color="actionMessageColor"
     />
     <v-form
+      v-if="!isLoading"
       ref="form"
       v-model="valid"
       lazy-validation
@@ -92,6 +94,7 @@
               :default-selected="form.state_id"
               :rules="[v => v!== null || 'Estado es requerido']"
               :readonly="!isEditing"
+              :disabled="!isEditing"
               @SelectedItem="form.state_id = $event"
             />
           </v-col>
@@ -143,6 +146,7 @@
 </template>
 
 <script>
+  import ProgressBar from '../../../app/ProgressBar'
   import FatherAddressService from '../../../../services/student/parents/father/FatherAddressService'
   import StateSelect from '../../../common/address/StateSelect'
   import ActionNotifier from '../../../common/general/ActionNotifier'
@@ -233,9 +237,11 @@
             this.hasRecord = true
           },
         )
+        this.isLoading = false
       },
       persist () {
         if (this.$refs.form.validate()) {
+          this.isLoading = true
           if (!this.hasRecord) {
             this.createFatherAddress()
           } else {
@@ -243,11 +249,11 @@
           }
         }
       },
-      createFatherAddress () {
-        FatherAddressService.post(this.currentUser.id, this.form).then(
+      async createFatherAddress () {
+        await FatherAddressService.post(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Guardado correctamente', 'success')
-            this.isEditing = false
+            this.hasRecord = true
           },
         ).catch(
           (response) => {
@@ -255,9 +261,11 @@
             return Promise.reject(response)
           },
         )
+        this.isEditing = false
+        this.isLoading = false
       },
-      updateFatherAddress () {
-        FatherAddressService.put(this.currentUser.id, this.form).then(
+      async updateFatherAddress () {
+        await FatherAddressService.put(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Guardado correctamente', 'success')
             this.isEditing = false
@@ -268,6 +276,8 @@
             return Promise.reject(response)
           },
         )
+        this.isEditing = false
+        this.isLoading = false
       },
       notify (message, type) {
         this.actionMessage = message

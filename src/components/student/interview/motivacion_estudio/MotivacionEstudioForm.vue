@@ -458,41 +458,40 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay registro de Organizacion del Estudio', 'error')
+            this.notify('No hay registro de Motivación para el Estudio', 'error')
             this.isLoading = false
             return Promise.reject(response)
           },
         )
       },
-      createMotivacionEstudio () {
-        MotivacionEstudioService.post(this.currentUser.id, this.form).then(
+      async createMotivacionEstudio () {
+        await MotivacionEstudioService.post(this.currentUser.id, this.form).then(
           (response) => {
-            this.isLoading = false
-            this.isEditing = false
+            this.hasRecord = true
             this.notify('Creado correctamente', 'success')
           },
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
-            this.isLoading = false
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
-      updateMotivacionEstudio () {
-        MotivacionEstudioService.put(this.currentUser.id, this.form).then(
+      async updateMotivacionEstudio () {
+        await MotivacionEstudioService.put(this.currentUser.id, this.form).then(
           (response) => {
-            this.isLoading = false
-            this.isEditing = false
             this.notify('Actualizado correctamente', 'success')
           },
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
-            this.isLoading = false
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
       notify (message, type) {
         this.actionMessage = message

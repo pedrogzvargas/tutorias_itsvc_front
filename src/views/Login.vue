@@ -1,5 +1,10 @@
 <template>
-  <v-main>
+  <div>
+    <action-notifier
+      ref="ActionNotifier"
+      :text="actionMessage"
+      :color="actionMessageColor"
+    />
     <v-container
       fluid
     >
@@ -24,21 +29,25 @@
               >
             </div>
             <v-card-text>
-              <v-form>
+              <v-form
+                ref="form"
+                lazy-validation
+              >
                 <v-text-field
+                  v-model="form.username"
                   name="login"
                   label="Usuario"
                   prepend-icon="mdi-account-circle-outline"
                   type="text"
-                  v-model="form.username"
+                  :rules="[v => !!v || 'Usuario es requerido']"
                 ></v-text-field>
                 <v-text-field
-                  id="password"
+                  v-model="form.password"
                   prepend-icon="mdi-lock-outline"
                   name="password"
                   label="Contraseña"
                   type="password"
-                  v-model="form.password"
+                  :rules="[v => !!v || 'Contraseña es requerida']"
                 ></v-text-field>
               </v-form>
             </v-card-text>
@@ -47,17 +56,18 @@
               <v-btn
                 class="ma-2"
                 color="primary"
-                v-on:click.prevent="auth"
+                @click="auth"
               >Iniciar</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
     </v-container>
-  </v-main>
+  </div>
 </template>
 
 <script>
+  import ActionNotifier from '../components/common/general/ActionNotifier'
   import LoginService from '../services/user/LoginService'
   // Utilities
   import { sync, call } from 'vuex-pathify'
@@ -66,10 +76,12 @@
     data () {
       return {
         form: {
-          username: '',
-          password: '',
+          username: null,
+          password: null,
         },
         show: true,
+        actionMessage: null,
+        actionMessageColor: null,
       }
     },
     computed: {
@@ -83,19 +95,33 @@
     methods: {
       ...call('user/*'),
       auth () {
-        LoginService.create(this.form).then(
-          (response) => {
-            this.data.fullName = response.data.data.fullname
-            this.data.profileImage = response.data.data.profile_image
-            this.data.userId = response.data.data.user_id
-            this.data.roles = response.data.data.roles
-            this.data.groups = response.data.data.groups
-            this.drawerSide = true
-            this.update()
-            this.$router.push('/student/profile/')
-            this.$cookies.set('token', response.data.data.token)
-          },
-        )
+        if (this.$refs.form.validate()) {
+          console.info(this.$refs.form.validate())
+          LoginService.create(this.form).then(
+            (response) => {
+              this.data.fullName = response.data.data.fullname
+              this.data.profileImage = response.data.data.profile_image
+              this.data.userId = response.data.data.user_id
+              this.data.roles = response.data.data.roles
+              this.data.groups = response.data.data.groups
+              this.drawerSide = true
+              this.update()
+              this.$router.push('/student/profile/')
+              this.$cookies.set('token', response.data.data.token)
+            },
+          ).catch(
+            (response) => {
+              console.info(response)
+              this.notify('No se pudo iniciar sesión, revisa tus credenciales', 'error')
+              return Promise.reject(response)
+            },
+          )
+        }
+      },
+      notify (message, type) {
+        this.actionMessage = message
+        this.actionMessageColor = type
+        this.$refs.ActionNotifier.snackbar = true
       },
     },
   }

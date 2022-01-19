@@ -1,5 +1,6 @@
 <template>
   <v-menu
+    v-if="data.userId"
     bottom
     left
     min-width="200"
@@ -19,25 +20,28 @@
       </v-btn>
     </template>
 
-    <v-list
-      :tile="false"
-      flat
-      nav
-    >
-      <template>
-        <app-bar-item
-          to="/"
-        >
-          <v-list-item-title>Perfil</v-list-item-title>
-        </app-bar-item>
-        <v-divider
-          class="mb-2 mt-2"
-        />
+    <v-list>
+      <v-list-item @click="logOut">
+        <v-list-item-title>Perfil</v-list-item-title>
+      </v-list-item>
+      <v-divider class="mb-2 mt-2" />
+      <v-list-item @click="logOut">
+        <v-list-item-title>Cerrar sesión</v-list-item-title>
+      </v-list-item>
+<!--      <template>-->
+<!--        <app-bar-item-->
+<!--          to="/"-->
+<!--        >-->
+<!--          <v-list-item-title>Perfil</v-list-item-title>-->
+<!--        </app-bar-item>-->
+<!--        <v-divider-->
+<!--          class="mb-2 mt-2"-->
+<!--        />-->
 
-        <app-bar-item>
-          <v-list-item-title @click="logOut">Cerrar Sesión</v-list-item-title>
-        </app-bar-item>
-      </template>
+<!--        <app-bar-item>-->
+<!--          <v-list-item-title @click="logOut">Cerrar Sesión</v-list-item-title>-->
+<!--        </app-bar-item>-->
+<!--      </template>-->
     </v-list>
   </v-menu>
 </template>
@@ -67,6 +71,7 @@
         this.data.userId = null
         this.drawerSide = false
         this.$router.push('/components/login/')
+        console.info('logOut')
       },
     },
   }

@@ -20,8 +20,9 @@
             <university-select
               ref="UniversitySelect"
               :default-selected="form.university_id"
-              :readonly="!isEditing"
               :rules="[v => v!== null || 'Este campo es requerido']"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
               @SelectedItem="updateMajors"
             />
           </v-col>
@@ -35,8 +36,9 @@
             <major-select
               :university-id="form.university_id"
               :default-selected="form.major_id"
-              :readonly="!isEditing"
               :rules="[v => v!== null || 'Este campo es requerido']"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
               @SelectedItem="updatePeriods"
             />
           </v-col>
@@ -50,8 +52,9 @@
             <academic-period-select
               :university-id="form.university_id"
               :major-id="form.major_id"
-              :readonly="!isEditing"
               :rules="[v => v!== null || 'Este campo es requerido']"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
               :default-selected="form.period_id"
               @SelectedItem="updatePeriodsNumber"
             />
@@ -66,8 +69,9 @@
               :major-id="form.major_id"
               :academic-period-id="form.period_id"
               :default-selected="form.period_number_id"
-              :readonly="!isEditing"
               :rules="[v => v!== null || 'Este campo es requerido']"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
               @SelectedItem="updateGroup"
             />
           </v-col>
@@ -81,9 +85,10 @@
               :major-id="form.major_id"
               :academic-period-id="form.period_id"
               :academic-period-number-id="form.period_number_id"
-              :readonly="!isEditing"
               :default-selected="form.group_id"
               :rules="[v => v!== null || 'Este campo es requerido']"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
               @SelectedItem="form.group_id = $event"
             />
           </v-col>
@@ -210,35 +215,33 @@
           },
         )
       },
-      createAcademicInformation () {
-        AcademicInformationService.post(this.currentUser.id, this.academicInformationId, this.form).then(
+      async createAcademicInformation () {
+        await AcademicInformationService.post(this.currentUser.id, this.academicInformationId, this.form).then(
           (response) => {
-            this.isLoading = false
-            this.isEditing = false
             this.notify('Actualizado correctamente', 'success')
           },
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
-            this.isLoading = false
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
-      updateAcademicInformation () {
-        AcademicInformationService.put(this.currentUser.id, this.academicInformationId, this.form).then(
+      async updateAcademicInformation () {
+        await AcademicInformationService.put(this.currentUser.id, this.academicInformationId, this.form).then(
           (response) => {
-            this.isLoading = false
-            this.isEditing = false
             this.notify('Actualizado correctamente', 'success')
           },
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
-            this.isLoading = false
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
       updateMajors (item) {
         this.form.university_id = item

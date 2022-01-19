@@ -1,11 +1,13 @@
 <template>
   <div>
+    <progress-bar v-if="isLoading" />
     <action-notifier
       ref="ActionNotifier"
       :text="actionMessage"
       :color="actionMessageColor"
     />
     <v-form
+      v-if="!isLoading"
       ref="form"
       v-model="valid"
       lazy-validation
@@ -70,6 +72,7 @@
 </template>
 
 <script>
+  import ProgressBar from '../../../app/ProgressBar'
   import FatherContactService from '../../../../services/student/parents/father/FatherContactService'
   import ActionNotifier from '../../../common/general/ActionNotifier'
   import { get } from 'vuex-pathify'
@@ -136,14 +139,16 @@
             this.hasRecord = true
           },
         )
+        this.isLoading = false
       },
       persist () {
         if (this.$refs.form.validate()) {
+          this.isLoading = true
           this.saveFatherContact()
         }
       },
-      saveFatherContact () {
-        FatherContactService.post(this.currentUser.id, this.form).then(
+      async saveFatherContact () {
+        await FatherContactService.post(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Guardado correctamente', 'success')
             this.isEditing = false
@@ -154,6 +159,7 @@
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
       },
       notify (message, type) {
         this.actionMessage = message

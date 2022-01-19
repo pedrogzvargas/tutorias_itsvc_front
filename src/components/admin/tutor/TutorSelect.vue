@@ -54,7 +54,7 @@
     methods: {
       fillSelect () {
         TutorsService.get().then(
-          tutors => tutors.data.results.forEach(
+          tutors => tutors.data.forEach(
             element => this.tutors.push(element),
           ),
         ).catch(

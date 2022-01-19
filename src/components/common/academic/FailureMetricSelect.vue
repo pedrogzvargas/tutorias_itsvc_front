@@ -6,9 +6,10 @@
       item-text="name"
       :items="failureMetrics"
       :readonly="readonly"
+      :disabled="disabled"
       :rules="rules"
       outlined
-      label="Métrica"
+      label="Métrica de reprobación"
       @change="emitSelected"
     ></v-autocomplete>
   </div>
@@ -21,6 +22,7 @@
     props: {
       defaultSelected: Number,
       readonly: Boolean,
+      disabled: Boolean,
       rules: Array,
     },
     data () {

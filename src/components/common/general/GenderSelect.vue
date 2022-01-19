@@ -7,6 +7,7 @@
       :items="genders"
       label="Genero"
       :readonly="readonly"
+      :disabled="disabled"
       :dense="dense"
       :rules="rules"
       outlined
@@ -24,6 +25,7 @@
       defaultSelected: Number,
       dense: Boolean,
       readonly: Boolean,
+      disabled: Boolean,
       rules: Array,
     },
     data () {

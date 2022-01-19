@@ -7,6 +7,7 @@
       :items="majors"
       label="Carrera"
       :readonly="readonly"
+      :disabled="disabled"
       :rules="rules"
       outlined
       @change="emitSelected"
@@ -23,6 +24,7 @@
       universityId: Number,
       defaultSelected: Number,
       readonly: Boolean,
+      disabled: Boolean,
       rules: Array,
     },
     data () {

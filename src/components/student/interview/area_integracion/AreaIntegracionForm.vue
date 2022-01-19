@@ -21,10 +21,10 @@
           >
             <answer-select
               :default-selected="form.p1"
-              :readonly="!isEditing"
-              :disabled="!isEditing"
               :label="'¿Cómo es la relación con tu familia?'"
               :rules="[v => v!== null || 'Este campo es requerido']"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
               @SelectedItem="form.p1 = $event"
             />
           </v-col>
@@ -88,10 +88,10 @@
           >
             <answer1-select
               :default-selected="form.p4"
-              :readonly="!isEditing"
-              :disabled="!isEditing"
               :label="'¿Cómo te relacionas con tu Padre?'"
               :rules="[v => v!== null || 'Este campo es requerido']"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
               @SelectedItem="form.p4 = $event"
             />
           </v-col>
@@ -102,10 +102,10 @@
           >
             <answer-select
               :default-selected="form.p5"
-              :readonly="!isEditing"
-              :disabled="!isEditing"
               :label="'¿Qué actitud tienes hacia tu Padre?'"
               :rules="[v => v!== null || 'Este campo es requerido']"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
               @SelectedItem="form.p5 = $event"
             />
           </v-col>
@@ -120,10 +120,10 @@
           >
             <answer1-select
               :default-selected="form.p6"
-              :readonly="!isEditing"
-              :disabled="!isEditing"
               :label="'¿Cómo te relacionas con tu Madre?'"
               :rules="[v => v!== null || 'Este campo es requerido']"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
               @SelectedItem="form.p6 = $event"
             />
           </v-col>
@@ -134,10 +134,10 @@
           >
             <answer-select
               :default-selected="form.p7"
-              :readonly="!isEditing"
-              :disabled="!isEditing"
               :label="'¿Qué actitud tienes hacia tu Madre?'"
               :rules="[v => v!== null || 'Este campo es requerido']"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
               @SelectedItem="form.p7 = $event"
             />
           </v-col>
@@ -150,10 +150,10 @@
           >
             <answer-relative-select
               :default-selected="form.p8"
-              :readonly="!isEditing"
-              :disabled="!isEditing"
               :label="'¿Con quién te sientes mas ligado afectivamente?'"
               :rules="[v => v!== null || 'Este campo es requerido']"
+              :readonly="!isEditing"
+              :disabled="!isEditing"
               @SelectedItem="form.p8 = $event"
             />
           </v-col>
@@ -521,20 +521,20 @@
           },
         )
       },
-      createAreaIntegracion () {
-        AreaIntegracionService.post(this.currentUser.id, this.form).then(
+      async createAreaIntegracion () {
+        await AreaIntegracionService.post(this.currentUser.id, this.form).then(
           (response) => {
-            this.isLoading = false
-            this.isEditing = false
+            this.hasRecord = true
             this.notify('Creado correctamente', 'success')
           },
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
-            this.isLoading = false
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
       updateAreaIntegracion () {
         AreaIntegracionService.put(this.currentUser.id, this.form).then(

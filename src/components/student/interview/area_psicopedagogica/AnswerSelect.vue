@@ -7,6 +7,7 @@
       :items="items"
       :label="label"
       :readonly="readonly"
+      :disabled="disabled"
       :dense="dense"
       :rules="rules"
       outlined
@@ -23,6 +24,7 @@
       label: String,
       dense: Boolean,
       readonly: Boolean,
+      disabled: Boolean,
       rules: Array,
     },
     data () {

@@ -440,41 +440,40 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay registro de área de características personales', 'error')
+            this.notify('No hay registro de área de área psicopedagógica', 'error')
             this.isLoading = false
             return Promise.reject(response)
           },
         )
       },
-      createAreaPsicopedagogica () {
-        AreaPsicopedagogicaService.post(this.currentUser.id, this.form).then(
+      async createAreaPsicopedagogica () {
+        await AreaPsicopedagogicaService.post(this.currentUser.id, this.form).then(
           (response) => {
-            this.isLoading = false
-            this.isEditing = false
+            this.hasRecord = true
             this.notify('Creado correctamente', 'success')
           },
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
-            this.isLoading = false
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
-      updateAreaPsicopedagogica () {
-        AreaPsicopedagogicaService.put(this.currentUser.id, this.form).then(
+      async updateAreaPsicopedagogica () {
+        await AreaPsicopedagogicaService.put(this.currentUser.id, this.form).then(
           (response) => {
-            this.isLoading = false
-            this.isEditing = false
             this.notify('Actualizado correctamente', 'success')
           },
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
-            this.isLoading = false
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
       notify (message, type) {
         this.actionMessage = message

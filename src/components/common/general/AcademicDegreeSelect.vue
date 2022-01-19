@@ -7,6 +7,7 @@
       :items="academicDegree"
       label="Nivel académico"
       :readonly="readonly"
+      :disabled="disabled"
       :rules="rules"
       outlined
       :dense="dense"
@@ -24,6 +25,7 @@
       defaultSelected: Number,
       dense: Boolean,
       readonly: Boolean,
+      disabled: Boolean,
       rules: Array,
     },
     data () {

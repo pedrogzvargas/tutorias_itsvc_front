@@ -92,9 +92,9 @@
           >
             <state-select
               :default-selected="form.state_id"
+              :rules="[v => !!v || 'Este campo es requerido']"
               :readonly="!isEditing"
               :disabled="!isEditing"
-              :rules="[v => !!v || 'Este campo es requerido']"
               @SelectedItem="form.state_id = $event"
             />
           </v-col>
@@ -122,9 +122,9 @@
           >
             <house-type-select
               :default-selected="form.housing_type_id"
+              :rules="[v => !!v || 'Este campo es requerido']"
               :readonly="!isEditing"
               :disabled="!isEditing"
-              :rules="[v => !!v || 'Este campo es requerido']"
               @SelectedItem="form.housing_type_id = $event"
             />
           </v-col>
@@ -136,9 +136,9 @@
             <home-status-select
               v-model="form.home_status_id"
               :default-selected="form.home_status_id"
+              :rules="[v => !!v || 'Este campo es requerido']"
               :readonly="!isEditing"
               :disabled="!isEditing"
-              :rules="[v => !!v || 'Este campo es requerido']"
               @SelectedItem="form.home_status_id = $event"
             />
           </v-col>
@@ -341,11 +341,10 @@
         )
         this.isLoading = false
       },
-      saveAddressInformation () {
-        AddressService.post(this.currentUser.id, this.form).then(
+      async saveAddressInformation () {
+        await AddressService.post(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Guardado correctamente', 'success')
-            this.isEditing = false
           },
         ).catch(
           (response) => {
@@ -353,12 +352,13 @@
             return Promise.reject(response)
           },
         )
+        this.isEditing = false
+        this.isLoading = false
       },
-      updateAddressInformation () {
-        AddressService.put(this.currentUser.id, this.form).then(
+      async updateAddressInformation () {
+        await AddressService.put(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Guardado correctamente', 'success')
-            this.isEditing = false
           },
         ).catch(
           (response) => {
@@ -366,9 +366,12 @@
             return Promise.reject(response)
           },
         )
+        this.isEditing = false
+        this.isLoading = false
       },
       persist () {
         if (this.$refs.form.validate()) {
+          this.isLoading = true
           if (!this.hasRecord) {
             this.saveAddressInformation()
           } else {

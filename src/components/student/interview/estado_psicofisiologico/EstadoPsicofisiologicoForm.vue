@@ -349,35 +349,34 @@
           },
         )
       },
-      createEstadoPsicofisiologico () {
-        EstadoPsicofisiologicoService.post(this.currentUser.id, this.form).then(
+      async createEstadoPsicofisiologico () {
+        await EstadoPsicofisiologicoService.post(this.currentUser.id, this.form).then(
           (response) => {
-            this.isLoading = false
-            this.isEditing = false
+            this.hasRecord = true
             this.notify('Creado correctamente', 'success')
           },
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
-            this.isLoading = false
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
-      updateEstadoPsicofisiologico () {
-        EstadoPsicofisiologicoService.put(this.currentUser.id, this.form).then(
+      async updateEstadoPsicofisiologico () {
+        await EstadoPsicofisiologicoService.put(this.currentUser.id, this.form).then(
           (response) => {
-            this.isLoading = false
-            this.isEditing = false
             this.notify('Actualizado correctamente', 'success')
           },
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
-            this.isLoading = false
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
       notify (message, type) {
         this.actionMessage = message

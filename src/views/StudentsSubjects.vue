@@ -84,23 +84,60 @@
     },
     data: () => ({
       searchValue: '',
-      items: [
-        {
-          text: 'Alumnos',
-          disabled: false,
-          href: '/students',
-        },
-        {
-          text: 'Pedro Jesús González Vargas',
-          disabled: false,
-          href: '/students',
-        },
-        {
-          text: 'Materias',
-          disabled: true,
-        },
-      ],
+      idd: 1,
+      // items: [
+      //   {
+      //     text: 'Alumnos',
+      //     disabled: false,
+      //     exact: true,
+      //     to: {
+      //       name: 'Students',
+      //     },
+      //   },
+      //   {
+      //     text: 'Pedro Jesús González Vargas',
+      //     disabled: false,
+      //     to: {
+      //       name: 'StudentSubjectsDetail',
+      //       params: {
+      //         id: 1,
+      //       },
+      //     },
+      //   },
+      //   {
+      //     text: 'Materias',
+      //     disabled: true,
+      //   },
+      // ],
     }),
+    computed: {
+      items () {
+        return [
+          {
+            text: 'Alumnos',
+            disabled: false,
+            exact: true,
+            to: {
+              name: 'Students',
+            },
+          },
+          {
+            text: 'Pedro Jesús González Vargas',
+            disabled: false,
+            to: {
+              name: 'StudentSubjectsDetail',
+              params: {
+                id: this.$route.params.id,
+              },
+            },
+          },
+          {
+            text: 'Materias',
+            disabled: true,
+          },
+        ]
+      },
+    },
     methods: {
       showModalASCreate () {
         this.$refs.StudentsSubjectList.showStudentSubjectFormAsCreation()

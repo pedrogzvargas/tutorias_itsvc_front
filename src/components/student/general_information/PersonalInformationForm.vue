@@ -1,6 +1,11 @@
 <template>
   <div>
     <progress-bar v-if="isLoading" />
+    <action-notifier
+      ref="ActionNotifier"
+      :text="actionMessage"
+      :color="actionMessageColor"
+    />
     <v-form
       v-if="!isLoading"
       ref="form"
@@ -8,11 +13,6 @@
       lazy-validation
     >
       <v-container>
-        <action-notifier
-          ref="ActionNotifier"
-          :text="actionMessage"
-          :color="actionMessageColor"
-        />
         <v-row>
           <v-col
             cols="12"
@@ -73,6 +73,7 @@
             <gender-select
               :default-selected="form.gender_id"
               :rules="[v => !!v || 'Genero es requerido',]"
+              :disabled="!isEditing"
               :readonly="!isEditing"
               @SelectedItem="form.gender_id = $event"
             />
@@ -86,8 +87,9 @@
           >
             <marital-status-select
               :default-selected="form.marital_status_id"
-              :readonly="!isEditing"
               :rules="[v => !!v || 'Este campo es requerido']"
+              :disabled="!isEditing"
+              :readonly="!isEditing"
               @SelectedItem="form.marital_status_id = $event"
             />
           </v-col>
@@ -316,40 +318,41 @@
         this.isLoading = false
       },
       persist () {
-        if (!this.hasRecord) {
-          this.savePersonalInformation()
-        } else {
-          this.updatePersonalInformation()
+        if (this.$refs.form.validate()) {
+          this.isLoading = true
+          if (!this.hasRecord) {
+            this.savePersonalInformation()
+          } else {
+            this.updatePersonalInformation()
+          }
         }
       },
-      savePersonalInformation () {
-        if (this.$refs.form.validate()) {
-          this.form.number_of_children = this.form.number_of_children ? this.form.number_of_children : null
-          PersonalInformationService.post(this.currentStudentId, this.form).then((response) => {
-            this.notify('Guardado correctamente', 'success')
-            this.isEditing = false
-          }).catch(
-            (response) => {
-              this.notify('No se pudo guardar correctamente', 'error')
-              return Promise.reject(response)
-            },
-          )
+      async savePersonalInformation () {
+        this.form.number_of_children = this.form.number_of_children ? this.form.number_of_children : null
+        await PersonalInformationService.post(this.currentUser.id, this.form).then((response) => {
+          this.notify('Guardado correctamente', 'success')
           this.hasRecord = true
-        }
+        }).catch(
+          (response) => {
+            this.notify('No se pudo guardar correctamente', 'error')
+            return Promise.reject(response)
+          },
+        )
+        this.isEditing = false
+        this.isLoading = false
       },
-      updatePersonalInformation () {
-        if (this.$refs.form.validate()) {
-          this.form.number_of_children = this.form.number_of_children ? this.form.number_of_children : null
-          PersonalInformationService.put(this.currentUser.id, this.form).then((response) => {
-            this.notify('Guardado correctamente', 'success')
-            this.isEditing = false
-          }).catch(
-            (response) => {
-              this.notify('No se pudo guardar correctamente', 'error')
-              return Promise.reject(response)
-            },
-          )
-        }
+      async updatePersonalInformation () {
+        this.form.number_of_children = this.form.number_of_children ? this.form.number_of_children : null
+        await PersonalInformationService.put(this.currentUser.id, this.form).then((response) => {
+          this.notify('Guardado correctamente', 'success')
+        }).catch(
+          (response) => {
+            this.notify('No se pudo guardar correctamente', 'error')
+            return Promise.reject(response)
+          },
+        )
+        this.isEditing = false
+        this.isLoading = false
       },
       notify (message, type) {
         this.actionMessage = message

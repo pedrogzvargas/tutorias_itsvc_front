@@ -7,6 +7,7 @@
       :items="academicGroups"
       label="Grupo"
       :readonly="readonly"
+      :disabled="disabled"
       :rules="rules"
       outlined
       @change="emitSelected"
@@ -24,6 +25,7 @@
       academicPeriodId: Number,
       academicPeriodNumberId: Number,
       readonly: Boolean,
+      disabled: Boolean,
       defaultSelected: Number,
       rules: Array,
     },

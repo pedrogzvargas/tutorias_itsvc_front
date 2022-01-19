@@ -1,11 +1,13 @@
 <template>
   <div>
+    <progress-bar v-if="isLoading" />
     <action-notifier
       ref="ActionNotifier"
       :text="actionMessage"
       :color="actionMessageColor"
     />
     <v-form
+      v-if="!isLoading"
       ref="form"
       lazy-validation
     >
@@ -83,6 +85,7 @@
   </div>
 </template>
 <script>
+  import ProgressBar from '../../app/ProgressBar'
   import JobService from '../../../services/student/JobService'
   import BooleanSelect from '../../common/general/BooleanSelect'
   import ActionNotifier from '../../common/general/ActionNotifier'
@@ -99,6 +102,7 @@
     data () {
       return {
         isEditing: false,
+        isLoading: true,
         hasRecord: null,
         actionMessage: null,
         actionMessageColor: null,
@@ -143,22 +147,25 @@
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
       },
-      createJob () {
-        JobService.post(this.currentUser.id, this.form).then(
+      async createJob () {
+        await JobService.post(this.currentUser.id, this.form).then(
           (response) => {
+            this.hasRecord = true
             this.notify('Guardado correctamente', 'success')
           },
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
-            this.hasRecord = true
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
-      updateJob () {
-        JobService.put(this.currentUser.id, this.form).then(
+      async updateJob () {
+        await JobService.put(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Actualizado correctamente', 'success')
             this.isEditing = false
@@ -169,9 +176,12 @@
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
       persist () {
         if (this.$refs.form.validate()) {
+          this.isLoading = true
           if (!this.hasRecord) {
             this.createJob()
           } else {

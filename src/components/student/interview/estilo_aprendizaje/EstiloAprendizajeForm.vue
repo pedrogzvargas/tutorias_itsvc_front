@@ -530,41 +530,40 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay registro de Organizacion del Estudio', 'error')
+            this.notify('No hay registro de Estilos de aprendizaje', 'error')
             this.isLoading = false
             return Promise.reject(response)
           },
         )
       },
-      createOrganizacionEstudio () {
-        EstiloAprendizajeService.post(this.currentUser.id, this.form).then(
+      async createOrganizacionEstudio () {
+        await EstiloAprendizajeService.post(this.currentUser.id, this.form).then(
           (response) => {
-            this.isLoading = false
-            this.isEditing = false
+            this.hasRecord = true
             this.notify('Creado correctamente', 'success')
           },
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
-            this.isLoading = false
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
-      updateOrganizacionEstudio () {
-        EstiloAprendizajeService.put(this.currentUser.id, this.form).then(
+      async updateOrganizacionEstudio () {
+        await EstiloAprendizajeService.put(this.currentUser.id, this.form).then(
           (response) => {
-            this.isLoading = false
-            this.isEditing = false
             this.notify('Actualizado correctamente', 'success')
           },
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
-            this.isLoading = false
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
+        this.isEditing = false
       },
       notify (message, type) {
         this.actionMessage = message

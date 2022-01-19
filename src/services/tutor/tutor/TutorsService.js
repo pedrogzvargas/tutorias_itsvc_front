@@ -5,7 +5,7 @@ const resource = 'tutor'
 
 export default {
   get (search = '', page = 1) {
-    return Service.get(`${resource}/`, {
+    return Service.get(`${resource}/?get_all=true`, {
       params: {
         search: search,
         page: page,

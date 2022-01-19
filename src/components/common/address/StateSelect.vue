@@ -7,6 +7,7 @@
       :items="states"
       label="Estado"
       :readonly="readonly"
+      :disabled="disabled"
       :rules="rules"
       outlined
       @change="emitSelected"
@@ -22,6 +23,7 @@
     props: {
       defaultSelected: Number,
       readonly: Boolean,
+      disabled: Boolean,
       rules: Array,
     },
     data () {

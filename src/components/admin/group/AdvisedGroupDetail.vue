@@ -260,6 +260,7 @@
 </template>
 
 <script>
+  import { get } from 'vuex-pathify'
   import ProgressBar from '../../app/ProgressBar'
   import AdvisedGroupService from '../../../services/tutor/group/AdvisedGroupService'
   import AdvisedGroupStudentsList from '../../tutor/group/AdvisedGroupStudentsList'
@@ -275,18 +276,27 @@
       advisedGroup: null,
       advisedGroupId: null,
       academicInformationId: null,
-      items: [
-        {
-          text: 'Grupos asesorados',
-          disabled: false,
-          href: '/groups/',
-        },
-        {
-          text: 'Detalle',
-          disabled: true,
-        },
-      ],
     }),
+    computed: {
+      items () {
+        return [
+          {
+            text: 'Grupos asesorados',
+            disabled: false,
+            to: {
+              name: this.data.groups[0].name === 'tutor' ? 'TutorAdvisedGroups' : 'AdvisedGroups',
+            },
+          },
+          {
+            text: 'Detalle',
+            disabled: true,
+          },
+        ]
+      },
+      ...get('user', [
+        'data',
+      ]),
+    },
     watch: {
       '$route.params.id': function (id) {
         this.fillAdvisedGroup(id)

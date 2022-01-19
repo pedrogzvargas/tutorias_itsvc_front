@@ -155,7 +155,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay información academica para mostrar', 'error')
+            this.notify('No hay información de beca para mostrar', 'error')
             this.isLoading = false
             return Promise.reject(response)
           },
@@ -166,6 +166,7 @@
           (response) => {
             this.isLoading = false
             this.isEditing = false
+            this.hasRecord = true
             this.notify('Actualizado correctamente', 'success')
           },
         ).catch(
