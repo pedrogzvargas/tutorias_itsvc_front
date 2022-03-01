@@ -79,7 +79,7 @@
               <failure-metric-select
                 :readonly="form.approved || form.approved == null"
                 :disabled="form.approved || form.approved == null"
-                :default-selected="form.failure_metric_id"
+                :default-selected="failureMetricId"
                 :rules="failureMetricRules"
                 @SelectedItem="form.failure_metric_id = $event"
               />
@@ -198,6 +198,9 @@
       failureMetricRules () {
         const rules = [v => !!v || 'Este campo es requerido']
         return this.form.approved === false ? rules : []
+      },
+      failureMetricId () {
+        return this.form.approved === false ? this.form.failure_metric_id : null
       },
     },
     watch: {

@@ -295,8 +295,8 @@
       save (date) {
         this.$refs.menu.save(date)
       },
-      callMainService () {
-        PersonalInformationService.get(this.currentUser.id).then(
+      async callMainService () {
+        await PersonalInformationService.get(this.currentUser.id).then(
           (response) => {
             this.form.place_birth = response.data.data.place_birth
             this.form.birth_date = response.data.data.birth_date
@@ -312,6 +312,7 @@
         ).catch(
           (response) => {
             this.notify('No hay información registrada', 'warning')
+            this.isLoading = false
             return Promise.reject(response)
           },
         )

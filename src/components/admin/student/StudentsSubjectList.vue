@@ -5,7 +5,7 @@
       ref="studentSubjectModalForm"
       :mode="ModalMode"
       :current-record="selectedStudentSubject"
-      @listUpdated="fillStudents"
+      @listUpdated="fillSubjects"
     />
     <confirmation-modal
       ref="confirmationModal"
@@ -110,7 +110,6 @@
   import ActionNotifier from '../../common/general/ActionNotifier'
   import ConfirmationModal from '../../common/utils/ConfirmationModal'
   import ProgressBar from '../../app/ProgressBar'
-  import TutorService from '../../../services/admin/tutor/TutorService'
   import StudentSubjectsService from '../../../services/student/StudentSubjectsService'
   import StudentSubjectModalForm from '../subject/StudentSubjectModalForm'
   export default {
@@ -144,15 +143,15 @@
     },
     watch: {
       page (value) {
-        this.fillStudents()
+        this.fillSubjects()
       },
     },
     created () {
       this.studentId = this.$route.params.id
-      this.fillStudents()
+      this.fillSubjects()
     },
     methods: {
-      async fillStudents () {
+      async fillSubjects () {
         await StudentSubjectsService.get(this.studentId, this.search, this.page).then(
           (response) => {
             this.subjects = response.data.results
@@ -177,14 +176,14 @@
         this.ModalMode = 'create'
         this.$refs.studentSubjectModalForm.show = true
       },
-      showConfirmationModal (sibling) {
-        this.selectedTutor = sibling
+      showConfirmationModal (value) {
+        this.selectedStudentSubject = value
         this.$refs.confirmationModal.dialog = true
       },
       deleteSibling () {
-        TutorService.delete(this.selectedTutor.id).then(
+        StudentSubjectsService.delete(this.studentId, this.selectedStudentSubject.id).then(
           (response) => {
-            this.fillTutors()
+            this.fillSubjects()
             this.notify('Eliminado correctamente', 'success')
           },
         ).catch(
@@ -202,7 +201,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -350,8 +350,8 @@
           }
         }
       },
-      fillForm () {
-        FatherGeneralInformationService.get(this.currentUser.id).then(
+      async fillForm () {
+        await FatherGeneralInformationService.get(this.currentUser.id).then(
           (response) => {
             this.form.first_name = response.data.data.first_name
             this.form.second_name = response.data.data.second_name
@@ -365,6 +365,12 @@
             this.form.profession_occupation = response.data.data.profession_occupation
             this.form.is_alive = response.data.data.is_alive
             this.hasRecord = true
+          },
+        ).catch(
+          (response) => {
+            this.notify('No hay información para mostrar', 'error')
+            this.isLoading = false
+            return Promise.reject(response)
           },
         )
         this.isLoading = false

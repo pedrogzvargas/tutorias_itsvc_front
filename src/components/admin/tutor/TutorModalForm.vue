@@ -95,6 +95,7 @@
                 :hint="passwordHint"
                 persistent-hint
                 outlined
+                autocomplete="new-password"
                 @click:append="showPassword = !showPassword"
               />
             </v-col>
@@ -283,6 +284,7 @@
         )
       },
       updateTutor () {
+        this.form.password = this.form.password ? this.form.password : null
         TutorService.put(this.currentRecord.id, this.form).then(
           (response) => {
             this.$emit('listUpdated')

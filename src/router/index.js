@@ -21,8 +21,8 @@ const router = new Router({
   },
   routes: [
     layout('Default', [
-      route('Dashboard'),
-      route('Dash', null, 'components/dash', { requiresAuth: true }),
+      route('Login'),
+      // route('Dash', null, 'components/dash', { requiresAuth: true }),
 
       // Pages
       route('UserProfile', null, 'student/profile', { requiresAuth: true }),
@@ -69,7 +69,7 @@ router.beforeEach(async (to, from, next) => {
     next('/components/login/')
   } else if (to.name === 'Login' && user.userId) {
     console.info(user.userId)
-    next('/components/dash')
+    next('/student/profile')
   } else {
     next()
   }

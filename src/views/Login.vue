@@ -108,6 +108,7 @@
               this.update()
               this.$router.push('/student/profile/')
               this.$cookies.set('token', response.data.data.token)
+              this.$cookies.set('userId', response.data.data.user_id)
             },
           ).catch(
             (response) => {

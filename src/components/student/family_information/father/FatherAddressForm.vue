@@ -224,8 +224,8 @@
       resetValidation () {
         this.$refs.form.resetValidation()
       },
-      fillForm () {
-        FatherAddressService.get(this.currentUser.id).then(
+      async fillForm () {
+        await FatherAddressService.get(this.currentUser.id).then(
           (response) => {
             this.form.street = response.data.data.street
             this.form.outdoor_number = response.data.data.outdoor_number
@@ -235,6 +235,12 @@
             this.form.state_id = response.data.data.state_id
             this.form.zip_code = response.data.data.zip_code
             this.hasRecord = true
+          },
+        ).catch(
+          (response) => {
+            this.notify('No hay información para mostrar', 'error')
+            this.isLoading = false
+            return Promise.reject(response)
           },
         )
         this.isLoading = false

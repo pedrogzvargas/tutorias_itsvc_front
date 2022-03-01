@@ -174,6 +174,7 @@
   import AcademicDegreeSelect from '../../../common/general/AcademicDegreeSelect'
   import AttitudeSelect from '../../../common/general/AttitudeSelect'
   import RelationshipSelect from '../../../common/general/RelationshipSelect'
+  import { get } from 'vuex-pathify'
   export default {
     name: 'SiblingModalForm',
     components: {
@@ -219,6 +220,12 @@
       }
     },
     computed: {
+      currentUser () {
+        return this.studentId ? this.studentId : this.data.roles[0]
+      },
+      ...get('user', [
+        'data',
+      ]),
       secondNameRules () {
         const rules = [v => (v && v.length <= 100) || 'Segundo nombre debe menor o igual a 100 caracteres']
         return this.form.second_name ? rules : []
@@ -260,7 +267,7 @@
         this.$refs.form.resetValidation()
       },
       createInstitute () {
-        SiblingsService.post(1, this.form).then(
+        SiblingsService.post(this.currentUser.id, this.form).then(
           (response) => {
             this.$emit('listUpdated')
             this.notify('Agregado correctamente', 'success')
@@ -273,7 +280,7 @@
         )
       },
       updateInstitute () {
-        SiblingsService.put(1, this.currentRecord.id, this.form).then(
+        SiblingsService.put(this.currentUser.id, this.currentRecord.id, this.form).then(
           (response) => {
             this.$emit('listUpdated')
             this.notify('Actualizado correctamente', 'success')

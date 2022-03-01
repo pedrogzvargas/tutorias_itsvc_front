@@ -95,7 +95,7 @@
                 :hint="passwordHint"
                 persistent-hint
                 outlined
-                autocomplete="nope"
+                autocomplete="new-password"
                 @click:append="showPassword = !showPassword"
               />
             </v-col>

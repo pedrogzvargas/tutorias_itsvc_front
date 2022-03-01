@@ -17,7 +17,7 @@
       :text="actionMessage"
       :color="actionMessageColor"
     />
-    <v-simple-table>
+    <v-simple-table v-if="!isLoading">
       <thead>
         <tr>
           <th class="primary--text">

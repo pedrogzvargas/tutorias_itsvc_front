@@ -17,7 +17,7 @@
       :text="actionMessage"
       :color="actionMessageColor"
     />
-    <v-simple-table>
+    <v-simple-table v-if="!isLoading">
       <thead>
         <tr>
           <th class="primary--text">
@@ -109,14 +109,15 @@
       this.fillDeficiencies()
     },
     methods: {
-      fillDeficiencies () {
-        MedicalInformationService.get(this.currentUser.id).then(
+      async fillDeficiencies () {
+        await MedicalInformationService.get(this.currentUser.id).then(
           (response) => {
             this.deficiencies = response.data.data
           },
         ).catch(
           (response) => {
             this.notify('No hay deficiencias registradas', 'warning')
+            this.isLoading = false
             return Promise.reject(response)
           },
         )

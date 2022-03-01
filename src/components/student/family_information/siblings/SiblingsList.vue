@@ -17,7 +17,7 @@
       :text="actionMessage"
       :color="actionMessageColor"
     />
-    <v-simple-table>
+    <v-simple-table v-if="!isLoading">
       <thead>
         <tr>
           <th class="primary--text">
@@ -79,6 +79,7 @@
   import ConfirmationModal from '../../../common/utils/ConfirmationModal'
   import SiblingsService from '../../../../services/student/parents/sibling/SiblingsService'
   import SiblingModalForm from './SiblingModalForm'
+  import { get } from 'vuex-pathify'
   export default {
     name: 'SiblingsList',
     components: {
@@ -97,17 +98,32 @@
       actionMessage: null,
       actionMessageColor: null,
     }),
+    computed: {
+      currentUser () {
+        return this.studentId ? this.studentId : this.data.roles[0]
+      },
+      ...get('user', [
+        'data',
+      ]),
+    },
     created () {
       this.fillSiblings()
     },
     methods: {
-      fillSiblings () {
-        SiblingsService.get(1).then(
+      async fillSiblings () {
+        await SiblingsService.get(this.currentUser.id).then(
           (response) => {
             this.siblings = response.data.data
             this.isLoading = false
           },
+        ).catch(
+          (response) => {
+            this.notify('No se encontraron hermanos', 'warning')
+            this.isLoading = false
+            return Promise.reject(response)
+          },
         )
+        this.isLoading = false
       },
       showSiblingFormAsEdition (value) {
         this.siblingModelMode = 'edit'
@@ -124,7 +140,7 @@
         this.$refs.confirmationModal.dialog = true
       },
       deleteSibling () {
-        SiblingsService.delete(1, this.selectedSibling.id).then(
+        SiblingsService.delete(this.currentUser.id, this.selectedSibling.id).then(
           (response) => {
             this.fillSiblings()
             this.notify('Eliminado correctamente', 'success')

@@ -133,8 +133,8 @@
       this.callMainService()
     },
     methods: {
-      callMainService () {
-        JobService.get(this.currentUser.id).then(
+      async callMainService () {
+        await JobService.get(this.currentUser.id).then(
           (response) => {
             this.form.has_job = response.data.data.has_job
             this.form.company_name = response.data.data.company_name
@@ -144,6 +144,7 @@
         ).catch(
           (response) => {
             this.notify('No hay información laboral registrada', 'warning')
+            this.isLoading = false
             return Promise.reject(response)
           },
         )

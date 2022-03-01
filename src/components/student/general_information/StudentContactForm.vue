@@ -131,12 +131,18 @@
         const phone = phoneList.filter(phone => phone.type === `${type}`) || ''
         return phone ? phone[0].number : ''
       },
-      fillForm () {
-        StudentContactService.get(this.currentUser.id).then(
+      async fillForm () {
+        await StudentContactService.get(this.currentUser.id).then(
           (response) => {
             this.form.home_phone = this.getPhone(response.data.data, 'home_phone')
             this.form.mobile_phone = this.getPhone(response.data.data, 'mobile_phone')
             this.hasRecord = true
+          },
+        ).catch(
+          (response) => {
+            this.notify('No hay información de contacto registrada', 'warning')
+            this.isLoading = false
+            return Promise.reject(response)
           },
         )
         this.isLoading = false

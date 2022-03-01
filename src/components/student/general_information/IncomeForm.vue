@@ -109,8 +109,8 @@
       this.callMainService()
     },
     methods: {
-      callMainService () {
-        IncomeService.get(this.currentUser.id).then(
+      async callMainService () {
+        await IncomeService.get(this.currentUser.id).then(
           (response) => {
             this.form.income = response.data.data.income
             this.form.family_income = response.data.data.family_income
@@ -119,6 +119,7 @@
         ).catch(
           (response) => {
             this.notify('No hay información económica registrada', 'warning')
+            this.isLoading = false
             return Promise.reject(response)
           },
         )

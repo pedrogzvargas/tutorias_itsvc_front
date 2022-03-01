@@ -71,6 +71,9 @@ const getters = {
   userData: state => {
     return state.data
   },
+  userToken: state => {
+    return state.data.userId
+  },
   userType: state => {
     return state.data.groups[0]
   },

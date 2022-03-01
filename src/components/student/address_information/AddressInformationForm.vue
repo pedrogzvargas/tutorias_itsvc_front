@@ -317,8 +317,8 @@
       resetValidation () {
         this.$refs.form.resetValidation()
       },
-      callMainService () {
-        AddressService.get(this.currentUser.id).then(
+      async callMainService () {
+        await AddressService.get(this.currentUser.id).then(
           (response) => {
             this.form.street = response.data.data.street
             this.form.indoor_number = response.data.data.indoor_number
@@ -336,6 +336,8 @@
           },
         ).catch(
           (response) => {
+            this.notify('No hay información domiciliaria registrada', 'warning')
+            this.isLoading = false
             return Promise.reject(response)
           },
         )
@@ -349,6 +351,7 @@
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
+            this.isLoading = false
             return Promise.reject(response)
           },
         )
@@ -363,6 +366,7 @@
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
+            this.isLoading = false
             return Promise.reject(response)
           },
         )
@@ -387,7 +391,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

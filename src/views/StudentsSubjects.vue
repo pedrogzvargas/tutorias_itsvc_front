@@ -84,31 +84,6 @@
     },
     data: () => ({
       searchValue: '',
-      idd: 1,
-      // items: [
-      //   {
-      //     text: 'Alumnos',
-      //     disabled: false,
-      //     exact: true,
-      //     to: {
-      //       name: 'Students',
-      //     },
-      //   },
-      //   {
-      //     text: 'Pedro Jesús González Vargas',
-      //     disabled: false,
-      //     to: {
-      //       name: 'StudentSubjectsDetail',
-      //       params: {
-      //         id: 1,
-      //       },
-      //     },
-      //   },
-      //   {
-      //     text: 'Materias',
-      //     disabled: true,
-      //   },
-      // ],
     }),
     computed: {
       items () {
@@ -122,7 +97,7 @@
             },
           },
           {
-            text: 'Pedro Jesús González Vargas',
+            text: 'Detalle',
             disabled: false,
             to: {
               name: 'StudentSubjectsDetail',

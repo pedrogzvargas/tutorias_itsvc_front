@@ -62,9 +62,9 @@
               {{ this.data.fullName }}
             </h4>
 
-            <h6 class="text-h5 mb-2 text--secondary">
-              11VC0091
-            </h6>
+<!--            <h6 class="text-h5 mb-2 text&#45;&#45;secondary">-->
+<!--              11VC0091-->
+<!--            </h6>-->
             <profile-form />
           </v-card-text>
         </app-card>

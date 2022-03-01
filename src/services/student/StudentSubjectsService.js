@@ -29,4 +29,11 @@ export default {
       },
     })
   },
+  delete (studentId, studentSubjectId) {
+    return Service.delete(`${resource}/${studentId}/subject/${studentSubjectId}/`, {
+      headers: {
+        Authorization: `token ${cookie.get('token')}`,
+      },
+    })
+  },
 }

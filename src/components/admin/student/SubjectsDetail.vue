@@ -314,12 +314,54 @@
         <p class="text-center secondary--text text-h4">No hay detalle de materias</p>
       </v-container>
     </material-card>
+
+    <material-card
+      v-if="!isLoading"
+      class="mb-10"
+      color="primary"
+      icon="mdi-clipboard-account-outline"
+    >
+      <template #title>
+        Reporte de Tutorias
+      </template>
+      <v-container v-if="subjectDetails.subject_details">
+        <v-row>
+          <v-col
+            cols="12"
+            sm="12"
+          >
+            <progress-bar v-if="isDownloading" />
+            <span
+              v-else
+              class="group pa-2"
+            >
+              <v-icon
+                x-large
+                color="blue-grey darken-2"
+                @click="downloadReport"
+              >
+                mdi-account-arrow-down-outline
+              </v-icon>
+              <v-icon
+                x-large
+                color="blue-grey darken-2"
+                @click="downloadEvaluation"
+              >
+                mdi-file-chart-outline
+              </v-icon>
+            </span>
+          </v-col>
+        </v-row>
+      </v-container>
+    </material-card>
   </div>
 </template>
 
 <script>
   import ProgressBar from '../../app/ProgressBar'
   import StudentSubjectsDeatailService from '../../../services/student/StudentSubjectsDeatailService'
+  import InterviewService from '../../../services/admin/student/InterviewService'
+  import InterviewEvaluationService from '../../../services/admin/student/InterviewEvaluationService'
 
   export default {
     name: 'SubjectsDetail',
@@ -329,6 +371,7 @@
     data: () => ({
       subjectDetails: null,
       isLoading: true,
+      isDownloading: false,
       items: [
         {
           text: 'Alumnos',
@@ -367,10 +410,52 @@
         )
         this.isLoading = false
       },
+      async downloadReport () {
+        this.isDownloading = true
+        await InterviewService.get(this.studentId).then(
+          (response) => {
+            const linkSource = `data:application/pdf;base64,${response.data.data.file}`
+            const downloadLink = document.createElement('a')
+
+            downloadLink.href = linkSource
+            downloadLink.download = 'Reporte.pdf'
+            downloadLink.click()
+          },
+        ).catch(
+          (response) => {
+            this.notify('No fue posible descargar el reporte', 'warning')
+            return Promise.reject(response)
+          },
+        )
+        this.isDownloading = false
+      },
+      async downloadEvaluation () {
+        this.isDownloading = true
+        await InterviewEvaluationService.get(this.studentId).then(
+          (response) => {
+            const linkSource = `data:application/pdf;base64,${response.data.data.file}`
+            const downloadLink = document.createElement('a')
+
+            downloadLink.href = linkSource
+            downloadLink.download = 'Reporte.pdf'
+            downloadLink.click()
+          },
+        ).catch(
+          (response) => {
+            this.notify('No fue posible descargar el reporte', 'warning')
+            return Promise.reject(response)
+          },
+        )
+        this.isDownloading = false
+      },
     },
   }
 </script>
 
 <style scoped>
-
+  .group {
+    display: flex;
+    flex: 1;
+    justify-content: space-around;
+  }
 </style>
