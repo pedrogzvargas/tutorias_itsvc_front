@@ -13,7 +13,7 @@
 
         <v-btn
           color="secondary"
-          @click="dialog = false"
+          @click="rejection"
         >
           Cancelar
         </v-btn>
@@ -44,6 +44,10 @@
       agree () {
         this.dialog = false
         this.$emit('agree')
+      },
+      rejection () {
+        this.dialog = false
+        this.$emit('rejection')
       },
     },
   }

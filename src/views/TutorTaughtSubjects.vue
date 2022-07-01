@@ -84,6 +84,7 @@
         this.$refs.TutorSubjectsList.showSubjectFormAsCreation()
       },
       filterList () {
+        this.$refs.TutorSubjectsList.page = 1
         this.$refs.TutorSubjectsList.fillSubjects()
       },
     },

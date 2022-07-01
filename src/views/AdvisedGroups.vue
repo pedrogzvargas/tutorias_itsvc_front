@@ -84,6 +84,7 @@
         this.$refs.TutorGroupsList.showGroupFormAsCreation()
       },
       filterList () {
+        this.$refs.TutorGroupsList.page = 1
         this.$refs.TutorGroupsList.fillGroups()
       },
     },

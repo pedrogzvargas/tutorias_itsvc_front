@@ -11,6 +11,7 @@
       ref="confirmationModal"
       :message="confirmationModalMessage"
       @agree="deleteDeficiency"
+      @rejection="selectedDeficiency = null"
     />
     <action-notifier
       ref="ActionNotifier"

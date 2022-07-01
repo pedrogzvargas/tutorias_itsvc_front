@@ -358,6 +358,7 @@
 </template>
 
 <script>
+  import { get } from 'vuex-pathify'
   import ProgressBar from '../../app/ProgressBar'
   import StudentSubjectsDeatailService from '../../../services/student/StudentSubjectsDeatailService'
   import InterviewService from '../../../services/admin/student/InterviewService'
@@ -372,21 +373,28 @@
       subjectDetails: null,
       isLoading: true,
       isDownloading: false,
-      items: [
-        {
-          text: 'Alumnos',
-          disabled: false,
-          exact: true,
-          to: {
-            name: 'Students',
-          },
-        },
-        {
-          text: 'Detalle',
-          disabled: true,
-        },
-      ],
     }),
+    computed: {
+      items () {
+        return [
+          {
+            text: 'Alumnos',
+            disabled: false,
+            exact: true,
+            to: {
+              name: this.data.groups[0].name === 'tutor' ? 'TutorAdvisedGroups' : 'Students',
+            },
+          },
+          {
+            text: 'Detalle',
+            disabled: true,
+          },
+        ]
+      },
+      ...get('user', [
+        'data',
+      ]),
+    },
     watch: {
       '$route.params.id': function (id) {
         this.fillSubjectsDetail(id)

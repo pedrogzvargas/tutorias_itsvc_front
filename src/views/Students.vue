@@ -85,6 +85,7 @@
         this.$refs.StudentsList.showStudentFormAsCreation()
       },
       filterList () {
+        this.$refs.StudentsList.page = 1
         this.$refs.StudentsList.fillStudents()
       },
     },

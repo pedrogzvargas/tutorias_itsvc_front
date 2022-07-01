@@ -140,7 +140,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No se encontraron tutores', 'warning')
+            this.notify('No se encontraron grupos', 'warning')
             this.isLoading = false
             return Promise.reject(response)
           },

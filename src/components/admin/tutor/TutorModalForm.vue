@@ -241,17 +241,17 @@
       },
     },
     watch: {
-      currentRecord () {
-        if (this.mode === 'edit' && this.currentRecord) {
-          this.form.first_name = this.currentRecord.first_name
-          this.form.second_name = this.currentRecord.second_name
-          this.form.last_name = this.currentRecord.last_name
-          this.form.second_last_name = this.currentRecord.second_last_name
-          this.form.username = this.currentRecord.username
-          this.form.email = this.currentRecord.email
-          this.form.university_id = this.currentRecord.university_id
-          this.form.academic_id = this.currentRecord.academic_id
-          this.form.is_active = this.currentRecord.is_active
+      currentRecord (currentRecord) {
+        if (this.mode === 'edit' && currentRecord) {
+          this.form.first_name = currentRecord.first_name
+          this.form.second_name = currentRecord.second_name
+          this.form.last_name = currentRecord.last_name
+          this.form.second_last_name = currentRecord.second_last_name
+          this.form.username = currentRecord.username
+          this.form.email = currentRecord.email
+          this.form.university_id = currentRecord.university_id
+          this.form.academic_id = currentRecord.academic_id
+          this.form.is_active = currentRecord.is_active
         } else {
           this.reset()
         }

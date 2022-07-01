@@ -13,6 +13,7 @@
       ref="confirmationModal"
       :message="confirmationModalMessage"
       @agree="deleteSubject"
+      @rejection="selectedSubject = null"
     />
     <action-notifier
       ref="ActionNotifier"
@@ -141,7 +142,7 @@
       subjectModelMode: null,
       groupModelKey: 0,
       selectedSubject: null,
-      confirmationModalMessage: '¿Estas seguro que deseas eliminar este tutor?',
+      confirmationModalMessage: '¿Estás seguro que deseas eliminar esta materia?',
       actionMessage: null,
       actionMessageColor: null,
     }),
@@ -197,8 +198,8 @@
         this.subjectModelMode = 'create'
         this.$refs.subjectModalForm.show = true
       },
-      showConfirmationModal (group) {
-        this.selectedSubject = group
+      showConfirmationModal (subject) {
+        this.selectedSubject = subject
         this.$refs.confirmationModal.dialog = true
       },
       deleteSubject () {

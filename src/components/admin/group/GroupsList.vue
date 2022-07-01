@@ -13,6 +13,7 @@
       ref="confirmationModal"
       :message="confirmationModalMessage"
       @agree="deleteGroup"
+      @rejection="selectedGroup = null"
     />
     <action-notifier
       ref="ActionNotifier"
@@ -141,7 +142,7 @@
       groupModelMode: null,
       groupModelKey: 0,
       selectedGroup: null,
-      confirmationModalMessage: '¿Estas seguro que deseas eliminar este tutor?',
+      confirmationModalMessage: '¿Estás seguro que deseas eliminar este grupo?',
       actionMessage: null,
       actionMessageColor: null,
     }),

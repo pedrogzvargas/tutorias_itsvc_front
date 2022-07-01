@@ -11,6 +11,7 @@
       ref="confirmationModal"
       :message="confirmationModalMessage"
       @agree="deleteStudent"
+      @rejection="selectedStudent = null"
     />
     <action-notifier
       ref="ActionNotifier"

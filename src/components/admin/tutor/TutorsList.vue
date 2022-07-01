@@ -10,7 +10,8 @@
     <confirmation-modal
       ref="confirmationModal"
       :message="confirmationModalMessage"
-      @agree="deleteSibling"
+      @agree="deleteTutor"
+      @rejection="selectedTutor = null"
     />
     <action-notifier
       ref="ActionNotifier"
@@ -19,71 +20,72 @@
     />
     <v-simple-table v-if="!isLoading">
       <thead>
-        <tr>
-          <th class="primary--text">
-            #
-          </th>
-          <th class="primary--text">
-            Nombre
-          </th>
-          <th class="primary--text">
-            Usuario
-          </th>
-          <th class="primary--text">
-            Activo
-          </th>
-          <th class="primary--text">
-            Acciones
-          </th>
-        </tr>
+      <tr>
+        <th class="primary--text">
+          #
+        </th>
+        <th class="primary--text">
+          Nombre
+        </th>
+        <th class="primary--text">
+          Usuario
+        </th>
+        <th class="primary--text">
+          Activo
+        </th>
+        <th class="primary--text">
+          Acciones
+        </th>
+      </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="(tutor, index) in tutors"
-          :key="tutor.id"
-        >
-          <td>{{ index +1 }}</td>
-          <td>{{ `${tutor.first_name} ${tutor.second_name || ''} ${tutor.last_name} ${tutor.second_last_name || ''}` }}</td>
-          <td>{{ tutor.username }}</td>
-          <td>
-            <v-icon
-              v-if="tutor.is_active"
-              class="mx-1"
-              color="success"
+      <tr
+        v-for="(tutor, index) in tutors"
+        :key="tutor.id"
+      >
+        <td>{{ index +1 }}</td>
+        <td>{{ `${tutor.first_name} ${tutor.second_name || ''} ${tutor.last_name} ${tutor.second_last_name || ''}` }}
+        </td>
+        <td>{{ tutor.username }}</td>
+        <td>
+          <v-icon
+            v-if="tutor.is_active"
+            class="mx-1"
+            color="success"
+          >
+            mdi-check-circle-outline
+          </v-icon>
+          <v-icon
+            v-else
+            class="mx-1"
+            color="error"
+          >
+            mdi-close-circle-outline
+          </v-icon>
+        </td>
+        <td class="text-right">
+          <v-row>
+            <v-col
+              cols="auto"
             >
-              mdi-check-circle-outline
-            </v-icon>
-            <v-icon
-              v-else
-              class="mx-1"
-              color="error"
-            >
-              mdi-close-circle-outline
-            </v-icon>
-          </td>
-          <td class="text-right">
-            <v-row>
-              <v-col
-                cols="auto"
+              <v-icon
+                class="mx-1"
+                @click="showTutorFormAsEdition(tutor)"
               >
-                <v-icon
-                  class="mx-1"
-                  @click="showTutorFormAsEdition(tutor)"
-                >
-                  mdi-pencil
-                </v-icon>
+                mdi-pencil
+              </v-icon>
 
-                <v-icon
-                  class="mx-1"
-                  color="error"
-                  @click="showConfirmationModal(tutor)"
-                >
-                  mdi-close
-                </v-icon>
-              </v-col>
-            </v-row>
-          </td>
-        </tr>
+              <v-icon
+                class="mx-1"
+                color="error"
+                @click="showConfirmationModal(tutor)"
+              >
+                mdi-close
+              </v-icon>
+            </v-col>
+          </v-row>
+        </td>
+      </tr>
       </tbody>
     </v-simple-table>
     <div
@@ -93,7 +95,7 @@
       <v-pagination
         v-model="page"
         :length="totalPages"
-      ></v-pagination>
+      />
     </div>
   </div>
 </template>
@@ -124,7 +126,7 @@
       tutors: [],
       tutorModelMode: null,
       selectedTutor: null,
-      confirmationModalMessage: '¿Estas seguro que deseas eliminar este tutor?',
+      confirmationModalMessage: '¿Estás seguro que deseas eliminar este tutor?',
       actionMessage: null,
       actionMessageColor: null,
     }),
@@ -136,7 +138,6 @@
     },
     watch: {
       page (value) {
-        // console.log(value)
         this.fillTutors()
       },
     },
@@ -159,21 +160,21 @@
         )
         this.isLoading = false
       },
-      showTutorFormAsEdition (value) {
+      showTutorFormAsEdition (tutor) {
         this.tutorModelMode = 'edit'
-        this.selectedTutor = value
+        this.selectedTutor = tutor
         this.$refs.tutorModalForm.show = true
       },
-      showTutorFormAsCreation (value) {
+      showTutorFormAsCreation () {
         this.selectedTutor = null
         this.tutorModelMode = 'create'
         this.$refs.tutorModalForm.show = true
       },
-      showConfirmationModal (sibling) {
-        this.selectedTutor = sibling
+      showConfirmationModal (tutor) {
+        this.selectedTutor = tutor
         this.$refs.confirmationModal.dialog = true
       },
-      deleteSibling () {
+      deleteTutor () {
         TutorService.delete(this.selectedTutor.id).then(
           (response) => {
             this.fillTutors()

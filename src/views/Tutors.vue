@@ -85,6 +85,7 @@
         this.$refs.TutorsList.showTutorFormAsCreation()
       },
       filterList () {
+        this.$refs.TutorsList.page = 1
         this.$refs.TutorsList.fillTutors()
       },
     },

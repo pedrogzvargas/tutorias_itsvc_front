@@ -128,7 +128,7 @@
       subjects: [],
       ModalMode: null,
       selectedStudentSubject: null,
-      confirmationModalMessage: '¿Estas seguro que deseas eliminar este tutor?',
+      confirmationModalMessage: '¿Estas seguro que deseas eliminar este alumno?',
       actionMessage: null,
       actionMessageColor: null,
     }),
