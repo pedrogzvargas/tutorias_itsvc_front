@@ -311,7 +311,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay información registrada', 'warning')
+            this.notify('No se encontró información general', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

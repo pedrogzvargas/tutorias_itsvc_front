@@ -143,7 +143,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay información laboral registrada', 'warning')
+            this.notify('No se encontró información laboral', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

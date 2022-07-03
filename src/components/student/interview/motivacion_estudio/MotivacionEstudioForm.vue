@@ -458,7 +458,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay registro de Motivación para el Estudio', 'error')
+            this.notify('No hay registro de Motivación para el Estudio', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

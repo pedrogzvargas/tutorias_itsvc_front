@@ -369,7 +369,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay información de madre', 'error')
+            this.notify('No se encontró información de la madre', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

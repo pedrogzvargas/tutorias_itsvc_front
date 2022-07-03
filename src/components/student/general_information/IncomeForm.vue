@@ -118,7 +118,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay información económica registrada', 'warning')
+            this.notify('No se encontró información económica', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

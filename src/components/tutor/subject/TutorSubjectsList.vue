@@ -1,11 +1,6 @@
 <template>
   <div>
     <progress-bar v-if="isLoading" />
-<!--    <confirmation-modal-->
-<!--      ref="confirmationModal"-->
-<!--      :message="confirmationModalMessage"-->
-<!--      @agree="deleteSubject"-->
-<!--    />-->
     <action-notifier
       ref="ActionNotifier"
       :text="actionMessage"
@@ -130,7 +125,6 @@
     },
     watch: {
       page (value) {
-        // console.log(value)
         this.fillSubjects()
       },
     },
@@ -146,7 +140,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No se encontraron materias', 'warning')
+            this.notify('No se encontraron materias', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },
@@ -159,38 +153,6 @@
         this.groupModelKey += 1
         this.subjectModelMode = null
       },
-      // hideModal () {
-      //   this.groupModelKey += 1
-      //   this.selectedSubject = null
-      //   this.subjectModelMode = null
-      // },
-      // showSubjectFormAsEdition (value) {
-      //   this.subjectModelMode = 'edit'
-      //   this.selectedSubject = value
-      //   this.$refs.subjectModalForm.show = true
-      // },
-      // showSubjectFormAsCreation () {
-      //   this.selectedSubject = null
-      //   this.subjectModelMode = 'create'
-      //   this.$refs.subjectModalForm.show = true
-      // },
-      // showConfirmationModal (group) {
-      //   this.selectedSubject = group
-      //   this.$refs.confirmationModal.dialog = true
-      // },
-      // deleteSubject () {
-      //   SubjectService.delete(this.selectedSubject.id).then(
-      //     (response) => {
-      //       this.fillSubjects()
-      //       this.notify('Eliminado correctamente', 'success')
-      //     },
-      //   ).catch(
-      //     (response) => {
-      //       this.notify('No se pudo eliminar correctamente', 'error')
-      //       return Promise.reject(response)
-      //     },
-      //   )
-      // },
       notify (message, type) {
         this.actionMessage = message
         this.actionMessageColor = type

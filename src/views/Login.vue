@@ -67,7 +67,6 @@
 </template>
 
 <script>
-  import ActionNotifier from '../components/common/general/ActionNotifier'
   import LoginService from '../services/user/LoginService'
   // Utilities
   import { sync, call } from 'vuex-pathify'
@@ -106,7 +105,7 @@
               this.data.groups = response.data.data.groups
               this.drawerSide = true
               this.update()
-              this.$router.push('/student/profile/')
+              this.$router.push('/profile/')
               this.$cookies.set('token', response.data.data.token)
               this.$cookies.set('userId', response.data.data.user_id)
             },

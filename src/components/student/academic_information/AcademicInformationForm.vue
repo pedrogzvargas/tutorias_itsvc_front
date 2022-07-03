@@ -209,7 +209,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay información academica para mostrar', 'error')
+            this.notify('No hay información academica para mostrar', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

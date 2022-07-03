@@ -238,7 +238,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay información de dirección', 'error')
+            this.notify('No se encontró información de dirección', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

@@ -145,7 +145,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay información de contacto registrada', 'error')
+            this.notify('No se encontró información de contacto', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

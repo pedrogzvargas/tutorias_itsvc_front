@@ -140,7 +140,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No se encontraron grupos', 'warning')
+            this.notify('No se encontraron grupos', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

@@ -369,7 +369,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay información de padre', 'error')
+            this.notify('No se encontró información del padre', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

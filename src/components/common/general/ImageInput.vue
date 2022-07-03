@@ -10,6 +10,7 @@
       type="file"
       :name="uploadFieldName"
       style="display:none"
+      accept="image/png, image/gif, image/jpeg"
       @change="onFileChange(
         $event.target.name, $event.target.files)"
     >

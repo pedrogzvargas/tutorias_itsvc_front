@@ -122,7 +122,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No se encontró historial academico', 'warning')
+            this.notify('No se encontró historial académico', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

@@ -119,7 +119,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No se encontraron hermanos', 'warning')
+            this.notify('No se encontró información de hermanos', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },
@@ -143,8 +143,9 @@
       deleteSibling () {
         SiblingsService.delete(this.currentUser.id, this.selectedSibling.id).then(
           (response) => {
-            this.fillSiblings()
             this.notify('Eliminado correctamente', 'success')
+            this.siblings = []
+            this.fillSiblings()
           },
         ).catch(
           (response) => {

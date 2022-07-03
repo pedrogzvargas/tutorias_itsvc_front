@@ -206,6 +206,7 @@
         SubjectService.delete(this.selectedSubject.id).then(
           (response) => {
             this.notify('Eliminado correctamente', 'success')
+            this.subjects = []
             this.totalItems -= 1
             this.setPage()
             this.fillSubjects()

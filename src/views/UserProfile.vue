@@ -10,12 +10,6 @@
         md="9"
       >
         <app-card class="mt-4 text-center">
-<!--          <v-img-->
-<!--            class="rounded-circle elevation-6 mt-n12 d-inline-block"-->
-<!--            :src="data.profileImage ? data.profileImage : require('@/assets/no-image.png')"-->
-<!--            width="140"-->
-<!--            height="140"-->
-<!--          />-->
           <image-input
             v-model="avatar"
             @input="setValue($event)"
@@ -27,7 +21,6 @@
                 v-ripple
                 size="150px"
               >
-                <!--<span>Agregar imagen</span>-->
                 <img
                   :src="data.profileImage ? data.profileImage : require('@/assets/no-image.png')"
                   alt="avatar"
@@ -61,10 +54,6 @@
             <h4 class="text-h3 mb-1 text--primary">
               {{ this.data.fullName }}
             </h4>
-
-<!--            <h6 class="text-h5 mb-2 text&#45;&#45;secondary">-->
-<!--              11VC0091-->
-<!--            </h6>-->
             <profile-form />
           </v-card-text>
         </app-card>
@@ -109,8 +98,6 @@
         setTimeout(() => this.savedAvatar(), 1000)
         ProfileImageService.post(this.data.userId, { profile_image: this.avatar.fileAsBase64 }).then(
           (response) => {
-            // this.notify('Agregado correctamente', 'success')
-            // this.$emit('listUpdated')
             this.data.profileImage = this.avatar.fileAsBase64
           },
         ).catch(

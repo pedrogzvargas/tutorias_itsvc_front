@@ -155,7 +155,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay información de beca para mostrar', 'error')
+            this.notify('No se encontró información de beca', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

@@ -177,8 +177,11 @@
       deleteTutor () {
         TutorService.delete(this.selectedTutor.id).then(
           (response) => {
-            this.fillTutors()
             this.notify('Eliminado correctamente', 'success')
+            this.tutors = []
+            this.totalItems -= 1
+            this.setPage()
+            this.fillTutors()
           },
         ).catch(
           (response) => {
@@ -191,6 +194,11 @@
         this.actionMessage = message
         this.actionMessageColor = type
         this.$refs.ActionNotifier.snackbar = true
+      },
+      setPage () {
+        if (this.page > this.totalPages) {
+          this.page = this.totalPages
+        }
       },
     },
   }

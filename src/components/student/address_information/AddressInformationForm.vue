@@ -336,7 +336,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay información domiciliaria registrada', 'warning')
+            this.notify('No se encontró información domiciliaria', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

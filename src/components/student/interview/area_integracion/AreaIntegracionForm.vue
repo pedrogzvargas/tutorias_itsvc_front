@@ -515,7 +515,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay registro de área de integración', 'error')
+            this.notify('No hay registro de área de integración', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

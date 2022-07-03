@@ -343,7 +343,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay registro de estado psicofisiológico', 'error')
+            this.notify('No hay registro de estado psicofisiológico', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

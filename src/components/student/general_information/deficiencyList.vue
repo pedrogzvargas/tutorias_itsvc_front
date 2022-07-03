@@ -117,7 +117,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay deficiencias registradas', 'warning')
+            this.notify('No se encontró información médica', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

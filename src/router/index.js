@@ -27,7 +27,7 @@ const router = new Router({
       // route('Dash', null, 'components/dash', { requiresAuth: true }),
 
       // Pages
-      route('UserProfile', null, 'student/profile', { requiresAuth: true }),
+      route('UserProfile', null, 'profile', { requiresAuth: true }),
       route('AcademicInformation', null, 'student/academic-information', { requiresAuth: true }),
       route('GeneralInformation', null, 'student/general-information', { requiresAuth: true }),
       route('Address', null, 'student/address', { requiresAuth: true }),
@@ -73,7 +73,7 @@ router.beforeEach(async (to, from, next) => {
     next('/components/login/')
   } else if (to.name === 'Login' && user.userId) {
     console.info(user.userId)
-    next('/student/profile')
+    next('/profile')
   } else {
     next()
   }

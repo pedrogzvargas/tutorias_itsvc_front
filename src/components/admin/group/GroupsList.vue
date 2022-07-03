@@ -206,6 +206,7 @@
         GroupService.delete(this.selectedGroup.id).then(
           (response) => {
             this.notify('Eliminado correctamente', 'success')
+            this.groups = []
             this.totalItems -= 1
             this.setPage()
             this.fillGroups()

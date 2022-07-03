@@ -458,7 +458,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay registro de Técnicas de Estudio', 'error')
+            this.notify('No hay registro de Técnicas de Estudio', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

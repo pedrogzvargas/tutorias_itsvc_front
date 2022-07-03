@@ -157,9 +157,9 @@
         actionMessageColor: null,
         form: {
           first_name: null,
-          second_name: null,
+          second_name: '',
           last_name: null,
-          second_last_name: null,
+          second_last_name: '',
           email: null,
           username: null,
           password: null,

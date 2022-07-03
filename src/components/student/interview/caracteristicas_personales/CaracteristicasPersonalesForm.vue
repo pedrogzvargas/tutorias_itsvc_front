@@ -553,7 +553,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay registro de área de características personales', 'error')
+            this.notify('No hay registro de área de características personales', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

@@ -440,7 +440,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay registro de área de área psicopedagógica', 'error')
+            this.notify('No hay registro de área de área psicopedagógica', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

@@ -530,7 +530,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay registro de Estilos de aprendizaje', 'error')
+            this.notify('No hay registro de Estilos de aprendizaje', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

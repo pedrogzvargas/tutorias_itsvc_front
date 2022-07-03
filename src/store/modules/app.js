@@ -6,7 +6,7 @@ const usersMenu = {
     {
       title: 'Perfil',
       icon: 'mdi-account',
-      to: '/student/profile/',
+      to: '/profile/',
     },
     {
       title: 'Información académica',
@@ -43,7 +43,7 @@ const usersMenu = {
     {
       title: 'Perfil',
       icon: 'mdi-account',
-      to: '/student/profile/',
+      to: '/profile/',
     },
     {
       title: 'Mis materias impartidas',
@@ -60,7 +60,7 @@ const usersMenu = {
     {
       title: 'Perfil',
       icon: 'mdi-account',
-      to: '/student/profile/',
+      to: '/profile/',
     },
     {
       title: 'Alumnos',

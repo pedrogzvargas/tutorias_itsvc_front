@@ -21,7 +21,7 @@
     </template>
 
     <v-list>
-      <v-list-item @click="$router.push('/student/profile/')">
+      <v-list-item @click="$router.push('/profile/')">
         <v-list-item-title>Perfil</v-list-item-title>
       </v-list-item>
       <v-divider class="mb-2 mt-2" />

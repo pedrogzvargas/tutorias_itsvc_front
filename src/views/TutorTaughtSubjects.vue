@@ -40,19 +40,6 @@
                       </v-btn>
                     </div>
                   </v-col>
-                  <!--<v-col
-                    cols="12"
-                    md="6"
-                  >
-                    <div class="d-flex justify-end mb-6">
-                      <v-icon
-                        class="mx-1"
-                        @click="showModalASCreate"
-                      >
-                        mdi-book-plus
-                      </v-icon>
-                    </div>
-                  </v-col>-->
                 </v-row>
               </div>
             </div>
@@ -80,9 +67,6 @@
       searchValue: '',
     }),
     methods: {
-      showModalASCreate () {
-        this.$refs.TutorSubjectsList.showSubjectFormAsCreation()
-      },
       filterList () {
         this.$refs.TutorSubjectsList.page = 1
         this.$refs.TutorSubjectsList.fillSubjects()
