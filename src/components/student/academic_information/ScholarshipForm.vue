@@ -23,7 +23,7 @@
               :disabled="!isEditing"
               :label="'¿Has estado becado?'"
               :rules="[v => v!== null || 'Este campo es requerido']"
-              @SelectedItem="form.has_scholarship = $event"
+              @SelectedItem="selectItem"
             />
           </v-col>
         </v-row>
@@ -196,6 +196,13 @@
         this.actionMessage = message
         this.actionMessageColor = type
         this.$refs.ActionNotifier.snackbar = true
+      },
+      selectItem (item) {
+        this.form.has_scholarship = item
+        if (this.form.has_scholarship === false) {
+          this.form.institute_name = ''
+          this.form.dependence_name = ''
+        }
       },
     },
   }

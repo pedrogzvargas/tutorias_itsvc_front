@@ -22,7 +22,7 @@
               v-model="form.mobile_phone"
               label="Teléfono celular"
               outlined
-              :rules="[v => !!v || 'Este campo es requerido']"
+              :rules="mobilePhoneRules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -36,6 +36,7 @@
               v-model="form.home_phone"
               label="Teléfono de casa"
               outlined
+              :rules="homePhoneRules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -72,7 +73,6 @@
 </template>
 
 <script>
-  import ProgressBar from '../../../app/ProgressBar'
   import FatherContactService from '../../../../services/student/parents/father/FatherContactService'
   import ActionNotifier from '../../../common/general/ActionNotifier'
   import { get } from 'vuex-pathify'
@@ -97,9 +97,9 @@
           home_phone: null,
           mobile_phone: null,
         },
-        streetRules: [
-          v => !!v || 'Calle es requerida',
-          v => (v && v.length <= 200) || 'Calle debe ser menor de 200 caracteres',
+        mobilePhoneRules: [
+          v => !!v || 'Teléfono es requerida',
+          v => (v && v.length <= 15) || 'Teléfono debe ser menor de 16 caracteres',
         ],
       }
     },
@@ -112,6 +112,10 @@
       ]),
       homePhone () {
         return this.phones.filter(phone => phone.type === 'home_phone')
+      },
+      homePhoneRules () {
+        const rules = [v => (v && v.length <= 16) || 'Teléfono debe ser menor de 16 caracteres']
+        return this.form.home_phone ? rules : []
       },
     },
     created () {
@@ -128,8 +132,8 @@
         this.$refs.form.resetValidation()
       },
       getPhone (phoneList, type) {
-        const phone = phoneList.filter(phone => phone.type === `${type}`) || ''
-        return phone ? phone[0].number : ''
+        const phone = phoneList.filter(phone => phone.type === `${type}`) || []
+        return phone.length ? phone[0].number : ''
       },
       async fillForm () {
         await FatherContactService.get(this.currentUser.id).then(
@@ -140,7 +144,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No hay información para mostrar', 'error')
+            this.notify('No hay información de contacto', 'error')
             this.isLoading = false
             return Promise.reject(response)
           },

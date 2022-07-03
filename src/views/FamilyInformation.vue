@@ -68,10 +68,12 @@
                   <template #title>
                     Información general
                   </template>
-                  <father-general-information-form />
+                  <father-general-information-form
+                    @registeredFather="registeredFather=true"
+                  />
                 </material-card>
               </v-card-text>
-              <v-card-text>
+              <v-card-text v-if="registeredFather">
                 <material-card
                   color="#278894"
                   icon="mdi-map-marker"
@@ -83,7 +85,7 @@
                   <father-address-form />
                 </material-card>
               </v-card-text>
-              <v-card-text>
+              <v-card-text v-if="registeredFather">
                 <material-card
                   color="#4c61af"
                   icon="mdi-phone"
@@ -106,10 +108,12 @@
                   <template #title>
                     Información general
                   </template>
-                  <mother-general-information-form />
+                  <mother-general-information-form
+                    @registeredMother="registeredMother=true"
+                  />
                 </material-card>
               </v-card-text>
-              <v-card-text>
+              <v-card-text v-if="registeredMother">
                 <material-card
                   color="#278894"
                   icon="mdi-map-marker"
@@ -120,7 +124,7 @@
                   <mother-address-form />
                 </material-card>
               </v-card-text>
-              <v-card-text>
+              <v-card-text v-if="registeredMother">
                 <material-card
                   color="#4c61af"
                   icon="mdi-phone"
@@ -186,7 +190,8 @@
     },
     data: () => ({
       tabs: null,
-      isEditing: null,
+      registeredFather: false,
+      registeredMother: false,
     }),
     methods: {
       showModalASCreate () {
@@ -195,7 +200,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -88,9 +88,9 @@
                   <v-text-field
                     v-model="form.birth_date"
                     label="Fecha de nacimiento"
-                    outlined
                     readonly
-                    :disabled="!isEditing"
+                    :rules="birthDateRules"
+                    outlined
                     v-bind="attrs"
                     v-on="on"
                   />
@@ -365,10 +365,11 @@
             this.form.profession_occupation = response.data.data.profession_occupation
             this.form.is_alive = response.data.data.is_alive
             this.hasRecord = true
+            this.$emit('registeredMother')
           },
         ).catch(
           (response) => {
-            this.notify('No hay información para mostrar', 'error')
+            this.notify('No hay información de madre', 'error')
             this.isLoading = false
             return Promise.reject(response)
           },
@@ -380,6 +381,7 @@
           (response) => {
             this.notify('Creado correctamente', 'success')
             this.hasRecord = true
+            this.$emit('registeredMother')
           },
         ).catch(
           (response) => {

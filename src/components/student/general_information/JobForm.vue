@@ -23,7 +23,7 @@
               :disabled="!isEditing"
               :label="'¿Trabajas?'"
               :rules="[v => v!== null || 'Este campo es requerido']"
-              @SelectedItem="form.has_job = $event"
+              @SelectedItem="selectItem"
             />
           </v-col>
         </v-row>
@@ -195,10 +195,13 @@
         this.actionMessageColor = type
         this.$refs.ActionNotifier.snackbar = true
       },
+      selectItem (item) {
+        this.form.has_job = item
+        if (this.form.has_job === false) {
+          this.form.company_name = null
+          this.form.schedule = null
+        }
+      },
     },
   }
 </script>
-
-<style scoped>
-
-</style>
