@@ -76,6 +76,7 @@
 </template>
 
 <script>
+  import { get } from 'vuex-pathify'
   import StudentsSubjectList from '../components/admin/student/StudentsSubjectList'
   export default {
     name: 'StudentsSubjects',
@@ -93,7 +94,7 @@
             disabled: false,
             exact: true,
             to: {
-              name: 'Students',
+              name: this.data.groups[0].name === 'tutor' ? 'TutorAdvisedGroups' : 'Students',
             },
           },
           {
@@ -112,6 +113,9 @@
           },
         ]
       },
+      ...get('user', [
+        'data',
+      ]),
     },
     methods: {
       showModalASCreate () {

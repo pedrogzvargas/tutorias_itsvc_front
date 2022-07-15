@@ -9,7 +9,9 @@
     <v-form
       v-if="!isLoading"
       ref="form"
+      v-model="valid"
       lazy-validation
+      @submit.prevent=""
     >
       <v-container>
         <v-row>
@@ -60,7 +62,7 @@
             Cancelar
           </v-btn>
           <v-btn
-            :disabled="!isEditing"
+            :disabled="disabledSubmit"
             color="success"
             @click="persist"
           >
@@ -91,6 +93,7 @@
         hasRecord: null,
         actionMessage: null,
         actionMessageColor: null,
+        valid: false,
         form: {
           income: null,
           family_income: null,
@@ -104,6 +107,11 @@
       ...get('user', [
         'data',
       ]),
+      disabledSubmit () {
+        let disabled = true
+        disabled = !this.valid || !this.isEditing
+        return disabled
+      },
     },
     created () {
       this.callMainService()

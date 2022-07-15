@@ -264,7 +264,7 @@
         </div>
       </template>
       <v-card-text>
-        <taught-subject-students-list />
+        <tutor-taught-subject-students-list />
       </v-card-text>
     </material-card>
   </div>
@@ -274,12 +274,12 @@
   import { get } from 'vuex-pathify'
   import ProgressBar from '../../app/ProgressBar'
   import TaughtSubjectService from '../../../services/tutor/subject/TaughtSubjectService'
-  import TaughtSubjectStudentsList from './TaughtSubjectStudentsList'
+  import TutorTaughtSubjectStudentsList from './TutorTaughtSubjectStudentsList'
 
   export default {
-    name: 'TaughtSubjectDetail',
+    name: 'TutorTaughtSubjectDetail',
     components: {
-      TaughtSubjectStudentsList,
+      TutorTaughtSubjectStudentsList,
       ProgressBar,
     },
     data: () => ({

@@ -9,7 +9,9 @@
     <v-form
       v-if="!isLoading"
       ref="form"
+      v-model="valid"
       lazy-validation
+      @submit.prevent=""
     >
       <v-container>
         <p class="text-h3 pa-6 py-1">Área familiar</p>
@@ -55,7 +57,7 @@
               :disabled="!isEditing"
               :label="'¿Existen dificultades?'"
               :rules="[v => v!== null || 'Este campo es requerido']"
-              @SelectedItem="form.p2 = $event"
+              @SelectedItem="selectP2"
             />
           </v-col>
         </v-row>
@@ -73,6 +75,7 @@
               name="input-7-4"
               label="Especifica las dificultades"
               :value="form.p2_1"
+              :rules="p2_1Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -170,7 +173,7 @@
               rows="3"
               name="input-7-4"
               label="Especifica por qué"
-              :rules="[v => !!v || 'Este campo es requerido']"
+              :rules="p8_1Rules "
               :value="form.p8_1"
               :readonly="!isEditing"
               :disabled="!isEditing"
@@ -220,6 +223,7 @@
               name="input-7-4"
               label="Consideras importante facilitar algún otro dato sobre tu ambiente familiar"
               :value="form.p11"
+              :rules="p11Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -433,6 +437,7 @@
       actionMessage: null,
       actionMessageColor: null,
       hasRecord: false,
+      valid: false,
       form: {
         p1: null,
         p2: null,
@@ -457,6 +462,9 @@
         p18: null,
         p19: null,
       },
+      // p2_1Rules: [
+      //   v => !!v || 'Este campo es requerido',
+      // ],
     }),
     computed: {
       showMiedos () {
@@ -470,6 +478,26 @@
       ...get('user', [
         'data',
       ]),
+      p2_1Rules () {
+        const rules = [
+          v => !!v || 'Este campo es requerido',
+          v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+        ]
+        return this.form.p2 ? rules : []
+      },
+      p8_1Rules () {
+        const rules = [
+          v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+        ]
+        return this.form.p8_1 ? rules : []
+      },
+      p11Rules () {
+        const rules = [
+          v => !!v || 'Este campo es requerido',
+          v => (v && v.length <= 255) || 'Dato debe ser menor de 255 caracteres',
+        ]
+        return this.form.p11 ? rules : []
+      },
     },
     created () {
       this.fillForm()
@@ -555,6 +583,12 @@
         this.actionMessage = message
         this.actionMessageColor = type
         this.$refs.ActionNotifier.snackbar = true
+      },
+      selectP2 (item) {
+        this.form.p2 = item
+        if (this.form.p2 === false || this.form.p2 === null) {
+          this.form.p2_1 = ''
+        }
       },
     },
   }

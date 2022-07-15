@@ -33,17 +33,20 @@ const router = new Router({
       route('Address', null, 'student/address', { requiresAuth: true }),
       route('FamilyInformation', null, 'student/family', { requiresAuth: true }),
       route('Login', null, 'components/login'),
-      route('Tutors', null, 'tutors'),
-      route('AdvisedGroups', null, 'groups'),
-      route('TaughtSubjects', null, 'subjects'),
+      // Admin
       route('Students', null, 'students'),
+      route('Tutors', null, 'tutors'),
+      route('TaughtSubjects', null, 'subjects'),
+      route('AdvisedGroups', null, 'groups'),
       route('StudentSubjectsDetail', null, 'students/:id/subjects-detail/'),
       route('StudentsSubjects', null, 'students/:id/subjects/'),
-      route('TaughtSubject', null, 'subject/detail/:id'),
-      route('AdvisedGroup', null, 'group/detail/:id'),
+      route('TaughtSubject', null, 'subjects/:id/detail'),
+      route('AdvisedGroup', null, 'groups/:id/detail'),
       // Tutor
       route('TutorTaughtSubjects', null, 'tutor/subjects'),
+      route('TutorTaughtSubject', null, 'tutor/subjects/:id/detail'),
       route('TutorAdvisedGroups', null, 'tutor/groups'),
+      route('TutorAdvisedGroup', null, 'tutor/groups/:id/detail'),
 
       // Components
       route('Notifications', null, 'components/notifications'),

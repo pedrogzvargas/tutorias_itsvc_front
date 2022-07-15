@@ -9,7 +9,9 @@
     <v-form
       v-if="!isLoading"
       ref="form"
+      v-model="valid"
       lazy-validation
+      @submit.prevent=""
     >
       <v-container>
         <v-row>
@@ -220,6 +222,7 @@
               rows="3"
               name="input-7-4"
               label="Observaciones de Higiene: "
+              :rules="feedbackRules"
               :value="form.p12"
               :readonly="!isEditing"
               :disabled="!isEditing"
@@ -244,7 +247,7 @@
             Cancelar
           </v-btn>
           <v-btn
-            :disabled="!isEditing"
+            :disabled="disabledSubmit"
             color="success"
             @click="persist"
           >
@@ -279,6 +282,7 @@
       actionMessage: null,
       actionMessageColor: null,
       hasRecord: null,
+      valid: false,
       form: {
         p1: null,
         p2: null,
@@ -307,6 +311,17 @@
       ...get('user', [
         'data',
       ]),
+      feedbackRules () {
+        const rules = [
+          v => (v && v.length <= 255) || 'Observaciones de Higiene debe ser menor de 255 caracteres',
+        ]
+        return this.form.p12 ? rules : []
+      },
+      disabledSubmit () {
+        let disabled = true
+        disabled = !this.valid || !this.isEditing
+        return disabled
+      },
     },
     created () {
       this.fillForm()

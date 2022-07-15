@@ -109,6 +109,7 @@
               outlined
               :rules="zipCodeRules"
               :counter="5"
+              :maxlength="5"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -133,7 +134,7 @@
             Cancelar
           </v-btn>
           <v-btn
-            :disabled="!isEditing"
+            :disabled="disabledSubmit"
             color="success"
             @click="persist"
           >
@@ -195,7 +196,7 @@
         ],
         zipCodeRules: [
           v => !!v || 'Código postal es requerido',
-          v => (v && v.length <= 5) || 'Código postal debe ser de 5 caracteres',
+          v => (v && v.length !== 4) || 'Código postal debe ser de 5 caracteres',
         ],
       }
     },
@@ -210,6 +211,11 @@
       ...get('user', [
         'data',
       ]),
+      disabledSubmit () {
+        let disabled = true
+        disabled = !this.valid || !this.isEditing
+        return disabled
+      },
     },
     created () {
       this.fillForm()

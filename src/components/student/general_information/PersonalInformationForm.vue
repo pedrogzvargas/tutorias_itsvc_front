@@ -90,7 +90,7 @@
               :rules="[v => !!v || 'Este campo es requerido']"
               :disabled="!isEditing"
               :readonly="!isEditing"
-              @SelectedItem="form.marital_status_id = $event"
+              @SelectedItem="selectItem"
             />
           </v-col>
 
@@ -104,7 +104,7 @@
               :rules="maritalStatusDescriptionRules"
               outlined
               :readonly="!isEditing"
-              :disabled="!isEditing"
+              :disabled="!isEditing || form.marital_status_id !== 7"
             />
           </v-col>
 
@@ -112,16 +112,13 @@
             cols="12"
             sm="2"
           >
-            <v-select
-              v-model="form.has_children"
-              :items="hasChildren"
-              :rules="[v => v!== null || 'Este campo es requerido']"
+            <boolean-select
+              :default-selected="form.has_children"
               :readonly="!isEditing"
               :disabled="!isEditing"
-              item-value="id"
-              item-text="name"
-              label="Tienes hijos"
-              outlined
+              :label="'¿Tienes hijos?'"
+              :rules="[v => v!== null || 'Este campo es requerido']"
+              @SelectedItem="selectHasChildrenItem"
             />
           </v-col>
 
@@ -192,7 +189,7 @@
             Cancelar
           </v-btn>
           <v-btn
-            :disabled="!isEditing"
+            :disabled="disabledSubmit"
             color="success"
             @click="persist"
           >
@@ -210,6 +207,7 @@
   import PersonalInformationService from '../../../services/student/PersonalInformationService'
   import ActionNotifier from '../../common/general/ActionNotifier'
   import ProgressBar from '../../app/ProgressBar'
+  import BooleanSelect from '../../common/general/BooleanSelect'
   import { get } from 'vuex-pathify'
   export default {
     name: 'PersonalInformationForm',
@@ -218,6 +216,7 @@
       MaritalStatusSelect,
       ActionNotifier,
       ProgressBar,
+      BooleanSelect,
     },
     props: {
       studentId: Number,
@@ -249,7 +248,7 @@
       },
       birthPlaceRules: [
         v => !!v || 'Lugar de nacimiento es requerido',
-        v => (v && v.length <= 255) || 'Nombre de la institución debe ser menor de 255 caracteres',
+        v => (v && v.length <= 255) || 'Lugar de nacimiento debe ser menor de 255 caracteres',
       ],
       birthDateRules: [
         v => !!v || 'Lugar de nacimiento es requerido',
@@ -270,8 +269,16 @@
         return this.form.has_children ? rules : []
       },
       maritalStatusDescriptionRules () {
-        const rules = [v => !!v || 'Descripción requerido']
+        const rules = [
+          v => !!v || 'Descripción requerido',
+          v => (v && v.length <= 255) || 'Descripción debe ser menor de 255 caracteres',
+        ]
         return this.form.marital_status_id === 7 ? rules : []
+      },
+      disabledSubmit () {
+        let disabled = true
+        disabled = !this.valid || !this.isEditing
+        return disabled
       },
     },
     watch: {
@@ -363,6 +370,18 @@
       cancelFormEdition () {
         this.isEditing = false
         this.resetValidation()
+      },
+      selectItem (item) {
+        this.form.marital_status_id = item
+        if (this.form.marital_status_id !== 7) {
+          this.form.marital_status_description = ''
+        }
+      },
+      selectHasChildrenItem (item) {
+        this.form.has_children = item
+        if (!this.form.has_children) {
+          this.form.number_of_children = ''
+        }
       },
     },
   }

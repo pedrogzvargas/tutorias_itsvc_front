@@ -93,8 +93,12 @@
     },
     computed: {
       descriptionRules () {
-        const rules = [v => !!v || 'Description es requerida']
-        return this.form.disability_id === 4 ? rules : []
+        const requieredRules = [
+          v => !!v || 'Description es requerida',
+          v => (v && v.length <= 200) || 'Description debe ser menor de 200 caracteres',
+        ]
+        const lengthRules = this.form.description ? [v => (v && v.length <= 200) || 'Description debe ser menor de 200 caracteres'] : []
+        return this.form.disability_id === 4 ? requieredRules : lengthRules
       },
       currentUser () {
         return this.studentId ? this.studentId : this.data.roles[0]

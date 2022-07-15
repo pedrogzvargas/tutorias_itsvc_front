@@ -9,7 +9,9 @@
     <v-form
       v-if="!isLoading"
       ref="form"
+      v-model="valid"
       lazy-validation
+      @submit.prevent=""
     >
       <v-container>
         <v-row>
@@ -37,8 +39,8 @@
               label="Nombre de la compañia"
               outlined
               :rules="companyNameRules"
-              :readonly="!isEditing"
-              :disabled="!isEditing"
+              :readonly="!isEditing || !form.has_job"
+              :disabled="!isEditing || !form.has_job"
             />
           </v-col>
           <v-col
@@ -50,8 +52,8 @@
               label="Horario"
               outlined
               :rules="scheduleRules"
-              :readonly="!isEditing"
-              :disabled="!isEditing"
+              :readonly="!isEditing || !form.has_job"
+              :disabled="!isEditing || !form.has_job"
             />
           </v-col>
         </v-row>
@@ -73,7 +75,7 @@
             Cancelar
           </v-btn>
           <v-btn
-            :disabled="!isEditing"
+            :disabled="disabledSubmit"
             color="success"
             @click="persist"
           >
@@ -106,6 +108,7 @@
         hasRecord: null,
         actionMessage: null,
         actionMessageColor: null,
+        valid: false,
         form: {
           has_job: null,
           company_name: null,
@@ -127,6 +130,11 @@
       scheduleRules () {
         const rules = [v => !!v || 'Horario es requerida']
         return this.form.has_job ? rules : []
+      },
+      disabledSubmit () {
+        let disabled = true
+        disabled = !this.valid || !this.isEditing
+        return disabled
       },
     },
     created () {

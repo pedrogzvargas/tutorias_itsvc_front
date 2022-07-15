@@ -60,7 +60,7 @@
             Cancelar
           </v-btn>
           <v-btn
-            :disabled="!isEditing"
+            :disabled="disabledSubmit"
             color="success"
             @click="persist"
           >
@@ -117,6 +117,11 @@
       homePhoneRules () {
         const rules = [v => (v && v.length <= 16) || 'Teléfono debe ser menor de 16 caracteres']
         return this.form.home_phone ? rules : []
+      },
+      disabledSubmit () {
+        let disabled = true
+        disabled = !this.valid || !this.isEditing
+        return disabled
       },
     },
     created () {

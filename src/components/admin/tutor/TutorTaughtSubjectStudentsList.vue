@@ -5,13 +5,12 @@
       ref="studentSubjectModalForm"
       :mode="ModalMode"
       :current-record="selectedStudentSubject"
-      @listUpdated="fillSubjects"
+      @listUpdated="fillStudents"
     />
     <confirmation-modal
       ref="confirmationModal"
       :message="confirmationModalMessage"
       @agree="deleteSibling"
-      @rejection="selectedStudentSubject = null"
     />
     <action-notifier
       ref="ActionNotifier"
@@ -20,79 +19,75 @@
     />
     <v-simple-table v-if="!isLoading">
       <thead>
-        <tr>
-          <th class="primary--text">
-            #
-          </th>
-          <th class="primary--text">
-            Materia
-          </th>
-          <th class="primary--text">
-            Tipo
-          </th>
-          <th class="primary--text">
-            Aprovada
-          </th>
-          <th class="primary--text">
-            Calificación
-          </th>
-          <th class="primary--text">
-            Ciclo escolar
-          </th>
-          <th class="primary--text">
-            Acciones
-          </th>
-        </tr>
+      <tr>
+        <th class="primary--text">
+          #
+        </th>
+        <th class="primary--text">
+          Nombre
+        </th>
+        <th class="primary--text">
+          Aprovada
+        </th>
+        <th class="primary--text">
+          Calificación
+        </th>
+        <th class="primary--text">
+          Ciclo escolar
+        </th>
+        <th class="primary--text">
+          Acciones
+        </th>
+      </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="(subject, index) in subjects"
-          :key="subject.id"
-        >
-          <td>{{ index +1 }}</td>
-          <td>{{ subject.subject_name }}</td>
-          <td>{{ subject.type_name }}</td>
-          <td>
-            <v-icon
-              v-if="subject.approved"
-              class="mx-1"
-              color="success"
+      <tr
+        v-for="(subject, index) in subjects"
+        :key="subject.id"
+      >
+        <td>{{ index +1 }}</td>
+        <td>{{ `${subject.name} ${subject.second_name || ''} ${subject.last_name} ${subject.second_last_name || ''}` }}</td>
+        <td>
+          <v-icon
+            v-if="subject.approved"
+            class="mx-1"
+            color="success"
+          >
+            mdi-check-circle-outline
+          </v-icon>
+          <v-icon
+            v-else
+            class="mx-1"
+            color="error"
+          >
+            mdi-close-circle-outline
+          </v-icon>
+        </td>
+        <td>{{ subject.final_score }}</td>
+        <td>{{ subject.school_cycle_name }}</td>
+        <td class="text-right">
+          <v-row>
+            <v-col
+              cols="auto"
             >
-              mdi-check-circle-outline
-            </v-icon>
-            <v-icon
-              v-else
-              class="mx-1"
-              color="error"
-            >
-              mdi-close-circle-outline
-            </v-icon>
-          </td>
-          <td>{{ subject.final_score }}</td>
-          <td>{{ subject.school_cycle_name }}</td>
-          <td class="text-right">
-            <v-row>
-              <v-col
-                cols="auto"
+              <v-icon
+                class="mx-1"
+                @click="showStudentSubjectFormAsEdition(subject)"
               >
-                <v-icon
-                  class="mx-1"
-                  @click="showStudentSubjectFormAsEdition(subject)"
-                >
-                  mdi-pencil
-                </v-icon>
+                mdi-pencil
+              </v-icon>
 
-                <v-icon
-                  class="mx-1"
-                  color="error"
-                  @click="showConfirmationModal(subject)"
-                >
-                  mdi-close
-                </v-icon>
-              </v-col>
-            </v-row>
-          </td>
-        </tr>
+              <v-icon
+                class="mx-1"
+                color="error"
+                @click="showConfirmationModal(subject)"
+              >
+                mdi-close
+              </v-icon>
+            </v-col>
+          </v-row>
+        </td>
+      </tr>
       </tbody>
     </v-simple-table>
     <div
@@ -111,10 +106,11 @@
   import ActionNotifier from '../../common/general/ActionNotifier'
   import ConfirmationModal from '../../common/utils/ConfirmationModal'
   import ProgressBar from '../../app/ProgressBar'
-  import StudentSubjectsService from '../../../services/student/StudentSubjectsService'
+  import TutorService from '../../../services/admin/tutor/TutorService'
+  import TaughtSubjectStudentsService from '../../../services/admin/subject/TaughtSubjectStudentsService'
   import StudentSubjectModalForm from '../subject/StudentSubjectModalForm'
   export default {
-    name: 'StudentsSubjectList',
+    name: 'TutorTaughtSubjectStudentsList',
     components: {
       ActionNotifier,
       ConfirmationModal,
@@ -132,7 +128,7 @@
       subjects: [],
       ModalMode: null,
       selectedStudentSubject: null,
-      confirmationModalMessage: '¿Estas seguro que deseas eliminar esta materia?',
+      confirmationModalMessage: '¿Estas seguro que deseas eliminar este alumno?',
       actionMessage: null,
       actionMessageColor: null,
     }),
@@ -144,23 +140,23 @@
     },
     watch: {
       page (value) {
-        this.fillSubjects()
+        this.fillStudents()
       },
     },
     created () {
-      this.studentId = this.$route.params.id
-      this.fillSubjects()
+      this.tutorSubjectId = this.$route.params.id
+      this.fillStudents()
     },
     methods: {
-      async fillSubjects () {
-        await StudentSubjectsService.get(this.studentId, this.search, this.page).then(
+      async fillStudents () {
+        await TaughtSubjectStudentsService.get(this.tutorSubjectId, this.search, this.page).then(
           (response) => {
             this.subjects = response.data.results
             this.totalItems = response.data.count
           },
         ).catch(
           (response) => {
-            this.notify('No se encontraron materias', 'secondary')
+            this.notify('No se encontraron estudiantes', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },
@@ -177,19 +173,19 @@
         this.ModalMode = 'create'
         this.$refs.studentSubjectModalForm.show = true
       },
-      showConfirmationModal (value) {
-        this.selectedStudentSubject = value
+      showConfirmationModal (sibling) {
+        this.selectedTutor = sibling
         this.$refs.confirmationModal.dialog = true
       },
       deleteSibling () {
-        StudentSubjectsService.delete(this.studentId, this.selectedStudentSubject.id).then(
+        TutorService.delete(this.selectedTutor.id).then(
           (response) => {
-            this.fillSubjects()
+            this.fillTutors()
             this.notify('Eliminado correctamente', 'success')
           },
         ).catch(
           (response) => {
-            this.notify('No se pudo eliminar correctamente', 'secondary')
+            this.notify('No se pudo eliminar correctamente', 'error')
             return Promise.reject(response)
           },
         )
@@ -202,3 +198,7 @@
     },
   }
 </script>
+
+<style scoped>
+
+</style>

@@ -9,7 +9,9 @@
     <v-form
       v-if="!isLoading"
       ref="form"
+      v-model="valid"
       lazy-validation
+      @submit.prevent=""
     >
       <v-container>
         <v-row>
@@ -38,7 +40,7 @@
               outlined
               :rules="institutionRules"
               :readonly="!isEditing"
-              :disabled="!isEditing"
+              :disabled="!isEditing || !form.has_scholarship"
             />
           </v-col>
           <v-col
@@ -51,7 +53,7 @@
               outlined
               :rules="dependenceRules"
               :readonly="!isEditing"
-              :disabled="!isEditing"
+              :disabled="!isEditing || !form.has_scholarship"
             />
           </v-col>
         </v-row>
@@ -73,7 +75,7 @@
             Cancelar
           </v-btn>
           <v-btn
-            :disabled="!isEditing"
+            :disabled="disabledSubmit"
             color="success"
             @click="persist"
           >
@@ -108,6 +110,7 @@
       actionMessage: null,
       actionMessageColor: null,
       hasRecord: null,
+      valid: false,
       form: {
         has_scholarship: null,
         institute_name: '',
@@ -122,12 +125,23 @@
         'data',
       ]),
       institutionRules () {
-        const rules = [v => !!v || 'Nombre de la institución es requerida']
+        const rules = [
+          v => !!v || 'Nombre de la institución es requerida',
+          v => (v && v.length <= 150) || 'Nombre de la institución debe ser menor de 150 caracteres',
+        ]
         return this.form.has_scholarship ? rules : []
       },
       dependenceRules () {
-        const rules = [v => !!v || 'Nombre de la dependencia es requerida']
+        const rules = [
+          v => !!v || 'Nombre de la dependencia es requerida',
+          v => (v && v.length <= 150) || 'Nombre de la dependencia debe ser menor de 150 caracteres',
+        ]
         return this.form.has_scholarship ? rules : []
+      },
+      disabledSubmit () {
+        let disabled = true
+        disabled = !this.valid || !this.isEditing
+        return disabled
       },
     },
     created () {

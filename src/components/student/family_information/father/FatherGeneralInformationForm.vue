@@ -35,6 +35,7 @@
             <v-text-field
               v-model="form.second_name"
               label="Segundo Nombre"
+              :rules="secondNameRules"
               outlined
               :readonly="!isEditing"
               :disabled="!isEditing"
@@ -62,6 +63,7 @@
             <v-text-field
               v-model="form.second_last_name"
               label="Apellido Materno"
+              :rules="secondLastNameRules"
               outlined
               :readonly="!isEditing"
               :disabled="!isEditing"
@@ -220,7 +222,7 @@
             Cancelar
           </v-btn>
           <v-btn
-            :disabled="!isEditing"
+            :disabled="disabledSubmit"
             color="success"
             @click="persist"
           >
@@ -294,12 +296,26 @@
       }
     },
     computed: {
+      secondNameRules () {
+        const rules = [v => (v && v.length <= 100) || 'Segundo nombre debe ser menor o igual a 100 caracteres']
+        return this.form.second_name ? rules : []
+      },
+      secondLastNameRules () {
+        const rules = [v => (v && v.length <= 100) || 'Apellido materno debe ser menor o igual a 100 caracteres']
+        return this.form.second_last_name ? rules : []
+      },
       typeOfJobRules () {
-        const rules = [v => !!v || 'Tipo de trabajo es requerido']
+        const rules = [
+          v => !!v || 'Tipo de trabajo es requerido',
+          v => (v && v.length <= 255) || 'Tipo de trabajo debe ser menor o igual a 255 caracteres',
+        ]
         return this.form.has_job ? rules : []
       },
       workplaceRules () {
-        const rules = [v => !!v || 'Lugar de trabajo es requerido']
+        const rules = [
+          v => !!v || 'Lugar de trabajo es requerido',
+          v => (v && v.length <= 255) || 'Lugar de trabajo debe ser menor o igual a 255 caracteres',
+        ]
         return this.form.has_job ? rules : []
       },
       typeOfJob () {
@@ -311,6 +327,11 @@
       ...get('user', [
         'data',
       ]),
+      disabledSubmit () {
+        let disabled = true
+        disabled = !this.valid || !this.isEditing
+        return disabled
+      },
     },
     watch: {
       menu (val) {
@@ -417,7 +438,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

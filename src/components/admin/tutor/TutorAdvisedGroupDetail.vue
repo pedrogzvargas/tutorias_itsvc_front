@@ -26,7 +26,7 @@
           >
             <v-text-field
               label="Nombre"
-              :value="taughtSubject.tutor.first_name"
+              :value="advisedGroup.tutor.first_name"
               outlined
               readonly
               disabled
@@ -38,7 +38,7 @@
           >
             <v-text-field
               label="Segundo nombre"
-              :value="taughtSubject.tutor.second_name"
+              :value="advisedGroup.tutor.second_name"
               outlined
               readonly
               disabled
@@ -50,7 +50,7 @@
           >
             <v-text-field
               label="Apellido paterno"
-              :value="taughtSubject.tutor.last_name"
+              :value="advisedGroup.tutor.last_name"
               outlined
               readonly
               disabled
@@ -62,7 +62,7 @@
           >
             <v-text-field
               label="Apellido materno"
-              :value="taughtSubject.tutor.second_last_name"
+              :value="advisedGroup.tutor.second_last_name"
               outlined
               readonly
               disabled
@@ -77,7 +77,7 @@
           >
             <v-text-field
               label="Nombre de usuario"
-              :value="taughtSubject.tutor.username"
+              :value="advisedGroup.tutor.username"
               outlined
               readonly
               disabled
@@ -89,9 +89,9 @@
           >
             <v-switch
               class="px-10"
-              v-model="taughtSubject.tutor.is_active"
+              v-model="advisedGroup.tutor.is_active"
               inset
-              :label="taughtSubject.tutor.is_active ? 'Activo': 'Inactivo'"
+              :label="advisedGroup.tutor.is_active ? 'Activo': 'Inactivo'"
               disabled
             ></v-switch>
           </v-col>
@@ -103,47 +103,34 @@
       v-if="!isLoading"
       class="mb-10"
       color="primary"
-      icon="mdi-book"
+      icon="mdi-account-multiple"
     >
       <template #title>
-        Materia
+        Grupo
       </template>
       <v-container>
         <v-row>
           <v-col
             cols="12"
-            sm="8"
+            sm="12"
           >
             <v-text-field
-              label="Nombre"
-              :value="taughtSubject.subject.name"
-              outlined
-              readonly
-              disabled
-            ></v-text-field>
-          </v-col>
-          <v-col
-            cols="12"
-            sm="4"
-          >
-            <v-text-field
-              label="Código"
-              :value="taughtSubject.subject.code"
+              label="Instituto"
+              :value="advisedGroup.group.university"
               outlined
               readonly
               disabled
             ></v-text-field>
           </v-col>
         </v-row>
-
         <v-row>
           <v-col
             cols="12"
-            sm="3"
+            sm="6"
           >
             <v-text-field
-              label="Horas teóricas"
-              :value="taughtSubject.subject.first_value"
+              label="Carera"
+              :value="advisedGroup.group.major"
               outlined
               readonly
               disabled
@@ -151,11 +138,25 @@
           </v-col>
           <v-col
             cols="12"
-            sm="3"
+            sm="6"
           >
             <v-text-field
-              label="Horas prácticas"
-              :value="taughtSubject.subject.second_value"
+              label="Periodo"
+              :value="advisedGroup.group.period"
+              outlined
+              readonly
+              disabled
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col
+            cols="12"
+            sm="6"
+          >
+            <v-text-field
+              label="Número de periodo"
+              :value="advisedGroup.group.period_number"
               outlined
               readonly
               disabled
@@ -163,27 +164,15 @@
           </v-col>
           <v-col
             cols="12"
-            sm="3"
+            sm="6"
           >
             <v-text-field
-              label="Total de créditos"
-              :value="taughtSubject.subject.total_value"
+              label="Grupo"
+              :value="advisedGroup.group.group"
               outlined
               readonly
               disabled
             ></v-text-field>
-          </v-col>
-          <v-col
-            cols="12"
-            sm="3"
-          >
-            <v-switch
-              v-model="taughtSubject.subject.is_active"
-              class="px-10"
-              inset
-              :label="taughtSubject.subject.is_active ? 'Activo': 'Inactivo'"
-              disabled
-            ></v-switch>
           </v-col>
         </v-row>
       </v-container>
@@ -206,7 +195,7 @@
           >
             <v-text-field
               label="Nombre"
-              :value="taughtSubject.school_cycle.name"
+              :value="advisedGroup.school_cycle.name"
               outlined
               readonly
               disabled
@@ -217,10 +206,10 @@
             sm="4"
           >
             <v-switch
-              v-model="taughtSubject.school_cycle.is_active"
+              v-model="advisedGroup.school_cycle.is_active"
               class="px-10"
               inset
-              :label="taughtSubject.school_cycle.is_active ? 'Activo': 'Inactivo'"
+              :label="advisedGroup.school_cycle.is_active ? 'Activo': 'Inactivo'"
               disabled
             ></v-switch>
           </v-col>
@@ -263,8 +252,8 @@
           </div>
         </div>
       </template>
-      <v-card-text>
-        <taught-subject-students-list />
+      <v-card-text v-if="academicInformationId">
+        <advised-group-students-list :academic-information-id="academicInformationId" />
       </v-card-text>
     </material-card>
   </div>
@@ -273,28 +262,29 @@
 <script>
   import { get } from 'vuex-pathify'
   import ProgressBar from '../../app/ProgressBar'
-  import TaughtSubjectService from '../../../services/tutor/subject/TaughtSubjectService'
-  import TaughtSubjectStudentsList from './TaughtSubjectStudentsList'
+  import AdvisedGroupService from '../../../services/tutor/group/AdvisedGroupService'
+  import AdvisedGroupStudentsList from '../../tutor/group/AdvisedGroupStudentsList'
 
   export default {
-    name: 'TaughtSubjectDetail',
+    name: 'TutorAdvisedGroupDetail',
     components: {
-      TaughtSubjectStudentsList,
       ProgressBar,
+      AdvisedGroupStudentsList,
     },
     data: () => ({
       isLoading: true,
-      taughtSubject: null,
-      taughtSubjectId: null,
+      advisedGroup: null,
+      advisedGroupId: null,
+      academicInformationId: null,
     }),
     computed: {
       items () {
         return [
           {
-            text: 'Materias impartidas',
+            text: 'Grupos asesorados',
             disabled: false,
             to: {
-              name: this.data.groups[0].name === 'tutor' ? 'TutorTaughtSubjects' : 'TaughtSubjects',
+              name: this.data.groups[0].name === 'tutor' ? 'TutorAdvisedGroups' : 'AdvisedGroups',
             },
           },
           {
@@ -309,22 +299,23 @@
     },
     watch: {
       '$route.params.id': function (id) {
-        this.fillTaughtSubject(id)
+        this.fillAdvisedGroup(id)
       },
     },
     created () {
-      this.taughtSubjectId = this.$route.params.id
-      this.fillTaughtSubject()
+      this.advisedGroupId = this.$route.params.id
+      this.fillAdvisedGroup()
     },
     methods: {
-      async fillTaughtSubject () {
-        await TaughtSubjectService.get(this.taughtSubjectId).then(
+      async fillAdvisedGroup () {
+        await AdvisedGroupService.get(this.advisedGroupId).then(
           (response) => {
-            this.taughtSubject = response.data.data
+            this.advisedGroup = response.data.data
+            this.academicInformationId = response.data.data.group.id
           },
         ).catch(
           (response) => {
-            this.notify('No se encontraron tutores', 'secondary')
+            this.notify('No se encontraron tutores', 'warning')
             return Promise.reject(response)
           },
         )
@@ -333,3 +324,7 @@
     },
   }
 </script>
+
+<style scoped>
+
+</style>

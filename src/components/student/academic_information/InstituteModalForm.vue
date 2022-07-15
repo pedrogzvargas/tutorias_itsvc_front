@@ -158,7 +158,7 @@
         },
         instituteRules: [
           v => !!v || 'Nombre de la institución es requerido',
-          v => (v && v.length <= 255) || 'Nombre de la institución debe ser menor de 255 caracteres',
+          v => (v && v.length <= 150) || 'Nombre de la institución debe ser menor de 150 caracteres',
         ],
         requireRules: [
           v => !!v || 'Este campo es requerido',

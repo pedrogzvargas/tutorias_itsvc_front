@@ -10,7 +10,7 @@
     <confirmation-modal
       ref="confirmationModal"
       :message="confirmationModalMessage"
-      @agree="deleteSibling"
+      @agree="deleteSubject"
     />
     <action-notifier
       ref="ActionNotifier"
@@ -106,8 +106,8 @@
   import ActionNotifier from '../../common/general/ActionNotifier'
   import ConfirmationModal from '../../common/utils/ConfirmationModal'
   import ProgressBar from '../../app/ProgressBar'
-  import TutorService from '../../../services/admin/tutor/TutorService'
   import TaughtSubjectStudentsService from '../../../services/admin/subject/TaughtSubjectStudentsService'
+  import StudentSubjectsService from '../../../services/student/StudentSubjectsService'
   import StudentSubjectModalForm from '../subject/StudentSubjectModalForm'
   export default {
     name: 'TaughtSubjectStudentsList',
@@ -156,7 +156,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No se encontraron estudiantes', 'warning')
+            this.notify('No se encontraron estudiantes', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },
@@ -173,14 +173,14 @@
         this.ModalMode = 'create'
         this.$refs.studentSubjectModalForm.show = true
       },
-      showConfirmationModal (sibling) {
-        this.selectedTutor = sibling
+      showConfirmationModal (value) {
+        this.selectedStudentSubject = value
         this.$refs.confirmationModal.dialog = true
       },
-      deleteSibling () {
-        TutorService.delete(this.selectedTutor.id).then(
+      deleteSubject () {
+        StudentSubjectsService.delete(this.selectedStudentSubject.student_id, this.selectedStudentSubject.id).then(
           (response) => {
-            this.fillTutors()
+            this.fillStudents()
             this.notify('Eliminado correctamente', 'success')
           },
         ).catch(
@@ -198,7 +198,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

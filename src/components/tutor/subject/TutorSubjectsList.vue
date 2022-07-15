@@ -19,7 +19,7 @@
             Código materia
           </th>
           <th class="primary--text">
-            Periodo academico
+            Periodo académico
           </th>
           <th class="primary--text">
             Periodo activo
@@ -61,7 +61,7 @@
               >
                 <v-icon
                   class="mx-1"
-                  @click="$router.push({name: 'TaughtSubject', params: { id: subject.id }})"
+                  @click="$router.push({name: 'TutorTaughtSubject', params: { id: subject.id }})"
                 >
                   mdi-arrow-right-thick
                 </v-icon>
@@ -161,7 +161,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -146,7 +146,7 @@
           },
         ).catch(
           (response) => {
-            this.notify('No se encontraron estudiantes', 'warning')
+            this.notify('No se encontraron estudiantes', 'secondary')
             this.isLoading = false
             return Promise.reject(response)
           },

@@ -220,6 +220,7 @@
         emailRules: [
           v => !!v || 'E-mail es requerido',
           v => /.+@.+\..+/.test(v) || 'E-mail debe ser válido',
+          v => (v && v.length <= 100) || 'Email debe ser menor de 100 caracteres',
         ],
       }
     },

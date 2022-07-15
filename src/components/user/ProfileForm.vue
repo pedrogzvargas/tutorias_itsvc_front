@@ -9,7 +9,9 @@
     <v-form
       v-if="!isLoading"
       ref="form"
+      v-model="valid"
       lazy-validation
+      @submit.prevent=""
     >
       <v-container>
         <v-row>
@@ -23,6 +25,7 @@
               outlined
               :readonly="!isEditing"
               :disabled="!isEditing"
+              :rules="firstNameRules"
             ></v-text-field>
           </v-col>
 
@@ -36,6 +39,7 @@
               outlined
               :readonly="!isEditing"
               :disabled="!isEditing"
+              :rules="secondNameRules"
             ></v-text-field>
           </v-col>
 
@@ -49,6 +53,7 @@
               outlined
               :readonly="!isEditing"
               :disabled="!isEditing"
+              :rules="lastNameRules"
             ></v-text-field>
           </v-col>
 
@@ -62,6 +67,7 @@
               outlined
               :readonly="!isEditing"
               :disabled="!isEditing"
+              :rules="secondLastNameRules"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -76,6 +82,7 @@
               outlined
               :readonly="!isEditing"
               :disabled="!isEditing"
+              :rules="emailRules"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -98,7 +105,7 @@
             Cancelar
           </v-btn>
           <v-btn
-            :disabled="!isEditing"
+            :disabled="disabledSubmit"
             color="success"
             @click="updateProfile"
           >
@@ -118,6 +125,10 @@
 
   export default {
     name: 'ProfileForm',
+    components: {
+      ActionNotifier,
+      ProgressBar,
+    },
     props: {
       userId: Number,
     },
@@ -127,6 +138,7 @@
       actionMessage: null,
       actionMessageColor: null,
       isLoading: true,
+      valid: false,
       form: {
         first_name: '',
         second_name: '',
@@ -134,6 +146,19 @@
         second_last_name: '',
         email: '',
       },
+      firstNameRules: [
+        v => !!v || 'Nombre es requerido',
+        v => (v && v.length <= 100) || 'Nombre debe ser menor de 100 caracteres',
+      ],
+      lastNameRules: [
+        v => !!v || 'Apellido paterno es requerido',
+        v => (v && v.length <= 100) || 'Apellido paterno debe ser menor de 100 caracteres',
+      ],
+      emailRules: [
+        v => !!v || 'E-mail es requerido',
+        v => /.+@.+\..+/.test(v) || 'E-mail debe ser válido',
+        v => (v && v.length <= 100) || 'Email debe ser menor de 100 caracteres',
+      ],
     }),
     computed: {
       currentUser () {
@@ -142,6 +167,19 @@
       ...get('user', [
         'data',
       ]),
+      secondNameRules () {
+        const rules = [v => (v && v.length <= 100) || 'Segundo nombre debe ser menor de 100 caracteres']
+        return this.form.second_name ? rules : []
+      },
+      secondLastNameRules () {
+        const rules = [v => (v && v.length <= 100) || 'Apellido materno debe ser menor de 100 caracteres']
+        return this.form.second_last_name ? rules : []
+      },
+      disabledSubmit () {
+        let disabled = true
+        disabled = !this.valid || !this.isEditing
+        return disabled
+      },
     },
     created () {
       ProfileService.get(this.currentUser).then(

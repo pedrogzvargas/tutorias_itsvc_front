@@ -9,7 +9,9 @@
     <v-form
       v-if="!isLoading"
       ref="form"
+      v-model="valid"
       lazy-validation
+      @submit.prevent=""
     >
       <v-container>
         <v-row>
@@ -156,6 +158,7 @@
               outlined
               rows="1"
               row-height="25"
+              :rules="homeStatusDescription"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -210,7 +213,7 @@
             Cancelar
           </v-btn>
           <v-btn
-            :disabled="!isEditing"
+            :disabled="disabledSubmit"
             color="success"
             @click="persist"
           >
@@ -249,6 +252,7 @@
         actionMessage: null,
         actionMessageColor: null,
         hasRecord: null,
+        valid: false,
         form: {
           street: null,
           indoor_number: null,
@@ -281,7 +285,7 @@
         ],
         zipCodeRules: [
           v => !!v || 'Código postal es requerido',
-          v => (v && v.length <= 5) || 'Código postal debe ser de 5 caracteres',
+          v => (v && v.length !== 4) || 'Código postal debe ser de 5 caracteres',
         ],
         membersRules: [
           v => !!v || 'Número de personas con las que vives es requerido',
@@ -297,12 +301,21 @@
         const rules = [v => (v && v.length <= 50) || 'Número interior debe menor o igual a 50 caracteres']
         return this.form.indoor_number ? rules : []
       },
+      homeStatusDescription () {
+        const rules = [v => (v && v.length <= 255) || 'Descripción de la vivienda debe menor o igual a 255 caracteres']
+        return this.form.home_status_description ? rules : []
+      },
       currentUser () {
         return this.studentId ? this.studentId : this.data.roles[0]
       },
       ...get('user', [
         'data',
       ]),
+      disabledSubmit () {
+        let disabled = true
+        disabled = !this.valid || !this.isEditing
+        return disabled
+      },
     },
     created () {
       this.callMainService()
