@@ -9,18 +9,22 @@
         cols="12"
         md="9"
       >
-        <tutor-advised-group-detail />
+        <subjects-detail />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-  import TutorAdvisedGroupDetail from '../components/tutor/group/TutorAdvisedGroupDetail'
+  import SubjectsDetail from '../components/tutor/group/SubjectsDetail'
   export default {
-    name: 'TutorAdvisedGroup',
+    name: 'AdvisedStudentSubjectsDetail',
     components: {
-      TutorAdvisedGroupDetail,
+      SubjectsDetail,
     },
   }
 </script>
+
+<style scoped>
+
+</style>

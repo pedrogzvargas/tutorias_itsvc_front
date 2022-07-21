@@ -153,7 +153,7 @@
     },
     methods: {
       async fillSubjects () {
-        await StudentSubjectsService.get(this.studentId, this.search, this.page).then(
+        await StudentSubjectsService.get(this.studentId, { search: this.search, page: this.page }).then(
           (response) => {
             this.subjects = response.data.results
             this.totalItems = response.data.count

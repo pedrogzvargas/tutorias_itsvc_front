@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import TutorTaughtSubjectDetail from '../components/admin/tutor/TutorTaughtSubjectDetail'
+  import TutorTaughtSubjectDetail from '../components/tutor/subject/TutorTaughtSubjectDetail'
   export default {
     name: 'TutorTaughtSubject',
     components: {

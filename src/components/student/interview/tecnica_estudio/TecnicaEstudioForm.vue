@@ -9,6 +9,7 @@
     <v-form
       v-if="!isLoading"
       ref="form"
+      v-model="valid"
       lazy-validation
     >
       <v-container>
@@ -350,7 +351,7 @@
             Cancelar
           </v-btn>
           <v-btn
-            :disabled="!isEditing"
+            :disabled="disabledSubmit"
             color="success"
             @click="persist"
           >
@@ -385,6 +386,7 @@
       actionMessage: null,
       actionMessageColor: null,
       hasRecord: null,
+      valid: false,
       form: {
         p1: null,
         p2: null,
@@ -415,6 +417,11 @@
       ...get('user', [
         'data',
       ]),
+      disabledSubmit () {
+        let disabled = true
+        disabled = !this.valid || !this.isEditing
+        return disabled
+      },
     },
     created () {
       this.fillForm()

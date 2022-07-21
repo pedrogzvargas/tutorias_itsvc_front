@@ -180,8 +180,9 @@
       deleteSubject () {
         StudentSubjectsService.delete(this.selectedStudentSubject.student_id, this.selectedStudentSubject.id).then(
           (response) => {
-            this.fillStudents()
+            this.subjects = []
             this.notify('Eliminado correctamente', 'success')
+            this.fillStudents()
           },
         ).catch(
           (response) => {

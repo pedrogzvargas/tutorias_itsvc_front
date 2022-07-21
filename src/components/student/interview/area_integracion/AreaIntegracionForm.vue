@@ -258,6 +258,7 @@
               name="input-7-4"
               label="¿Por qué?"
               :value="form.p13"
+              :rules="p13Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -291,7 +292,7 @@
               :disabled="!isEditing"
               :label="'¿Tienes Pareja?'"
               :rules="[v => v!== null || 'Este campo es requerido']"
-              @SelectedItem="form.p15 = $event"
+              @SelectedItem="selectP15"
             />
           </v-col>
         </v-row>
@@ -301,15 +302,24 @@
             sm="12"
             class="py-0"
           >
-            <v-textarea
-              v-model="form.p15_1"
-              outlined
-              rows="3"
-              name="input-7-4"
-              label="¿Cómo es tu relación con tu pareja?"
-              :value="form.p15_1"
+<!--            <v-textarea-->
+<!--              v-model="form.p15_1"-->
+<!--              outlined-->
+<!--              rows="3"-->
+<!--              name="input-7-4"-->
+<!--              label="¿Cómo es tu relación con tu pareja?"-->
+<!--              :value="form.p15_1"-->
+<!--              :rules="p15_1Rules"-->
+<!--              :readonly="!isEditing"-->
+<!--              :disabled="!isEditing"-->
+<!--            />-->
+            <answer-select
+              :default-selected="form.p15_1"
               :readonly="!isEditing"
               :disabled="!isEditing"
+              :label="'¿Cómo es tu relación con tu pareja?'"
+              :rules="p15_1Rules"
+              @SelectedItem="form.p15_1 = $event"
             />
           </v-col>
         </v-row>
@@ -356,7 +366,7 @@
               name="input-7-4"
               label="¿Qué haces en tu tiempo libre?"
               :value="form.p18"
-              :rules="[v => !!v || 'Este campo es requerido']"
+              :rules="p18Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -373,6 +383,7 @@
               name="input-7-4"
               label="¿Cuál es tu actividad recreativa?"
               :value="form.p19"
+              :rules="p19Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -396,7 +407,7 @@
             Cancelar
           </v-btn>
           <v-btn
-            :disabled="!isEditing"
+            :disabled="disabledSubmit"
             color="success"
             @click="persist"
           >
@@ -462,9 +473,10 @@
         p18: null,
         p19: null,
       },
-      // p2_1Rules: [
-      //   v => !!v || 'Este campo es requerido',
-      // ],
+      p18Rules: [
+        v => !!v || 'Este campo es requerido',
+        v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+      ],
     }),
     computed: {
       showMiedos () {
@@ -493,10 +505,32 @@
       },
       p11Rules () {
         const rules = [
-          v => !!v || 'Este campo es requerido',
           v => (v && v.length <= 255) || 'Dato debe ser menor de 255 caracteres',
         ]
         return this.form.p11 ? rules : []
+      },
+      p13Rules () {
+        const rules = [
+          v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+        ]
+        return this.form.p13 ? rules : []
+      },
+      p15_1Rules () {
+        const rules = [
+          v => !!v || 'Este campo es requerido',
+        ]
+        return this.form.p15 ? rules : []
+      },
+      p19Rules () {
+        const rules = [
+          v => (v && v.length <= 255) || 'Actividad debe ser menor de 255 caracteres',
+        ]
+        return this.form.p19 ? rules : []
+      },
+      disabledSubmit () {
+        let disabled = true
+        disabled = !this.valid || !this.isEditing
+        return disabled
       },
     },
     created () {
@@ -588,6 +622,12 @@
         this.form.p2 = item
         if (this.form.p2 === false || this.form.p2 === null) {
           this.form.p2_1 = ''
+        }
+      },
+      selectP15 (item) {
+        this.form.p15 = item
+        if (this.form.p15 === false) {
+          this.form.p15_1 = ''
         }
       },
     },

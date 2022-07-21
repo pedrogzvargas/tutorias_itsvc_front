@@ -53,7 +53,7 @@
               >
                 <v-icon
                   class="mx-1"
-                  @click="$router.push({name: 'AdvisedStudentSubjectsDetail', params: { id: student.id }})"
+                  @click="$router.push({name: 'StudentSubjectsDetail', params: { id: student.id }})"
                 >
                   mdi-arrow-right-thick
                 </v-icon>

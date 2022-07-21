@@ -9,6 +9,7 @@
     <v-form
       v-if="!isLoading"
       ref="form"
+      v-model="valid"
       lazy-validation
     >
       <v-container>
@@ -25,7 +26,7 @@
               name="input-7-4"
               label="¿Cómo te gustaría ser?"
               :value="form.p1"
-              :rules="[v => !!v || 'Este campo es requerido']"
+              :rules="p1Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -90,7 +91,7 @@
               name="input-7-4"
               label="¿Por qué vienes al Tecnológico?"
               :value="form.p5"
-              :rules="[v => !!v || 'Este campo es requerido']"
+              :rules="p5Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -107,7 +108,7 @@
               name="input-7-4"
               label="¿Qué te motiva para venir al Tecnológico?"
               :value="form.p6"
-              :rules="[v => !!v || 'Este campo es requerido']"
+              :rules="p6Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -125,8 +126,9 @@
               rows="3"
               name="input-7-4"
               label="¿Cuál es tu promedio general del ciclo escolar anterior?"
-              :value="form.p7"
+              type="number"
               :rules="[v => !!v || 'Este campo es requerido']"
+              :value="form.p7"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -142,7 +144,7 @@
               :disabled="!isEditing"
               :label="'¿Tienes asignaturas reprobadas?'"
               :rules="[v => v!== null || 'Este campo es requerido']"
-              @SelectedItem="form.p8 = $event"
+              @SelectedItem="selectItem"
             />
           </v-col>
           <v-col
@@ -156,14 +158,17 @@
               rows="3"
               name="input-7-4"
               label="¿Cuántas?"
+              type="number"
               :value="form.p8_1"
               :rules="subjectsNUmberRules"
-              :readonly="!isEditing"
-              :disabled="!isEditing"
+              :readonly="!isEditing || !form.p8"
+              :disabled="!isEditing || !form.p8"
             />
           </v-col>
         </v-row>
-        <p class="text-h3 pa-6 py-1">Plan de vida y carrera</p>
+        <p class="text-h3 pa-6 py-1">
+          Plan de vida y carrera
+        </p>
         <v-row>
           <v-col
             cols="12"
@@ -177,7 +182,7 @@
               name="input-7-4"
               label="¿Cuáles son tus planes inmediatos?"
               :value="form.p9"
-              :rules="[v => !!v || 'Este campo es requerido']"
+              :rules="p9Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -194,13 +199,15 @@
               name="input-7-4"
               label="¿Cuáles son tus metas en la vida?"
               :value="form.p10"
-              :rules="[v => !!v || 'Este campo es requerido']"
+              :rules="p10Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
           </v-col>
         </v-row>
-        <p class="text-h3 pa-6 py-1">Características Personales</p>
+        <p class="text-h3 pa-6 py-1">
+          Características Personales
+        </p>
         <v-row>
           <v-col
             cols="12"
@@ -214,7 +221,7 @@
               name="input-7-4"
               label="Yo Soy..."
               :value="form.p11"
-              :rules="[v => !!v || 'Este campo es requerido']"
+              :rules="p11Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -231,7 +238,7 @@
               name="input-7-4"
               label="Mi Carácter es..."
               :value="form.p12"
-              :rules="[v => !!v || 'Este campo es requerido']"
+              :rules="p12Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -248,7 +255,7 @@
               name="input-7-4"
               label="A mí me gusta que..."
               :value="form.p13"
-              :rules="[v => !!v || 'Este campo es requerido']"
+              :rules="p13Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -267,7 +274,7 @@
               name="input-7-4"
               label="Yo Aspiro en la Vida..."
               :value="form.p14"
-              :rules="[v => !!v || 'Este campo es requerido']"
+              :rules="p14Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -284,7 +291,7 @@
               name="input-7-4"
               label="Yo tengo miedo que..."
               :value="form.p15"
-              :rules="[v => !!v || 'Este campo es requerido']"
+              :rules="p15Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -301,7 +308,7 @@
               name="input-7-4"
               label="Pero pienso que podré lograr..."
               :value="form.p16"
-              :rules="[v => !!v || 'Este campo es requerido']"
+              :rules="p16Rules"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -325,7 +332,7 @@
             Cancelar
           </v-btn>
           <v-btn
-            :disabled="!isEditing"
+            :disabled="disabledSubmit"
             color="success"
             @click="persist"
           >
@@ -364,6 +371,7 @@
       actionMessage: null,
       actionMessageColor: null,
       hasRecord: false,
+      valid: false,
       form: {
         p1: null,
         p2: null,
@@ -383,6 +391,50 @@
         p15: null,
         p16: null,
       },
+      p1Rules: [
+        v => !!v || 'Este campo es requerido',
+        v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+      ],
+      p5Rules: [
+        v => !!v || 'Este campo es requerido',
+        v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+      ],
+      p6Rules: [
+        v => !!v || 'Este campo es requerido',
+        v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+      ],
+      p9Rules: [
+        v => !!v || 'Este campo es requerido',
+        v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+      ],
+      p10Rules: [
+        v => !!v || 'Este campo es requerido',
+        v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+      ],
+      p11Rules: [
+        v => !!v || 'Este campo es requerido',
+        v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+      ],
+      p12Rules: [
+        v => !!v || 'Este campo es requerido',
+        v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+      ],
+      p13Rules: [
+        v => !!v || 'Este campo es requerido',
+        v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+      ],
+      p14Rules: [
+        v => !!v || 'Este campo es requerido',
+        v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+      ],
+      p15Rules: [
+        v => !!v || 'Este campo es requerido',
+        v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+      ],
+      p16Rules: [
+        v => !!v || 'Este campo es requerido',
+        v => (v && v.length <= 255) || 'Especificación debe ser menor de 255 caracteres',
+      ],
     }),
     computed: {
       showMiedos () {
@@ -400,12 +452,18 @@
       ...get('user', [
         'data',
       ]),
+      disabledSubmit () {
+        let disabled = true
+        disabled = !this.valid || !this.isEditing
+        return disabled
+      },
     },
     created () {
       this.fillForm()
     },
     methods: {
       persist () {
+        this.form.p8_1 = this.form.p8_1 === '' ? null : this.form.p8_1
         if (this.$refs.form.validate()) {
           this.isLoading = true
           if (!this.hasRecord) {
@@ -469,6 +527,7 @@
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
+            this.isLoading = false
             return Promise.reject(response)
           },
         )
@@ -479,6 +538,12 @@
         this.actionMessage = message
         this.actionMessageColor = type
         this.$refs.ActionNotifier.snackbar = true
+      },
+      selectItem (item) {
+        this.form.p8 = item
+        if (!this.form.p8) {
+          this.form.p8_1 = null
+        }
       },
     },
   }

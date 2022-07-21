@@ -262,13 +262,11 @@
 <script>
   import { get } from 'vuex-pathify'
   import ProgressBar from '../../app/ProgressBar'
-  import AdvisedGroupService from '../../../services/tutor/group/AdvisedGroupService'
-  // import AdvisedGroupStudentsList from '../../tutor/group/AdvisedGroupStudentsList'
-  // import AdvisedGroupStudentsList from '../../tutor/group/AdvisedGroupStudentsList'
-  import AdvisedGroupStudentsList from '../tutor/AdvisedGroupStudentsList'
+  import TutorAdvisedGroupService from '../../../services/tutor/group/TutorAdvisedGroupService'
+  import AdvisedGroupStudentsList from './AdvisedGroupStudentsList'
 
   export default {
-    name: 'AdvisedGroupDetail',
+    name: 'TutorAdvisedGroupDetail',
     components: {
       ProgressBar,
       AdvisedGroupStudentsList,
@@ -285,8 +283,9 @@
           {
             text: 'Grupos asesorados',
             disabled: false,
+            exact: true,
             to: {
-              name: this.data.groups[0].name === 'tutor' ? 'TutorAdvisedGroups' : 'AdvisedGroups',
+              name: 'TutorAdvisedGroups',
             },
           },
           {
@@ -298,6 +297,9 @@
       ...get('user', [
         'data',
       ]),
+      currentUser () {
+        return this.data.roles[0]
+      },
     },
     watch: {
       '$route.params.id': function (id) {
@@ -310,7 +312,7 @@
     },
     methods: {
       async fillAdvisedGroup () {
-        await AdvisedGroupService.get(this.advisedGroupId).then(
+        await TutorAdvisedGroupService.get(this.currentUser.id, this.advisedGroupId).then(
           (response) => {
             this.advisedGroup = response.data.data
             this.academicInformationId = response.data.data.group.id

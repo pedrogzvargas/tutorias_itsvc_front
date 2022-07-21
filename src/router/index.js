@@ -47,6 +47,7 @@ const router = new Router({
       route('TutorTaughtSubject', null, 'tutor/subjects/:id/detail'),
       route('TutorAdvisedGroups', null, 'tutor/groups'),
       route('TutorAdvisedGroup', null, 'tutor/groups/:id/detail'),
+      route('AdvisedStudentSubjectsDetail', null, 'tutor/groups/students/:id/detail'),
 
       // Components
       route('Notifications', null, 'components/notifications'),
