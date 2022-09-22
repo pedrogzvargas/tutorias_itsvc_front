@@ -236,6 +236,7 @@
               >
                 <div class="d-flex justify-start">
                   <v-text-field
+                    v-model="searchValue"
                     label="Buscar"
                     clearable
                   ></v-text-field>
@@ -243,6 +244,7 @@
                     class="ma-3"
                     depressed
                     color="secondary"
+                    @click="filterList"
                   >
                     Buscar
                   </v-btn>
@@ -253,7 +255,11 @@
         </div>
       </template>
       <v-card-text v-if="academicInformationId">
-        <advised-group-students-list :academic-information-id="academicInformationId" />
+        <advised-group-students-list
+          ref="AdvisedGroupStudentsList"
+          :academic-information-id="academicInformationId"
+          :search="searchValue"
+        />
       </v-card-text>
     </material-card>
   </div>
@@ -276,6 +282,7 @@
       advisedGroup: null,
       advisedGroupId: null,
       academicInformationId: null,
+      searchValue: '',
     }),
     computed: {
       items () {
@@ -324,6 +331,10 @@
           },
         )
         this.isLoading = false
+      },
+      filterList () {
+        this.$refs.AdvisedGroupStudentsList.page = 1
+        this.$refs.AdvisedGroupStudentsList.fillStudents()
       },
     },
   }

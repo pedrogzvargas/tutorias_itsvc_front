@@ -125,7 +125,7 @@
     },
     methods: {
       async fillStudents () {
-        await AdvisedGroupStudentsService.get(this.academicInformationId, this.search, this.page).then(
+        await AdvisedGroupStudentsService.get(this.academicInformationId, { search: this.search, page: this.page }).then(
           (response) => {
             this.students = response.data.results
             this.totalItems = response.data.count

@@ -247,6 +247,7 @@
               >
                 <div class="d-flex justify-start">
                   <v-text-field
+                    v-model="searchValue"
                     label="Buscar"
                     clearable
                   ></v-text-field>
@@ -254,6 +255,7 @@
                     class="ma-3"
                     depressed
                     color="secondary"
+                    @click="filterList"
                   >
                     Buscar
                   </v-btn>
@@ -264,7 +266,10 @@
         </div>
       </template>
       <v-card-text>
-        <taught-subject-students-list />
+        <taught-subject-students-list
+          ref="TaughtSubjectStudentsList"
+          :search="searchValue"
+        />
       </v-card-text>
     </material-card>
   </div>
@@ -286,6 +291,7 @@
       isLoading: true,
       taughtSubject: null,
       taughtSubjectId: null,
+      searchValue: '',
     }),
     computed: {
       items () {
@@ -329,6 +335,10 @@
           },
         )
         this.isLoading = false
+      },
+      filterList () {
+        this.$refs.TaughtSubjectStudentsList.page = 1
+        this.$refs.TaughtSubjectStudentsList.fillStudents()
       },
     },
   }
