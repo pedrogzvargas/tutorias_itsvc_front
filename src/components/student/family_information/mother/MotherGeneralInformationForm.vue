@@ -161,16 +161,13 @@
             cols="12"
             sm="3"
           >
-            <v-select
-              v-model="form.has_job"
-              :items="trueFalseItems"
-              :rules="[v => v!== null || 'Este campo es requerido']"
+            <boolean-select
+              :default-selected="form.has_job"
               :readonly="!isEditing"
               :disabled="!isEditing"
-              item-value="id"
-              item-text="name"
-              label="¿Trabaja?"
-              outlined
+              :label="'¿Trabaja?'"
+              :rules="[v => v!== null || 'Este campo es requerido']"
+              @SelectedItem="selectItem"
             />
           </v-col>
 
@@ -240,6 +237,7 @@
     from '../../../../services/student/parents/mother/MotherGeneralInformationService'
   import AcademicDegreeSelect from '../../../common/general/AcademicDegreeSelect'
   import ActionNotifier from '../../../common/general/ActionNotifier'
+  import BooleanSelect from '../../../common/general/BooleanSelect'
   import { get } from 'vuex-pathify'
   export default {
     name: 'MotherGeneralInformationForm',
@@ -431,10 +429,13 @@
         this.actionMessageColor = type
         this.$refs.ActionNotifier.snackbar = true
       },
+      selectItem (item) {
+        this.form.has_job = item
+        if (this.form.has_job === false) {
+          this.form.company_name = null
+          this.form.schedule = null
+        }
+      },
     },
   }
 </script>
-
-<style scoped>
-
-</style>

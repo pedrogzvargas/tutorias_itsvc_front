@@ -86,7 +86,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-model="form.end_date"
-                    label="Fecha de inicio del periodo"
+                    label="Fecha fin del periodo"
                     readonly
                     :rules="requireRules"
                     dense

@@ -66,7 +66,7 @@
           >
             <v-text-field
               v-model="form.colony"
-              label="Colina"
+              label="Colonia"
               :rules="colonyRules"
               outlined
               :readonly="!isEditing"
