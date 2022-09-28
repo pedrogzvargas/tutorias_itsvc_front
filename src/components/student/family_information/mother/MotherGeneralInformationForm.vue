@@ -181,8 +181,8 @@
               label="Tipo de Trabajo"
               outlined
               :rules="typeOfJobRules"
-              :readonly="!isEditing"
-              :disabled="!isEditing"
+              :readonly="!isEditing || !form.has_job"
+              :disabled="!isEditing || !form.has_job"
             ></v-text-field>
           </v-col>
 
@@ -195,8 +195,8 @@
               label="Nombre o lugar de trabajo"
               :rules="workplaceRules"
               outlined
-              :readonly="!isEditing"
-              :disabled="!isEditing"
+              :readonly="!isEditing || !form.has_job"
+              :disabled="!isEditing || !form.has_job"
             ></v-text-field>
           </v-col>
         </v-row>
