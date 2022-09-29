@@ -69,6 +69,7 @@
                 :items="subjectStatusItems"
                 :label="'Estatus'"
                 outlined
+                @change="manageForm"
               ></v-select>
             </v-col>
             <v-col
@@ -185,8 +186,8 @@
         },
         subjectStatusItems: [
           { id: null, name: 'Cursando' },
-          { id: true, name: 'Aprovada' },
-          { id: false, name: 'Reprovada' },
+          { id: true, name: 'Aprobada' },
+          { id: false, name: 'Reprobada' },
         ],
       }
     },
@@ -293,6 +294,14 @@
         this.actionMessage = message
         this.actionMessageColor = type
         this.$refs.ActionNotifier.snackbar = true
+      },
+      manageForm () {
+        if (this.form.approved === true || this.form.approved == null) {
+          this.form.comment = null
+        }
+        if (this.form.approved == null) {
+          this.form.final_score = null
+        }
       },
     },
   }

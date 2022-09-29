@@ -63,7 +63,7 @@ const usersMenu = {
       to: '/profile/',
     },
     {
-      title: 'Alumnos',
+      title: 'Estudiantes',
       icon: 'mdi-account-multiple',
       to: '/students/',
     },
