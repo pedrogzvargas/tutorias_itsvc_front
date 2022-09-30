@@ -236,7 +236,7 @@
       <template #heading>
         <div class="pa-3 white--text">
           <div class="text-h4 font-weight-light">
-            Alumnos inscritos
+            Estudiantes inscritos
           </div>
 
           <div>
@@ -247,6 +247,7 @@
               >
                 <div class="d-flex justify-start">
                   <v-text-field
+                    v-model="searchValue"
                     label="Buscar"
                     clearable
                   ></v-text-field>
@@ -254,6 +255,7 @@
                     class="ma-3"
                     depressed
                     color="secondary"
+                    @click="filterList"
                   >
                     Buscar
                   </v-btn>
@@ -264,7 +266,10 @@
         </div>
       </template>
       <v-card-text>
-        <tutor-taught-subject-students-list />
+        <tutor-taught-subject-students-list
+          ref="TutorTaughtSubjectStudentsList"
+          :search="searchValue"
+        />
       </v-card-text>
     </material-card>
   </div>
@@ -286,6 +291,7 @@
       isLoading: true,
       taughtSubject: null,
       taughtSubjectId: null,
+      searchValue: '',
     }),
     computed: {
       items () {
@@ -333,6 +339,10 @@
           },
         )
         this.isLoading = false
+      },
+      filterList () {
+        this.$refs.TutorTaughtSubjectStudentsList.page = 1
+        this.$refs.TutorTaughtSubjectStudentsList.fillStudents()
       },
     },
   }

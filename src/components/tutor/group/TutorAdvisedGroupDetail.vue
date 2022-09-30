@@ -225,7 +225,7 @@
       <template #heading>
         <div class="pa-3 white--text">
           <div class="text-h4 font-weight-light">
-            Alumnos inscritos
+            Estudiantes inscritos
           </div>
 
           <div>
@@ -339,7 +339,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -378,7 +378,7 @@
       items () {
         return [
           {
-            text: 'Alumnos',
+            text: 'Estudiantes',
             disabled: false,
             exact: true,
             to: {

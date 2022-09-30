@@ -1,6 +1,11 @@
 <template>
   <div>
     <progress-bar v-if="isLoading" />
+    <action-notifier
+      ref="ActionNotifier"
+      :text="actionMessage"
+      :color="actionMessageColor"
+    />
     <v-breadcrumbs
       :items="items"
       v-if="!isLoading"
@@ -379,6 +384,8 @@
       subjectDetails: null,
       isLoading: true,
       isDownloading: false,
+      actionMessage: null,
+      actionMessageColor: null,
     }),
     computed: {
       items () {
@@ -437,7 +444,8 @@
           },
         ).catch(
           (response) => {
-            this.notify('No fue posible descargar el reporte', 'warning')
+            this.isDownloading = false
+            this.notify('No fue posible descargar el reporte', 'error')
             return Promise.reject(response)
           },
         )
@@ -456,7 +464,8 @@
           },
         ).catch(
           (response) => {
-            this.notify('No fue posible descargar el reporte', 'warning')
+            this.isDownloading = false
+            this.notify('No fue posible descargar el reporte', 'error')
             return Promise.reject(response)
           },
         )
@@ -464,6 +473,11 @@
       },
       showSubjects () {
         this.$refs.subjectModalForm.show = true
+      },
+      notify (message, type) {
+        this.actionMessage = message
+        this.actionMessageColor = type
+        this.$refs.ActionNotifier.snackbar = true
       },
     },
   }

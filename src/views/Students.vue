@@ -16,7 +16,7 @@
           <template #heading>
             <div class="pa-5 white--text">
               <div class="text-h4 font-weight-light">
-                Alumnos
+                Estudiantes
               </div>
 
               <div>
