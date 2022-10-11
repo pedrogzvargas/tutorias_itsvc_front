@@ -184,6 +184,7 @@
       deleteSibling () {
         StudentSubjectsService.delete(this.studentId, this.selectedStudentSubject.id).then(
           (response) => {
+            this.subjects = []
             this.fillSubjects()
             this.notify('Eliminado correctamente', 'success')
           },
