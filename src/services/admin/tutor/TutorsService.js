@@ -1,5 +1,6 @@
 import Service from '../../Service'
-import cookie from 'vue-cookies'
+
+import store from '../../../store'
 
 const resource = 'tutor'
 
@@ -11,14 +12,14 @@ export default {
         page: page,
       },
       headers: {
-        Authorization: `token ${cookie.get('token')}`,
+        Authorization: `token ${store.getters['user/userToken']}`,
       },
     })
   },
   post (payload) {
     return Service.post(`${resource}/`, payload, {
       headers: {
-        Authorization: `token ${cookie.get('token')}`,
+        Authorization: `token ${store.getters['user/userToken']}`,
       },
     })
   },

@@ -103,6 +103,7 @@
               this.data.userId = response.data.data.user_id
               this.data.roles = response.data.data.roles
               this.data.groups = response.data.data.groups
+              this.data.token = response.data.data.token
               this.drawerSide = true
               this.update()
               this.$router.push('/profile/')

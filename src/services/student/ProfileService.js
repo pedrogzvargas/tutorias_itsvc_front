@@ -1,5 +1,6 @@
 import Service from '../Service'
-import cookie from 'vue-cookies'
+
+import store from '../../store'
 
 const resource = 'users'
 
@@ -7,14 +8,14 @@ export default {
   get (studentId) {
     return Service.get(`${resource}/${studentId}/profile/`, {
       headers: {
-        Authorization: `token ${cookie.get('token')}`,
+        Authorization: `token ${store.getters['user/userToken']}`,
       },
     })
   },
   put (studentId, payload) {
     return Service.put(`${resource}/${studentId}/profile/`, payload, {
       headers: {
-        Authorization: `token ${cookie.get('token')}`,
+        Authorization: `token ${store.getters['user/userToken']}`,
       },
     })
   },

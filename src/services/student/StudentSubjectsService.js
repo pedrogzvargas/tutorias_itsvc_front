@@ -1,5 +1,6 @@
 import Service from '../Service'
-import cookie from 'vue-cookies'
+
+import store from '../../store'
 
 const resource = 'students'
 
@@ -8,7 +9,7 @@ export default {
     return Service.get(`${resource}/${studentId}/subject/`, {
       params: params,
       headers: {
-        Authorization: `token ${cookie.get('token')}`,
+        Authorization: `token ${store.getters['user/userToken']}`,
       },
     })
   },
@@ -19,28 +20,28 @@ export default {
   //       page: page,
   //     },
   //     headers: {
-  //       Authorization: `token ${cookie.get('token')}`,
+  //       Authorization: `token ${store.getters['user/userToken']}`,
   //     },
   //   })
   // },
   post (studentId, payload) {
     return Service.post(`${resource}/${studentId}/subject/`, payload, {
       headers: {
-        Authorization: `token ${cookie.get('token')}`,
+        Authorization: `token ${store.getters['user/userToken']}`,
       },
     })
   },
   put (studentId, studentSubjectId, payload) {
     return Service.put(`${resource}/${studentId}/subject/${studentSubjectId}/`, payload, {
       headers: {
-        Authorization: `token ${cookie.get('token')}`,
+        Authorization: `token ${store.getters['user/userToken']}`,
       },
     })
   },
   delete (studentId, studentSubjectId) {
     return Service.delete(`${resource}/${studentId}/subject/${studentSubjectId}/`, {
       headers: {
-        Authorization: `token ${cookie.get('token')}`,
+        Authorization: `token ${store.getters['user/userToken']}`,
       },
     })
   },

@@ -8,6 +8,7 @@ const state = {
   dark: false,
   data: {
     userId: null,
+    token: '',
     fullName: '',
     profileImage: '',
     roles: [],
@@ -72,7 +73,7 @@ const getters = {
     return state.data
   },
   userToken: state => {
-    return state.data.userId
+    return state.data.token
   },
   userType: state => {
     return state.data.groups[0]

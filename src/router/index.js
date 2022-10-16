@@ -3,7 +3,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { trailingSlash } from '@/util/helpers'
 // eslint-disable-next-line no-unused-vars
-import cookie from 'vue-cookies'
 import store from '../store'
 import {
   layout,
@@ -71,8 +70,7 @@ router.beforeEach(async (to, from, next) => {
   // return to.path.endsWith('/') ? next() : next(trailingSlash(to.path))
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const user = await store.getters['user/userData']
-  const token = cookie.get('token')
-  if (requiresAuth && (token == null || user.userId == null)) {
+  if (requiresAuth && user.userId == null) {
     next('/login/')
   } else if (to.name === 'Login' && user.userId) {
     next('/profile')
