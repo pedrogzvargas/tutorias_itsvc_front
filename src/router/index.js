@@ -32,22 +32,22 @@ const router = new Router({
       route('GeneralInformation', null, 'student/general-information', { requiresAuth: true }),
       route('Address', null, 'student/address', { requiresAuth: true }),
       route('FamilyInformation', null, 'student/family', { requiresAuth: true }),
-      route('Login', null, 'components/login'),
+      route('Login', null, 'login'),
       // Admin
-      route('Students', null, 'students'),
-      route('Tutors', null, 'tutors'),
-      route('TaughtSubjects', null, 'subjects'),
-      route('AdvisedGroups', null, 'groups'),
-      route('StudentSubjectsDetail', null, 'students/:id/subjects-detail/'),
-      route('StudentsSubjects', null, 'students/:id/subjects/'),
-      route('TaughtSubject', null, 'subjects/:id/detail'),
-      route('AdvisedGroup', null, 'groups/:id/detail'),
+      route('Students', null, 'students', { requiresAuth: true }),
+      route('Tutors', null, 'tutors', { requiresAuth: true }),
+      route('TaughtSubjects', null, 'subjects', { requiresAuth: true }),
+      route('AdvisedGroups', null, 'groups', { requiresAuth: true }),
+      route('StudentSubjectsDetail', null, 'students/:id/subjects-detail/', { requiresAuth: true }),
+      route('StudentsSubjects', null, 'students/:id/subjects/', { requiresAuth: true }),
+      route('TaughtSubject', null, 'subjects/:id/detail', { requiresAuth: true }),
+      route('AdvisedGroup', null, 'groups/:id/detail', { requiresAuth: true }),
       // Tutor
-      route('TutorTaughtSubjects', null, 'tutor/subjects'),
-      route('TutorTaughtSubject', null, 'tutor/subjects/:id/detail'),
-      route('TutorAdvisedGroups', null, 'tutor/groups'),
-      route('TutorAdvisedGroup', null, 'tutor/groups/:id/detail'),
-      route('AdvisedStudentSubjectsDetail', null, 'tutor/groups/students/:id/detail'),
+      route('TutorTaughtSubjects', null, 'tutor/subjects', { requiresAuth: true }),
+      route('TutorTaughtSubject', null, 'tutor/subjects/:id/detail', { requiresAuth: true }),
+      route('TutorAdvisedGroups', null, 'tutor/groups', { requiresAuth: true }),
+      route('TutorAdvisedGroup', null, 'tutor/groups/:id/detail', { requiresAuth: true }),
+      route('AdvisedStudentSubjectsDetail', null, 'tutor/groups/students/:id/detail', { requiresAuth: true }),
 
       // Components
       route('Notifications', null, 'components/notifications'),
@@ -61,8 +61,8 @@ const router = new Router({
       route('Google Maps', null, 'maps/google'),
       // Course
       route('StudentCourse', null, 'student/course'),
-      route('StudentInterview', null, 'student/interview'),
-      route('StudentStudyInterview', null, 'student/study-interview'),
+      route('StudentInterview', null, 'student/interview', { requiresAuth: true }),
+      route('StudentStudyInterview', null, 'student/study-interview', { requiresAuth: true }),
     ]),
   ],
 })
@@ -72,11 +72,9 @@ router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const user = await store.getters['user/userData']
   const token = cookie.get('token')
-  console.info((token == null || user.userId == null))
   if (requiresAuth && (token == null || user.userId == null)) {
-    next('/components/login/')
+    next('/login/')
   } else if (to.name === 'Login' && user.userId) {
-    console.info(user.userId)
     next('/profile')
   } else {
     next()

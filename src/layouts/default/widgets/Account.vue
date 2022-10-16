@@ -70,8 +70,7 @@
       logOut () {
         this.data.userId = null
         this.drawerSide = false
-        this.$router.push('/components/login/')
-        console.info('logOut')
+        this.$router.push('/login/')
       },
     },
   }
