@@ -89,17 +89,6 @@
                         @click="showModalASCreate"
                       >
                         mdi-pencil-plus
-                      <!--<template v-slot:activator="{ on, attrs }">
-                          <v-icon
-                            class="mx-1"
-                            v-bind="attrs"
-                            v-on="on"
-                          >
-                            mdi-pencil-plus
-                          </v-icon>
-                        </template>
-                        <span>Agregar instituto</span>
-                      </v-tooltip>-->
                       </v-icon>
                     </div>
                   </template>

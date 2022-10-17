@@ -41,6 +41,7 @@ const router = new Router({
       route('StudentsSubjects', null, 'students/:id/subjects/', { requiresAuth: true }),
       route('TaughtSubject', null, 'subjects/:id/detail', { requiresAuth: true }),
       route('AdvisedGroup', null, 'groups/:id/detail', { requiresAuth: true }),
+      route('LoadData', null, 'load-data', { requiresAuth: true }),
       // Tutor
       route('TutorTaughtSubjects', null, 'tutor/subjects', { requiresAuth: true }),
       route('TutorTaughtSubject', null, 'tutor/subjects/:id/detail', { requiresAuth: true }),

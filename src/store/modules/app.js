@@ -82,6 +82,11 @@ const usersMenu = {
       icon: 'mdi-account-group',
       to: '/groups/',
     },
+    {
+      title: 'Cargar información(csv)',
+      icon: 'mdi-cloud-upload',
+      to: '/load-data/',
+    },
   ],
 }
 
