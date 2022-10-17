@@ -20,17 +20,12 @@
             sm="12"
           >
             <v-file-input
-              v-model="img"
+              v-model="image"
               accept=".csv"
               label="Archivo"
               :rules="[v => !!v || 'Este campo es requerido']"
               @change="handleImage"
             />
-            <!--            <input-->
-            <!--              accept=".csv"-->
-            <!--              type="file"-->
-            <!--              @change="handleImage($event)"-->
-            <!--            >-->
           </v-col>
         </v-row>
         <v-divider />
@@ -64,7 +59,6 @@
         actionMessageColor: null,
         valid: false,
         image: '',
-        img: '',
         form: {
           file: null,
         },
@@ -77,7 +71,7 @@
     },
     methods: {
       handleImage (e) {
-        const selectedImage = this.img
+        const selectedImage = this.image
         this.createBase64Image(selectedImage)
       },
       createBase64Image (fileObject) {
