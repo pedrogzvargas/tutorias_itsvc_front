@@ -58,7 +58,7 @@
         actionMessage: null,
         actionMessageColor: null,
         valid: false,
-        image: '',
+        image: null,
         form: {
           file: null,
         },
@@ -88,6 +88,8 @@
             (response) => {
               this.notify('Guardado correctamente', 'success')
               this.isLoading = false
+              this.form.file = null
+              this.image = null
             },
           ).catch(
             (response) => {

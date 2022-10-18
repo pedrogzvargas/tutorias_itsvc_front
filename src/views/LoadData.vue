@@ -1,6 +1,6 @@
 <template>
   <v-container
-    id="user-profile-view"
+    id="load-data-view"
     fluid
     tag="section"
   >
@@ -99,7 +99,3 @@
     }),
   }
 </script>
-
-<style scoped>
-
-</style>

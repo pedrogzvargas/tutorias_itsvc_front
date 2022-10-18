@@ -6,8 +6,6 @@ const resource = 'students'
 
 export default {
   get (search = '', page = 1) {
-    console.info(store.getters['user/userToken'])
-    console.info(store.getters)
     return Service.get(`${resource}/`, {
       params: {
         search: search,

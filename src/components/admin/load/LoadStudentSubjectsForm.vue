@@ -33,7 +33,7 @@
           <v-spacer />
           <v-btn
             color="primary"
-            @click="loadStudents"
+            @click="loadStudentsSubject"
           >
             Cargar al sistema
           </v-btn>
@@ -44,7 +44,7 @@
 </template>
 <script>
   import ProgressBar from '../../app/ProgressBar'
-  import LoadStudentsService from '../../../services/admin/load/LoadStudentsService'
+  import LoadStudentsSubjectService from '../../../services/admin/load/LoadStudentsSubjectService'
   import ActionNotifier from '../../common/general/ActionNotifier'
   import { get } from 'vuex-pathify'
   export default {
@@ -58,7 +58,7 @@
         actionMessage: null,
         actionMessageColor: null,
         valid: false,
-        image: '',
+        image: null,
         form: {
           file: null,
         },
@@ -81,21 +81,24 @@
         }
         reader.readAsDataURL(fileObject)
       },
-      async loadStudents () {
+      async loadStudentsSubject () {
         if (this.$refs.form.validate()) {
-          await LoadStudentsService.post(this.form).then(
+          this.isLoading = true
+          await LoadStudentsSubjectService.post(this.form).then(
             (response) => {
+              this.isLoading = false
+              this.form.file = null
+              this.image = null
               this.notify('Guardado correctamente', 'success')
             },
           ).catch(
             (response) => {
+              this.isLoading = false
               this.notify('No se pudo guardar correctamente', 'error')
-              this.hasRecord = true
               return Promise.reject(response)
             },
           )
           this.isLoading = false
-          this.isEditing = false
         }
       },
       notify (message, type) {
