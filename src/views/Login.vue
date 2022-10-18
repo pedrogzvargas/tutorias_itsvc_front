@@ -107,8 +107,6 @@
               this.drawerSide = true
               this.update()
               this.$router.push('/profile/')
-              this.$cookies.set('token', response.data.data.token)
-              this.$cookies.set('userId', response.data.data.user_id)
             },
           ).catch(
             (response) => {
