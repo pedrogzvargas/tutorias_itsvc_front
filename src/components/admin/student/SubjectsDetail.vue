@@ -1,6 +1,11 @@
 <template>
   <div>
     <progress-bar v-if="isLoading" />
+    <action-notifier
+      ref="ActionNotifier"
+      :text="actionMessage"
+      :color="actionMessageColor"
+    />
     <v-breadcrumbs
       :items="items"
       v-if="!isLoading"
@@ -363,16 +368,20 @@
   import StudentSubjectsDeatailService from '../../../services/student/StudentSubjectsDeatailService'
   import InterviewService from '../../../services/admin/student/InterviewService'
   import InterviewEvaluationService from '../../../services/admin/student/InterviewEvaluationService'
+  import ActionNotifier from '../../common/general/ActionNotifier'
 
   export default {
     name: 'SubjectsDetail',
     components: {
       ProgressBar,
+      ActionNotifier,
     },
     data: () => ({
       subjectDetails: null,
       isLoading: true,
       isDownloading: false,
+      actionMessage: null,
+      actionMessageColor: null,
     }),
     computed: {
       items () {
@@ -431,10 +440,13 @@
           },
         ).catch(
           (response) => {
-            this.notify('No fue posible descargar el reporte', 'warning')
+            this.notify('No fue posible descargar el reporte', 'error')
+            this.isDownloading = false
+            this.isLoading = false
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
         this.isDownloading = false
       },
       async downloadEvaluation () {
@@ -450,11 +462,19 @@
           },
         ).catch(
           (response) => {
-            this.notify('No fue posible descargar el reporte', 'warning')
+            this.notify('No fue posible descargar el reporte', 'error')
+            this.isDownloading = false
+            this.isLoading = false
             return Promise.reject(response)
           },
         )
+        this.isLoading = false
         this.isDownloading = false
+      },
+      notify (message, type) {
+        this.actionMessage = message
+        this.actionMessageColor = type
+        this.$refs.ActionNotifier.snackbar = true
       },
     },
   }

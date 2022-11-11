@@ -20,7 +20,7 @@
             sm="12"
           >
             <v-text-field
-              v-model="form.income"
+              v-model="form.family_income"
               label="¿A cuánto ascienden los ingresos mensuales de tu familia?"
               outlined
               :rules="[v => !!v || 'Este campo es requerido']"
@@ -35,10 +35,9 @@
             sm="12"
           >
             <v-text-field
-              v-model="form.family_income"
+              v-model="form.income"
               label="¿En caso de ser económicamente independiente a cuánto asciende tu ingreso?"
               outlined
-              :rules="[v => !!v || 'Este campo es requerido']"
               :readonly="!isEditing"
               :disabled="!isEditing"
             />
@@ -137,11 +136,11 @@
         await IncomeService.post(this.currentUser.id, this.form).then(
           (response) => {
             this.notify('Guardado correctamente', 'success')
+            this.hasRecord = true
           },
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
-            this.hasRecord = true
             return Promise.reject(response)
           },
         )
@@ -156,6 +155,7 @@
         ).catch(
           (response) => {
             this.notify('No se pudo guardar correctamente', 'error')
+            this.isLoading = false
             return Promise.reject(response)
           },
         )
@@ -164,6 +164,8 @@
       },
       persist () {
         if (this.$refs.form.validate()) {
+          this.form.income = this.form.income === '' ? null : this.form.income
+          console.info(this.form)
           this.isLoading = true
           if (!this.hasRecord) {
             this.createIncome()
